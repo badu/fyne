@@ -23,7 +23,7 @@ func (b *preferenceBindings) getItem(key string) preferenceItem {
 }
 
 func (b *preferenceBindings) list() []preferenceItem {
-	ret := []preferenceItem{}
+	var ret []preferenceItem
 	b.items.Range(func(_, val any) bool {
 		ret = append(ret, val.(preferenceItem))
 		return true

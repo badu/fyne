@@ -15,7 +15,7 @@ import (
 func TestStackLayout(t *testing.T) {
 	size := fyne.NewSize(100, 100)
 
-	obj := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	obj := canvas.NewRectangle(color.NRGBA{})
 	container := &fyne.Container{
 		Objects: []fyne.CanvasObject{obj},
 	}
@@ -27,7 +27,7 @@ func TestStackLayout(t *testing.T) {
 }
 
 func TestStackLayoutMinSize(t *testing.T) {
-	text := canvas.NewText("Padding", color.NRGBA{0, 0xff, 0, 0})
+	text := canvas.NewText("Padding", color.NRGBA{G: 0xff})
 	minSize := text.MinSize()
 
 	container := container.NewWithoutLayout(text)
@@ -37,7 +37,7 @@ func TestStackLayoutMinSize(t *testing.T) {
 }
 
 func TestContainerStackLayoutMinSize(t *testing.T) {
-	text := canvas.NewText("Padding", color.NRGBA{0, 0xff, 0, 0})
+	text := canvas.NewText("Padding", color.NRGBA{G: 0xff})
 	minSize := text.MinSize()
 
 	container := container.NewWithoutLayout(text)

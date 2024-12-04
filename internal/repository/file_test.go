@@ -427,7 +427,7 @@ func TestFileRepositoryListing(t *testing.T) {
 	listing, err := storage.List(foo)
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(listing))
-	stringListing := []string{}
+	var stringListing []string
 	for _, u := range listing {
 		stringListing = append(stringListing, u.String())
 	}

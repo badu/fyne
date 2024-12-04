@@ -29,18 +29,18 @@ const defaultTitle = "Fyne Application"
 
 // Input modes.
 const (
-	CursorMode             glfw.InputMode = glfw.CursorMode
-	StickyKeysMode         glfw.InputMode = glfw.StickyKeysMode
-	StickyMouseButtonsMode glfw.InputMode = glfw.StickyMouseButtonsMode
-	LockKeyMods            glfw.InputMode = glfw.LockKeyMods
-	RawMouseMotion         glfw.InputMode = glfw.RawMouseMotion
+	CursorMode             = glfw.CursorMode
+	StickyKeysMode         = glfw.StickyKeysMode
+	StickyMouseButtonsMode = glfw.StickyMouseButtonsMode
+	LockKeyMods            = glfw.LockKeyMods
+	RawMouseMotion         = glfw.RawMouseMotion
 )
 
 // Cursor mode values.
 const (
-	CursorNormal   int = glfw.CursorNormal
-	CursorHidden   int = glfw.CursorHidden
-	CursorDisabled int = glfw.CursorDisabled
+	CursorNormal   = glfw.CursorNormal
+	CursorHidden   = glfw.CursorHidden
+	CursorDisabled = glfw.CursorDisabled
 )
 
 var cursorMap map[desktop.StandardCursor]*glfw.Cursor

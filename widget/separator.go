@@ -1,7 +1,6 @@
 package widget
 
 import (
-	"fmt"
 	"image/color"
 
 	"fyne.io/fyne/v2"

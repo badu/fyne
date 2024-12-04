@@ -38,7 +38,7 @@ type Shortcut interface {
 
 // KeyboardShortcut describes a shortcut meant to be triggered by a keyboard action.
 type KeyboardShortcut interface {
-	Shortcut
+	ShortcutName() string
 	Key() KeyName
 	Mod() KeyModifier
 }

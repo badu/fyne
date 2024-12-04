@@ -10,7 +10,7 @@ import (
 
 // repositoryTable stores the mapping of schemes to Repository implementations.
 // It should only ever be used by ForURI() and Register().
-var repositoryTable map[string]Repository = map[string]Repository{}
+var repositoryTable = map[string]Repository{}
 
 // Repository represents a storage repository, which is a set of methods which
 // implement specific functions on a URI. Repositories are registered to handle
@@ -88,7 +88,34 @@ type Repository interface {
 //
 // Since: 2.0
 type CustomURIRepository interface {
-	Repository
+
+	// Exists will be used to implement calls to storage.Exists() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	Exists(u fyne.URI) (bool, error)
+
+	// Reader will be used to implement calls to storage.Reader()
+	// for the registered scheme of this repository.
+	//
+	// Since: 2.0
+	Reader(u fyne.URI) (fyne.URIReadCloser, error)
+
+	// CanRead will be used to implement calls to storage.CanRead() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	CanRead(u fyne.URI) (bool, error)
+
+	// Destroy is called when the repository is un-registered from a given
+	// URI scheme.
+	//
+	// The string parameter will be the URI scheme that the repository was
+	// registered for. This may be useful for repositories that need to
+	// handle more than one URI scheme internally.
+	//
+	// Since: 2.0
+	Destroy(string)
 
 	// ParseURI will be used to implement calls to storage.ParseURI()
 	// for the registered scheme of this repository.
@@ -100,7 +127,34 @@ type CustomURIRepository interface {
 //
 // Since: 2.0
 type WritableRepository interface {
-	Repository
+
+	// Exists will be used to implement calls to storage.Exists() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	Exists(u fyne.URI) (bool, error)
+
+	// Reader will be used to implement calls to storage.Reader()
+	// for the registered scheme of this repository.
+	//
+	// Since: 2.0
+	Reader(u fyne.URI) (fyne.URIReadCloser, error)
+
+	// CanRead will be used to implement calls to storage.CanRead() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	CanRead(u fyne.URI) (bool, error)
+
+	// Destroy is called when the repository is un-registered from a given
+	// URI scheme.
+	//
+	// The string parameter will be the URI scheme that the repository was
+	// registered for. This may be useful for repositories that need to
+	// handle more than one URI scheme internally.
+	//
+	// Since: 2.0
+	Destroy(string)
 
 	// Writer will be used to implement calls to storage.WriterTo() for
 	// the registered scheme of this repository.
@@ -127,7 +181,34 @@ type WritableRepository interface {
 //
 // Since: 2.0
 type ListableRepository interface {
-	Repository
+
+	// Exists will be used to implement calls to storage.Exists() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	Exists(u fyne.URI) (bool, error)
+
+	// Reader will be used to implement calls to storage.Reader()
+	// for the registered scheme of this repository.
+	//
+	// Since: 2.0
+	Reader(u fyne.URI) (fyne.URIReadCloser, error)
+
+	// CanRead will be used to implement calls to storage.CanRead() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	CanRead(u fyne.URI) (bool, error)
+
+	// Destroy is called when the repository is un-registered from a given
+	// URI scheme.
+	//
+	// The string parameter will be the URI scheme that the repository was
+	// registered for. This may be useful for repositories that need to
+	// handle more than one URI scheme internally.
+	//
+	// Since: 2.0
+	Destroy(string)
 
 	// CanList will be used to implement calls to storage.Listable() for
 	// the registered scheme of this repository.
@@ -154,7 +235,34 @@ type ListableRepository interface {
 //
 // Since: 2.0
 type HierarchicalRepository interface {
-	Repository
+
+	// Exists will be used to implement calls to storage.Exists() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	Exists(u fyne.URI) (bool, error)
+
+	// Reader will be used to implement calls to storage.Reader()
+	// for the registered scheme of this repository.
+	//
+	// Since: 2.0
+	Reader(u fyne.URI) (fyne.URIReadCloser, error)
+
+	// CanRead will be used to implement calls to storage.CanRead() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	CanRead(u fyne.URI) (bool, error)
+
+	// Destroy is called when the repository is un-registered from a given
+	// URI scheme.
+	//
+	// The string parameter will be the URI scheme that the repository was
+	// registered for. This may be useful for repositories that need to
+	// handle more than one URI scheme internally.
+	//
+	// Since: 2.0
+	Destroy(string)
 
 	// Parent will be used to implement calls to storage.Parent() for the
 	// registered scheme of this repository.
@@ -180,7 +288,34 @@ type HierarchicalRepository interface {
 //
 // Since: 2.0
 type CopyableRepository interface {
-	Repository
+
+	// Exists will be used to implement calls to storage.Exists() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	Exists(u fyne.URI) (bool, error)
+
+	// Reader will be used to implement calls to storage.Reader()
+	// for the registered scheme of this repository.
+	//
+	// Since: 2.0
+	Reader(u fyne.URI) (fyne.URIReadCloser, error)
+
+	// CanRead will be used to implement calls to storage.CanRead() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	CanRead(u fyne.URI) (bool, error)
+
+	// Destroy is called when the repository is un-registered from a given
+	// URI scheme.
+	//
+	// The string parameter will be the URI scheme that the repository was
+	// registered for. This may be useful for repositories that need to
+	// handle more than one URI scheme internally.
+	//
+	// Since: 2.0
+	Destroy(string)
 
 	// Copy will be used to implement calls to storage.Copy() for the
 	// registered scheme of this repository.
@@ -207,7 +342,34 @@ type CopyableRepository interface {
 //
 // Since: 2.0
 type MovableRepository interface {
-	Repository
+
+	// Exists will be used to implement calls to storage.Exists() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	Exists(u fyne.URI) (bool, error)
+
+	// Reader will be used to implement calls to storage.Reader()
+	// for the registered scheme of this repository.
+	//
+	// Since: 2.0
+	Reader(u fyne.URI) (fyne.URIReadCloser, error)
+
+	// CanRead will be used to implement calls to storage.CanRead() for the
+	// registered scheme of this repository.
+	//
+	// Since: 2.0
+	CanRead(u fyne.URI) (bool, error)
+
+	// Destroy is called when the repository is un-registered from a given
+	// URI scheme.
+	//
+	// The string parameter will be the URI scheme that the repository was
+	// registered for. This may be useful for repositories that need to
+	// handle more than one URI scheme internally.
+	//
+	// Since: 2.0
+	Destroy(string)
 
 	// Move will be used to implement calls to storage.Move() for the
 	// registered scheme of this repository.

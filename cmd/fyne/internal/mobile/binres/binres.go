@@ -46,7 +46,6 @@
 package binres
 
 import (
-	"encoding"
 	"encoding/binary"
 	"encoding/xml"
 	"fmt"
@@ -99,8 +98,7 @@ var (
 
 // unmarshaler wraps BinaryUnmarshaler to provide byte size of decoded chunks.
 type unmarshaler interface {
-	encoding.BinaryUnmarshaler
-
+	UnmarshalBinary(data []byte) error
 	// size returns the byte size unmarshalled after a call to
 	// UnmarshalBinary, or otherwise zero.
 	size() int

@@ -24,6 +24,7 @@ func repaint(obj fyne.CanvasObject) {
 
 	c := app.Driver().CanvasForObject(obj)
 	if c != nil {
+		// TODO : @Badu - this
 		if paint, ok := c.(interface{ SetDirty() }); ok {
 			paint.SetDirty()
 		}

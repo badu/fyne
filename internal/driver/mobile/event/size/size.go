@@ -55,7 +55,7 @@ type Event struct {
 // Size returns the window's size in pixels, at the time this size event was
 // sent.
 func (e Event) Size() image.Point {
-	return image.Point{e.WidthPx, e.HeightPx}
+	return image.Point{X: e.WidthPx, Y: e.HeightPx}
 }
 
 // Bounds returns the window's bounds in pixels, at the time this size event
@@ -64,7 +64,7 @@ func (e Event) Size() image.Point {
 // The top-left pixel is always (0, 0). The bottom-right pixel is given by the
 // width and height.
 func (e Event) Bounds() image.Rectangle {
-	return image.Rectangle{Max: image.Point{e.WidthPx, e.HeightPx}}
+	return image.Rectangle{Max: image.Point{X: e.WidthPx, Y: e.HeightPx}}
 }
 
 // Orientation is the orientation of the device screen.

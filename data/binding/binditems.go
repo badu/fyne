@@ -13,7 +13,13 @@ import (
 //
 // Since: 2.0
 type Bool interface {
-	DataItem
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
 	Get() (bool, error)
 	Set(bool) error
 }
@@ -22,7 +28,15 @@ type Bool interface {
 //
 // Since: 2.0
 type ExternalBool interface {
-	Bool
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	Get() (bool, error)
+	Set(bool) error
 	Reload() error
 }
 
@@ -30,7 +44,7 @@ type ExternalBool interface {
 //
 // Since: 2.0
 func NewBool() Bool {
-	var blank bool = false
+	var blank = false
 	return &boundBool{val: &blank}
 }
 
@@ -40,7 +54,7 @@ func NewBool() Bool {
 // Since: 2.0
 func BindBool(v *bool) ExternalBool {
 	if v == nil {
-		var blank bool = false
+		var blank = false
 		v = &blank // never allow a nil value pointer
 	}
 	b := &boundExternalBool{}
@@ -104,7 +118,13 @@ func (b *boundExternalBool) Reload() error {
 //
 // Since: 2.2
 type Bytes interface {
-	DataItem
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
 	Get() ([]byte, error)
 	Set([]byte) error
 }
@@ -113,7 +133,15 @@ type Bytes interface {
 //
 // Since: 2.2
 type ExternalBytes interface {
-	Bytes
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	Get() ([]byte, error)
+	Set([]byte) error
 	Reload() error
 }
 
@@ -195,7 +223,13 @@ func (b *boundExternalBytes) Reload() error {
 //
 // Since: 2.0
 type Float interface {
-	DataItem
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
 	Get() (float64, error)
 	Set(float64) error
 }
@@ -204,7 +238,15 @@ type Float interface {
 //
 // Since: 2.0
 type ExternalFloat interface {
-	Float
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	Get() (float64, error)
+	Set(float64) error
 	Reload() error
 }
 
@@ -212,7 +254,7 @@ type ExternalFloat interface {
 //
 // Since: 2.0
 func NewFloat() Float {
-	var blank float64 = 0.0
+	var blank = 0.0
 	return &boundFloat{val: &blank}
 }
 
@@ -222,7 +264,7 @@ func NewFloat() Float {
 // Since: 2.0
 func BindFloat(v *float64) ExternalFloat {
 	if v == nil {
-		var blank float64 = 0.0
+		var blank = 0.0
 		v = &blank // never allow a nil value pointer
 	}
 	b := &boundExternalFloat{}
@@ -286,7 +328,13 @@ func (b *boundExternalFloat) Reload() error {
 //
 // Since: 2.0
 type Int interface {
-	DataItem
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
 	Get() (int, error)
 	Set(int) error
 }
@@ -295,7 +343,15 @@ type Int interface {
 //
 // Since: 2.0
 type ExternalInt interface {
-	Int
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	Get() (int, error)
+	Set(int) error
 	Reload() error
 }
 
@@ -303,7 +359,7 @@ type ExternalInt interface {
 //
 // Since: 2.0
 func NewInt() Int {
-	var blank int = 0
+	var blank = 0
 	return &boundInt{val: &blank}
 }
 
@@ -313,7 +369,7 @@ func NewInt() Int {
 // Since: 2.0
 func BindInt(v *int) ExternalInt {
 	if v == nil {
-		var blank int = 0
+		var blank = 0
 		v = &blank // never allow a nil value pointer
 	}
 	b := &boundExternalInt{}
@@ -377,7 +433,13 @@ func (b *boundExternalInt) Reload() error {
 //
 // Since: 2.0
 type Rune interface {
-	DataItem
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
 	Get() (rune, error)
 	Set(rune) error
 }
@@ -386,7 +448,15 @@ type Rune interface {
 //
 // Since: 2.0
 type ExternalRune interface {
-	Rune
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	Get() (rune, error)
+	Set(rune) error
 	Reload() error
 }
 
@@ -394,7 +464,7 @@ type ExternalRune interface {
 //
 // Since: 2.0
 func NewRune() Rune {
-	var blank rune = rune(0)
+	var blank = rune(0)
 	return &boundRune{val: &blank}
 }
 
@@ -404,7 +474,7 @@ func NewRune() Rune {
 // Since: 2.0
 func BindRune(v *rune) ExternalRune {
 	if v == nil {
-		var blank rune = rune(0)
+		var blank = rune(0)
 		v = &blank // never allow a nil value pointer
 	}
 	b := &boundExternalRune{}
@@ -468,7 +538,13 @@ func (b *boundExternalRune) Reload() error {
 //
 // Since: 2.0
 type String interface {
-	DataItem
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
 	Get() (string, error)
 	Set(string) error
 }
@@ -477,7 +553,15 @@ type String interface {
 //
 // Since: 2.0
 type ExternalString interface {
-	String
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	Get() (string, error)
+	Set(string) error
 	Reload() error
 }
 
@@ -485,7 +569,7 @@ type ExternalString interface {
 //
 // Since: 2.0
 func NewString() String {
-	var blank string = ""
+	var blank = ""
 	return &boundString{val: &blank}
 }
 
@@ -495,7 +579,7 @@ func NewString() String {
 // Since: 2.0
 func BindString(v *string) ExternalString {
 	if v == nil {
-		var blank string = ""
+		var blank = ""
 		v = &blank // never allow a nil value pointer
 	}
 	b := &boundExternalString{}
@@ -559,7 +643,13 @@ func (b *boundExternalString) Reload() error {
 //
 // Since: 2.1
 type URI interface {
-	DataItem
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
 	Get() (fyne.URI, error)
 	Set(fyne.URI) error
 }
@@ -568,7 +658,15 @@ type URI interface {
 //
 // Since: 2.1
 type ExternalURI interface {
-	URI
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	Get() (fyne.URI, error)
+	Set(fyne.URI) error
 	Reload() error
 }
 
@@ -576,7 +674,7 @@ type ExternalURI interface {
 //
 // Since: 2.1
 func NewURI() URI {
-	var blank fyne.URI = fyne.URI(nil)
+	var blank = fyne.URI(nil)
 	return &boundURI{val: &blank}
 }
 
@@ -586,7 +684,7 @@ func NewURI() URI {
 // Since: 2.1
 func BindURI(v *fyne.URI) ExternalURI {
 	if v == nil {
-		var blank fyne.URI = fyne.URI(nil)
+		var blank = fyne.URI(nil)
 		v = &blank // never allow a nil value pointer
 	}
 	b := &boundExternalURI{}

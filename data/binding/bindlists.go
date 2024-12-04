@@ -13,8 +13,15 @@ import (
 //
 // Since: 2.0
 type BoolList interface {
-	DataList
-
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
 	Append(value bool) error
 	Get() ([]bool, error)
 	GetValue(index int) (bool, error)
@@ -28,7 +35,22 @@ type BoolList interface {
 //
 // Since: 2.0
 type ExternalBoolList interface {
-	BoolList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
+	Append(value bool) error
+	Get() ([]bool, error)
+	GetValue(index int) (bool, error)
+	Prepend(value bool) error
+	Remove(value bool) error
+	Set(list []bool) error
+	SetValue(index int, value bool) error
 
 	Reload() error
 }
@@ -269,7 +291,15 @@ func (b *boundExternalBoolListItem) setIfChanged(val bool) error {
 //
 // Since: 2.2
 type BytesList interface {
-	DataList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
 
 	Append(value []byte) error
 	Get() ([][]byte, error)
@@ -284,7 +314,23 @@ type BytesList interface {
 //
 // Since: 2.2
 type ExternalBytesList interface {
-	BytesList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
+
+	Append(value []byte) error
+	Get() ([][]byte, error)
+	GetValue(index int) ([]byte, error)
+	Prepend(value []byte) error
+	Remove(value []byte) error
+	Set(list [][]byte) error
+	SetValue(index int, value []byte) error
 
 	Reload() error
 }
@@ -525,7 +571,15 @@ func (b *boundExternalBytesListItem) setIfChanged(val []byte) error {
 //
 // Since: 2.0
 type FloatList interface {
-	DataList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
 
 	Append(value float64) error
 	Get() ([]float64, error)
@@ -540,7 +594,23 @@ type FloatList interface {
 //
 // Since: 2.0
 type ExternalFloatList interface {
-	FloatList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
+
+	Append(value float64) error
+	Get() ([]float64, error)
+	GetValue(index int) (float64, error)
+	Prepend(value float64) error
+	Remove(value float64) error
+	Set(list []float64) error
+	SetValue(index int, value float64) error
 
 	Reload() error
 }
@@ -781,7 +851,15 @@ func (b *boundExternalFloatListItem) setIfChanged(val float64) error {
 //
 // Since: 2.0
 type IntList interface {
-	DataList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
 
 	Append(value int) error
 	Get() ([]int, error)
@@ -796,7 +874,23 @@ type IntList interface {
 //
 // Since: 2.0
 type ExternalIntList interface {
-	IntList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
+
+	Append(value int) error
+	Get() ([]int, error)
+	GetValue(index int) (int, error)
+	Prepend(value int) error
+	Remove(value int) error
+	Set(list []int) error
+	SetValue(index int, value int) error
 
 	Reload() error
 }
@@ -1037,7 +1131,15 @@ func (b *boundExternalIntListItem) setIfChanged(val int) error {
 //
 // Since: 2.0
 type RuneList interface {
-	DataList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
 
 	Append(value rune) error
 	Get() ([]rune, error)
@@ -1052,7 +1154,23 @@ type RuneList interface {
 //
 // Since: 2.0
 type ExternalRuneList interface {
-	RuneList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
+
+	Append(value rune) error
+	Get() ([]rune, error)
+	GetValue(index int) (rune, error)
+	Prepend(value rune) error
+	Remove(value rune) error
+	Set(list []rune) error
+	SetValue(index int, value rune) error
 
 	Reload() error
 }
@@ -1293,7 +1411,15 @@ func (b *boundExternalRuneListItem) setIfChanged(val rune) error {
 //
 // Since: 2.0
 type StringList interface {
-	DataList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
 
 	Append(value string) error
 	Get() ([]string, error)
@@ -1308,7 +1434,23 @@ type StringList interface {
 //
 // Since: 2.0
 type ExternalStringList interface {
-	StringList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
+
+	Append(value string) error
+	Get() ([]string, error)
+	GetValue(index int) (string, error)
+	Prepend(value string) error
+	Remove(value string) error
+	Set(list []string) error
+	SetValue(index int, value string) error
 
 	Reload() error
 }
@@ -1549,7 +1691,15 @@ func (b *boundExternalStringListItem) setIfChanged(val string) error {
 //
 // Since: 2.1
 type UntypedList interface {
-	DataList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
 
 	Append(value any) error
 	Get() ([]any, error)
@@ -1564,7 +1714,23 @@ type UntypedList interface {
 //
 // Since: 2.1
 type ExternalUntypedList interface {
-	UntypedList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
+
+	Append(value any) error
+	Get() ([]any, error)
+	GetValue(index int) (any, error)
+	Prepend(value any) error
+	Remove(value any) error
+	Set(list []any) error
+	SetValue(index int, value any) error
 
 	Reload() error
 }
@@ -1805,7 +1971,15 @@ func (b *boundExternalUntypedListItem) setIfChanged(val any) error {
 //
 // Since: 2.1
 type URIList interface {
-	DataList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
 
 	Append(value fyne.URI) error
 	Get() ([]fyne.URI, error)
@@ -1820,7 +1994,23 @@ type URIList interface {
 //
 // Since: 2.1
 type ExternalURIList interface {
-	URIList
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
+
+	Append(value fyne.URI) error
+	Get() ([]fyne.URI, error)
+	GetValue(index int) (fyne.URI, error)
+	Prepend(value fyne.URI) error
+	Remove(value fyne.URI) error
+	Set(list []fyne.URI) error
+	SetValue(index int, value fyne.URI) error
 
 	Reload() error
 }

@@ -13,7 +13,15 @@ import (
 //
 // Since: 2.4
 type BoolTree interface {
-	DataTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
 
 	Append(parent, id string, value bool) error
 	Get() (map[string][]string, map[string]bool, error)
@@ -28,7 +36,23 @@ type BoolTree interface {
 //
 // Since: 2.4
 type ExternalBoolTree interface {
-	BoolTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
+
+	Append(parent, id string, value bool) error
+	Get() (map[string][]string, map[string]bool, error)
+	GetValue(id string) (bool, error)
+	Prepend(parent, id string, value bool) error
+	Remove(id string) error
+	Set(ids map[string][]string, values map[string]bool) error
+	SetValue(id string, value bool) error
 
 	Reload() error
 }
@@ -164,7 +188,7 @@ func (t *boundBoolTree) Set(ids map[string][]string, v map[string]bool) error {
 }
 
 func (t *boundBoolTree) doReload() (retErr error) {
-	updated := []string{}
+	var updated []string
 	fire := false
 	for id := range *t.val {
 		found := false
@@ -298,7 +322,15 @@ func (t *boundExternalBoolTreeItem) setIfChanged(val bool) error {
 //
 // Since: 2.4
 type BytesTree interface {
-	DataTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
 
 	Append(parent, id string, value []byte) error
 	Get() (map[string][]string, map[string][]byte, error)
@@ -313,7 +345,23 @@ type BytesTree interface {
 //
 // Since: 2.4
 type ExternalBytesTree interface {
-	BytesTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
+
+	Append(parent, id string, value []byte) error
+	Get() (map[string][]string, map[string][]byte, error)
+	GetValue(id string) ([]byte, error)
+	Prepend(parent, id string, value []byte) error
+	Remove(id string) error
+	Set(ids map[string][]string, values map[string][]byte) error
+	SetValue(id string, value []byte) error
 
 	Reload() error
 }
@@ -449,7 +497,7 @@ func (t *boundBytesTree) Set(ids map[string][]string, v map[string][]byte) error
 }
 
 func (t *boundBytesTree) doReload() (retErr error) {
-	updated := []string{}
+	var updated []string
 	fire := false
 	for id := range *t.val {
 		found := false
@@ -583,7 +631,15 @@ func (t *boundExternalBytesTreeItem) setIfChanged(val []byte) error {
 //
 // Since: 2.4
 type FloatTree interface {
-	DataTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
 
 	Append(parent, id string, value float64) error
 	Get() (map[string][]string, map[string]float64, error)
@@ -598,7 +654,23 @@ type FloatTree interface {
 //
 // Since: 2.4
 type ExternalFloatTree interface {
-	FloatTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
+
+	Append(parent, id string, value float64) error
+	Get() (map[string][]string, map[string]float64, error)
+	GetValue(id string) (float64, error)
+	Prepend(parent, id string, value float64) error
+	Remove(id string) error
+	Set(ids map[string][]string, values map[string]float64) error
+	SetValue(id string, value float64) error
 
 	Reload() error
 }
@@ -734,7 +806,7 @@ func (t *boundFloatTree) Set(ids map[string][]string, v map[string]float64) erro
 }
 
 func (t *boundFloatTree) doReload() (retErr error) {
-	updated := []string{}
+	var updated []string
 	fire := false
 	for id := range *t.val {
 		found := false
@@ -868,7 +940,15 @@ func (t *boundExternalFloatTreeItem) setIfChanged(val float64) error {
 //
 // Since: 2.4
 type IntTree interface {
-	DataTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
 
 	Append(parent, id string, value int) error
 	Get() (map[string][]string, map[string]int, error)
@@ -883,7 +963,23 @@ type IntTree interface {
 //
 // Since: 2.4
 type ExternalIntTree interface {
-	IntTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
+
+	Append(parent, id string, value int) error
+	Get() (map[string][]string, map[string]int, error)
+	GetValue(id string) (int, error)
+	Prepend(parent, id string, value int) error
+	Remove(id string) error
+	Set(ids map[string][]string, values map[string]int) error
+	SetValue(id string, value int) error
 
 	Reload() error
 }
@@ -1019,7 +1115,7 @@ func (t *boundIntTree) Set(ids map[string][]string, v map[string]int) error {
 }
 
 func (t *boundIntTree) doReload() (retErr error) {
-	updated := []string{}
+	var updated []string
 	fire := false
 	for id := range *t.val {
 		found := false
@@ -1153,7 +1249,15 @@ func (t *boundExternalIntTreeItem) setIfChanged(val int) error {
 //
 // Since: 2.4
 type RuneTree interface {
-	DataTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
 
 	Append(parent, id string, value rune) error
 	Get() (map[string][]string, map[string]rune, error)
@@ -1168,7 +1272,23 @@ type RuneTree interface {
 //
 // Since: 2.4
 type ExternalRuneTree interface {
-	RuneTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
+
+	Append(parent, id string, value rune) error
+	Get() (map[string][]string, map[string]rune, error)
+	GetValue(id string) (rune, error)
+	Prepend(parent, id string, value rune) error
+	Remove(id string) error
+	Set(ids map[string][]string, values map[string]rune) error
+	SetValue(id string, value rune) error
 
 	Reload() error
 }
@@ -1304,7 +1424,7 @@ func (t *boundRuneTree) Set(ids map[string][]string, v map[string]rune) error {
 }
 
 func (t *boundRuneTree) doReload() (retErr error) {
-	updated := []string{}
+	var updated []string
 	fire := false
 	for id := range *t.val {
 		found := false
@@ -1438,7 +1558,15 @@ func (t *boundExternalRuneTreeItem) setIfChanged(val rune) error {
 //
 // Since: 2.4
 type StringTree interface {
-	DataTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
 
 	Append(parent, id string, value string) error
 	Get() (map[string][]string, map[string]string, error)
@@ -1453,7 +1581,23 @@ type StringTree interface {
 //
 // Since: 2.4
 type ExternalStringTree interface {
-	StringTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
+
+	Append(parent, id string, value string) error
+	Get() (map[string][]string, map[string]string, error)
+	GetValue(id string) (string, error)
+	Prepend(parent, id string, value string) error
+	Remove(id string) error
+	Set(ids map[string][]string, values map[string]string) error
+	SetValue(id string, value string) error
 
 	Reload() error
 }
@@ -1589,7 +1733,7 @@ func (t *boundStringTree) Set(ids map[string][]string, v map[string]string) erro
 }
 
 func (t *boundStringTree) doReload() (retErr error) {
-	updated := []string{}
+	var updated []string
 	fire := false
 	for id := range *t.val {
 		found := false
@@ -1723,7 +1867,15 @@ func (t *boundExternalStringTreeItem) setIfChanged(val string) error {
 //
 // Since: 2.5
 type UntypedTree interface {
-	DataTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
 
 	Append(parent, id string, value any) error
 	Get() (map[string][]string, map[string]any, error)
@@ -1738,7 +1890,23 @@ type UntypedTree interface {
 //
 // Since: 2.5
 type ExternalUntypedTree interface {
-	UntypedTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
+
+	Append(parent, id string, value any) error
+	Get() (map[string][]string, map[string]any, error)
+	GetValue(id string) (any, error)
+	Prepend(parent, id string, value any) error
+	Remove(id string) error
+	Set(ids map[string][]string, values map[string]any) error
+	SetValue(id string, value any) error
 
 	Reload() error
 }
@@ -1874,7 +2042,7 @@ func (t *boundUntypedTree) Set(ids map[string][]string, v map[string]any) error 
 }
 
 func (t *boundUntypedTree) doReload() (retErr error) {
-	updated := []string{}
+	var updated []string
 	fire := false
 	for id := range *t.val {
 		found := false
@@ -2008,7 +2176,15 @@ func (t *boundExternalUntypedTreeItem) setIfChanged(val any) error {
 //
 // Since: 2.4
 type URITree interface {
-	DataTree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
 
 	Append(parent, id string, value fyne.URI) error
 	Get() (map[string][]string, map[string]fyne.URI, error)
@@ -2023,7 +2199,23 @@ type URITree interface {
 //
 // Since: 2.4
 type ExternalURITree interface {
-	URITree
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
+
+	Append(parent, id string, value fyne.URI) error
+	Get() (map[string][]string, map[string]fyne.URI, error)
+	GetValue(id string) (fyne.URI, error)
+	Prepend(parent, id string, value fyne.URI) error
+	Remove(id string) error
+	Set(ids map[string][]string, values map[string]fyne.URI) error
+	SetValue(id string, value fyne.URI) error
 
 	Reload() error
 }
@@ -2159,7 +2351,7 @@ func (t *boundURITree) Set(ids map[string][]string, v map[string]fyne.URI) error
 }
 
 func (t *boundURITree) doReload() (retErr error) {
-	updated := []string{}
+	var updated []string
 	fire := false
 	for id := range *t.val {
 		found := false

@@ -61,11 +61,11 @@ func TestColorDialog_SetColor(t *testing.T) {
 	w := test.NewTempWindow(t, canvas.NewRectangle(color.Transparent))
 	w.Resize(fyne.NewSize(800, 600))
 
-	col := color.RGBA{70, 210, 200, 255}
+	col := color.RGBA{R: 70, G: 210, B: 200, A: 255}
 
 	d := NewColorPicker("pick colour", "select colour", func(c color.Color) {
 		r, g, b, a := c.RGBA()
-		col = color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)}
+		col = color.RGBA{R: uint8(r), G: uint8(g), B: uint8(b), A: uint8(a)}
 	}, w)
 	d.Advanced = true
 
@@ -78,7 +78,7 @@ func TestColorDialog_SetColor(t *testing.T) {
 	assert.Equal(t, 200, d.picker.Blue)
 	assert.Equal(t, 255, d.picker.Alpha)
 
-	col = color.RGBA{255, 40, 70, 244}
+	col = color.RGBA{R: 255, G: 40, B: 70, A: 244}
 	assert.NotEqual(t, int(col.R), d.picker.Red)
 	assert.NotEqual(t, int(col.G), d.picker.Green)
 	assert.NotEqual(t, int(col.B), d.picker.Blue)

@@ -75,10 +75,10 @@ func newColorAdvancedPicker(color color.Color, onChange func(color.Color)) *colo
 // Color returns the currently selected color.
 func (p *colorAdvancedPicker) Color() color.Color {
 	return &color.NRGBA{
-		uint8(p.Red),
-		uint8(p.Green),
-		uint8(p.Blue),
-		uint8(p.Alpha),
+		R: uint8(p.Red),
+		G: uint8(p.Green),
+		B: uint8(p.Blue),
+		A: uint8(p.Alpha),
 	}
 }
 

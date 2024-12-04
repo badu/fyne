@@ -135,7 +135,7 @@ func TestCard_Refresh(t *testing.T) {
 }
 
 func newContentRect() *canvas.Rectangle {
-	rect := canvas.NewRectangle(color.Gray{0x66})
+	rect := canvas.NewRectangle(color.Gray{Y: 0x66})
 	rect.StrokeColor = color.Black
 	rect.StrokeWidth = 2
 	rect.SetMinSize(fyne.NewSize(10, 10))

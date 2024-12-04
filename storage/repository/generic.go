@@ -10,7 +10,7 @@ import (
 // splitNonEmpty works exactly like strings.Split(), but only returns non-empty
 // components.
 func splitNonEmpty(str, sep string) []string {
-	components := []string{}
+	var components []string
 	for _, v := range strings.Split(str, sep) {
 		if len(v) > 0 {
 			components = append(components, v)

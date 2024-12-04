@@ -11,7 +11,13 @@ import (
 //
 // Since: 2.0
 type DataMap interface {
-	DataItem
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
 	GetItem(string) (DataItem, error)
 	Keys() []string
 }
@@ -20,7 +26,20 @@ type DataMap interface {
 //
 // Since: 2.0
 type ExternalUntypedMap interface {
-	UntypedMap
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(string) (DataItem, error)
+	Keys() []string
+	Delete(string)
+	Get() (map[string]any, error)
+	GetValue(string) (any, error)
+	Set(map[string]any) error
+	SetValue(string, any) error
 	Reload() error
 }
 
@@ -28,7 +47,15 @@ type ExternalUntypedMap interface {
 //
 // Since: 2.0
 type UntypedMap interface {
-	DataMap
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(string) (DataItem, error)
+	Keys() []string
 	Delete(string)
 	Get() (map[string]any, error)
 	GetValue(string) (any, error)
@@ -64,7 +91,15 @@ func BindUntypedMap(d *map[string]any) ExternalUntypedMap {
 //
 // Since: 2.0
 type Struct interface {
-	DataMap
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
+	GetItem(string) (DataItem, error)
+	Keys() []string
 	GetValue(string) (any, error)
 	SetValue(string, any) error
 	Reload() error
@@ -108,7 +143,13 @@ func BindStruct(i any) Struct {
 }
 
 type reflectUntyped interface {
-	DataItem
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
 	get() (any, error)
 	set(any) error
 }

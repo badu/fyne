@@ -38,7 +38,7 @@ func drawCircle(c fyne.Canvas, circle *canvas.Circle, pos fyne.Position, base *i
 	if scaledY < 0 {
 		offY = -scaledY
 	}
-	draw.Draw(base, bounds, raw, image.Point{offX, offY}, draw.Over)
+	draw.Draw(base, bounds, raw, image.Point{X: offX, Y: offY}, draw.Over)
 }
 
 func drawGradient(c fyne.Canvas, g gradient, pos fyne.Position, base *image.NRGBA, clip image.Rectangle) {
@@ -121,7 +121,7 @@ func drawLine(c fyne.Canvas, line *canvas.Line, pos fyne.Position, base *image.N
 	if scaledY < 0 {
 		offY = -scaledY
 	}
-	draw.Draw(base, bounds, raw, image.Point{offX, offY}, draw.Over)
+	draw.Draw(base, bounds, raw, image.Point{X: offX, Y: offY}, draw.Over)
 }
 
 func drawTex(x, y, width, height int, base *image.NRGBA, tex image.Image, clip image.Rectangle) {
@@ -201,7 +201,7 @@ func drawRectangleStroke(c fyne.Canvas, rect *canvas.Rectangle, pos fyne.Positio
 	if scaledY < 0 {
 		offY = -scaledY
 	}
-	draw.Draw(base, bounds, raw, image.Point{offX, offY}, draw.Over)
+	draw.Draw(base, bounds, raw, image.Point{X: offX, Y: offY}, draw.Over)
 }
 
 func drawRectangle(c fyne.Canvas, rect *canvas.Rectangle, pos fyne.Position, base *image.NRGBA, clip image.Rectangle) {

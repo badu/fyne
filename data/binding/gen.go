@@ -16,7 +16,8 @@ const itemBindTemplate = `
 //
 // Since: {{ .Since }}
 type {{ .Name }} interface {
-	DataItem
+	AddListener(DataListener)
+	RemoveListener(DataListener)
 	Get() ({{ .Type }}, error)
 	Set({{ .Type }}) error
 }
@@ -25,7 +26,10 @@ type {{ .Name }} interface {
 //
 // Since: {{ .Since }}
 type External{{ .Name }} interface {
-	{{ .Name }}
+	AddListener(DataListener)
+	RemoveListener(DataListener)
+	Get() ({{ .Type }}, error)
+	Set({{ .Type }}) error
 	Reload() error
 }
 
@@ -473,7 +477,10 @@ const listBindTemplate = `
 //
 // Since: {{ .Since }}
 type {{ .Name }}List interface {
-	DataList
+	AddListener(DataListener)
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
 
 	Append(value {{ .Type }}) error
 	Get() ([]{{ .Type }}, error)
@@ -488,7 +495,18 @@ type {{ .Name }}List interface {
 //
 // Since: {{ .Since }}
 type External{{ .Name }}List interface {
-	{{ .Name }}List
+	AddListener(DataListener)
+	RemoveListener(DataListener)
+	GetItem(index int) (DataItem, error)
+	Length() int
+
+	Append(value {{ .Type }}) error
+	Get() ([]{{ .Type }}, error)
+	GetValue(index int) ({{ .Type }}, error)
+	Prepend(value {{ .Type }}) error
+	Remove(value {{ .Type }}) error
+	Set(list []{{ .Type }}) error
+	SetValue(index int, value {{ .Type }}) error
 
 	Reload() error
 }
@@ -757,7 +775,10 @@ const treeBindTemplate = `
 // Since: 2.4
 {{- end }}
 type {{ .Name }}Tree interface {
-	DataTree
+	AddListener(DataListener)
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
 
 	Append(parent, id string, value {{ .Type }}) error
 	Get() (map[string][]string, map[string]{{ .Type }}, error)
@@ -776,7 +797,18 @@ type {{ .Name }}Tree interface {
 // Since: 2.4
 {{- end }}
 type External{{ .Name }}Tree interface {
-	{{ .Name }}Tree
+	AddListener(DataListener)
+	RemoveListener(DataListener)
+	GetItem(id string) (DataItem, error)
+	ChildIDs(string) []string
+
+	Append(parent, id string, value {{ .Type }}) error
+	Get() (map[string][]string, map[string]{{ .Type }}, error)
+	GetValue(id string) ({{ .Type }}, error)
+	Prepend(parent, id string, value {{ .Type }}) error
+	Remove(id string) error
+	Set(ids map[string][]string, values map[string]{{ .Type }}) error
+	SetValue(id string, value {{ .Type }}) error
 
 	Reload() error
 }

@@ -68,7 +68,7 @@ func TestButton_Hover_Math(t *testing.T) {
 	srcAlpha := float32(srcA) / 0xFF
 	dstAlpha := float32(dstA) / 0xFF
 
-	outAlpha := (srcAlpha + dstAlpha*(1-srcAlpha))
+	outAlpha := srcAlpha + dstAlpha*(1-srcAlpha)
 	outR := uint32((float32(srcR)*srcAlpha + float32(dstR)*dstAlpha*(1-srcAlpha)) / outAlpha)
 	outG := uint32((float32(srcG)*srcAlpha + float32(dstG)*dstAlpha*(1-srcAlpha)) / outAlpha)
 	outB := uint32((float32(srcB)*srcAlpha + float32(dstB)*dstAlpha*(1-srcAlpha)) / outAlpha)

@@ -74,7 +74,36 @@ func NewTabItemWithIcon(text string, icon fyne.Resource, content fyne.CanvasObje
 }
 
 type baseTabs interface {
-	fyne.Widget
+	// geometry
+
+	// MinSize returns the minimum size this object needs to be drawn.
+	MinSize() fyne.Size
+	// Move moves this object to the given position relative to its parent.
+	// This should only be called if your object is not in a container with a layout manager.
+	Move(fyne.Position)
+	// Position returns the current position of the object relative to its parent.
+	Position() fyne.Position
+	// Resize resizes this object to the given size.
+	// This should only be called if your object is not in a container with a layout manager.
+	Resize(fyne.Size)
+	// Size returns the current size of this object.
+	Size() fyne.Size
+
+	// visibility
+
+	// Hide hides this object.
+	Hide()
+	// Visible returns whether this object is visible or not.
+	Visible() bool
+	// Show shows this object.
+	Show()
+
+	// Refresh must be called if this object should be redrawn because its inner state changed.
+	Refresh()
+
+	// CreateRenderer returns a new [WidgetRenderer] for this widget.
+	// This should not be called by regular code, it is used internally to render a widget.
+	CreateRenderer() fyne.WidgetRenderer
 
 	onUnselected() func(*TabItem)
 	onSelected() func(*TabItem)

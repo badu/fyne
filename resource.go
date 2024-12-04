@@ -21,7 +21,8 @@ type Resource interface {
 //
 // Since: 2.5
 type ThemedResource interface {
-	Resource
+	Name() string
+	Content() []byte
 	ThemeColorName() ThemeColorName
 }
 

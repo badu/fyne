@@ -362,7 +362,7 @@ func (t *Tree) TypedKey(event *fyne.KeyEvent) {
 		if t.IsBranch(t.currentFocus) {
 			t.OpenBranch(t.currentFocus)
 		}
-		children := []TreeNodeID{}
+		var children []TreeNodeID
 		if childUIDs := t.ChildUIDs; childUIDs != nil {
 			children = childUIDs(t.currentFocus)
 		}

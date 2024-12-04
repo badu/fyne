@@ -36,7 +36,7 @@ func (cs *CustomShortcut) ShortcutName() string {
 }
 
 func modifierToString(mods fyne.KeyModifier) string {
-	s := []string{}
+	var s []string
 	if (mods & fyne.KeyModifierShift) != 0 {
 		s = append(s, string("Shift"))
 	}

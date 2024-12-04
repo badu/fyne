@@ -20,7 +20,14 @@ const (
 
 // Keyboardable describes any CanvasObject that needs a keyboard
 type Keyboardable interface {
-	fyne.Focusable
+	// FocusGained is a hook called by the focus handling logic after this object gained the focus.
+	FocusGained()
+	// FocusLost is a hook called by the focus handling logic after this object lost the focus.
+	FocusLost()
 
+	// TypedRune is a hook called by the input handling logic on text input events if this object is focused.
+	TypedRune(rune)
+	// TypedKey is a hook called by the input handling logic on key events if this object is focused.
+	TypedKey(*fyne.KeyEvent)
 	Keyboard() KeyboardType
 }

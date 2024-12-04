@@ -19,7 +19,7 @@ type ScrollDirection = widget.ScrollDirection
 // Constants for valid values of ScrollDirection.
 const (
 	// ScrollBoth supports horizontal and vertical scrolling.
-	ScrollBoth ScrollDirection = widget.ScrollBoth
+	ScrollBoth = widget.ScrollBoth
 	// ScrollHorizontalOnly specifies the scrolling should only happen left to right.
 	ScrollHorizontalOnly = widget.ScrollHorizontalOnly
 	// ScrollVerticalOnly specifies the scrolling should only happen top to bottom.

@@ -7,7 +7,13 @@ const DataTreeRootID = ""
 //
 // Since: 2.4
 type DataTree interface {
-	DataItem
+	// AddListener attaches a new change listener to this DataItem.
+	// Listeners are called each time the data inside this DataItem changes.
+	// Additionally the listener will be triggered upon successful connection to get the current value.
+	AddListener(DataListener)
+	// RemoveListener will detach the specified change listener from the DataItem.
+	// Disconnected listener will no longer be triggered when changes occur.
+	RemoveListener(DataListener)
 	GetItem(id string) (DataItem, error)
 	ChildIDs(string) []string
 }

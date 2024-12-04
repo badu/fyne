@@ -130,8 +130,8 @@ func TestSplitContainer_SetRatio(t *testing.T) {
 	size := fyne.NewSize(100, 100)
 	usableLength := 100 - float64(dividerThickness(nil))
 
-	objA := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
-	objB := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objA := canvas.NewRectangle(color.NRGBA{})
+	objB := canvas.NewRectangle(color.NRGBA{})
 
 	t.Run("Horizontal", func(t *testing.T) {
 		sc := NewHSplit(objA, objB)
@@ -181,9 +181,9 @@ func TestSplitContainer_SetRatio(t *testing.T) {
 
 func TestSplitContainer_SetRatio_limits(t *testing.T) {
 	size := fyne.NewSize(50, 50)
-	objA := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objA := canvas.NewRectangle(color.NRGBA{})
 	objA.SetMinSize(size)
-	objB := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objB := canvas.NewRectangle(color.NRGBA{})
 	objB.SetMinSize(size)
 	t.Run("Horizontal", func(t *testing.T) {
 		sc := NewHSplit(objA, objB)
@@ -264,11 +264,11 @@ func TestSplitContainer_swap_contents(t *testing.T) {
 	expectedWidth := 100 + 10 + dt
 	expectedHeight := fyne.Max(100, dl)
 
-	objA := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objA := canvas.NewRectangle(color.NRGBA{})
 	objA.SetMinSize(fyne.NewSize(10, 10))
-	objB := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objB := canvas.NewRectangle(color.NRGBA{})
 	objB.SetMinSize(fyne.NewSize(10, 10))
-	objC := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objC := canvas.NewRectangle(color.NRGBA{})
 	objC.SetMinSize(fyne.NewSize(100, 100))
 	t.Run("Leading", func(t *testing.T) {
 		sc := NewHSplit(objA, objB)
@@ -307,9 +307,9 @@ func TestSplitContainer_divider_cursor(t *testing.T) {
 
 func TestSplitContainer_divider_drag(t *testing.T) {
 	size := fyne.NewSize(10, 10)
-	objA := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objA := canvas.NewRectangle(color.NRGBA{})
 	objA.SetMinSize(size)
-	objB := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objB := canvas.NewRectangle(color.NRGBA{})
 	objB.SetMinSize(size)
 	t.Run("Horizontal", func(t *testing.T) {
 		split := NewHSplit(objA, objB)
@@ -383,9 +383,9 @@ func TestSplitContainer_divider_drag(t *testing.T) {
 
 func TestSplitContainer_divider_drag_StartOffsetLessThanMinSize(t *testing.T) {
 	size := fyne.NewSize(30, 30)
-	objA := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objA := canvas.NewRectangle(color.NRGBA{})
 	objA.SetMinSize(size)
-	objB := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objB := canvas.NewRectangle(color.NRGBA{})
 	objB.SetMinSize(size)
 	t.Run("Horizontal", func(t *testing.T) {
 		split := NewHSplit(objA, objB)
@@ -480,9 +480,9 @@ func TestSplitContainer_divider_MinSize(t *testing.T) {
 func TestSplitContainer_Hidden(t *testing.T) {
 	dt := dividerThickness(nil)
 	size := fyne.NewSize(10, 10)
-	objA := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objA := canvas.NewRectangle(color.NRGBA{})
 	objA.SetMinSize(size)
-	objB := canvas.NewRectangle(color.NRGBA{0, 0, 0, 0})
+	objB := canvas.NewRectangle(color.NRGBA{})
 
 	t.Run("Horizontal_Leading", func(t *testing.T) {
 		sc := NewHSplit(objA, objB)

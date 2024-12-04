@@ -18,7 +18,56 @@ var dummyCanvas WindowlessCanvas
 
 // WindowlessCanvas provides functionality for a canvas to operate without a window
 type WindowlessCanvas interface {
-	fyne.Canvas
+	Content() fyne.CanvasObject
+	SetContent(fyne.CanvasObject)
+
+	Refresh(fyne.CanvasObject)
+
+	// Focus makes the provided item focused.
+	// The item has to be added to the contents of the canvas before calling this.
+	Focus(fyne.Focusable)
+	// FocusNext focuses the next focusable item.
+	// If no item is currently focused, the first focusable item is focused.
+	// If the last focusable item is currently focused, the first focusable item is focused.
+	//
+	// Since: 2.0
+	FocusNext()
+	// FocusPrevious focuses the previous focusable item.
+	// If no item is currently focused, the last focusable item is focused.
+	// If the first focusable item is currently focused, the last focusable item is focused.
+	//
+	// Since: 2.0
+	FocusPrevious()
+	Unfocus()
+	Focused() fyne.Focusable
+
+	// Size returns the current size of this canvas
+	Size() fyne.Size
+	// Scale returns the current scale (multiplication factor) this canvas uses to render
+	// The pixel size of a [CanvasObject] can be found by multiplying by this value.
+	Scale() float32
+
+	// Overlays returns the overlay stack.
+	Overlays() fyne.OverlayStack
+
+	OnTypedRune() func(rune)
+	SetOnTypedRune(func(rune))
+	OnTypedKey() func(*fyne.KeyEvent)
+	SetOnTypedKey(func(*fyne.KeyEvent))
+	AddShortcut(shortcut fyne.Shortcut, handler func(shortcut fyne.Shortcut))
+	RemoveShortcut(shortcut fyne.Shortcut)
+
+	Capture() image.Image
+
+	// PixelCoordinateForPosition returns the x and y pixel coordinate for a given position on this canvas.
+	// This can be used to find absolute pixel positions or pixel offsets relative to an object top left.
+	PixelCoordinateForPosition(fyne.Position) (int, int)
+
+	// InteractiveArea returns the position and size of the central interactive area.
+	// Operating system elements may overlap the portions outside this area and widgets should avoid being outside.
+	//
+	// Since: 1.4
+	InteractiveArea() (fyne.Position, fyne.Size)
 
 	Padded() bool
 	Resize(fyne.Size)
@@ -179,8 +228,17 @@ func (c *canvas) Resize(size fyne.Size) {
 
 	// Ensure testcanvas mimics real canvas.Resize behavior
 	for _, overlay := range overlays.List() {
+		// TODO : @Badu - see this
 		type popupWidget interface {
-			fyne.CanvasObject
+			MinSize() fyne.Size
+			Move(fyne.Position)
+			Position() fyne.Position
+			Resize(fyne.Size)
+			Size() fyne.Size
+			Hide()
+			Visible() bool
+			Show()
+			Refresh()
 			ShowAtPosition(fyne.Position)
 		}
 		if p, ok := overlay.(popupWidget); ok {

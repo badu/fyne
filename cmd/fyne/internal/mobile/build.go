@@ -381,7 +381,7 @@ func parseBuildTarget(buildTarget string) (os string, archs []string, _ error) {
 	}
 
 	all := false
-	archNames := []string{}
+	var archNames []string
 	for i, p := range strings.Split(buildTarget, ",") {
 		osarch := strings.SplitN(p, "/", 2) // len(osarch) > 0
 		if !util.IsAndroid(osarch[0]) && !util.IsIOS(osarch[0]) {

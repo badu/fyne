@@ -68,12 +68,12 @@ func TestCanvas_walkTree(t *testing.T) {
 		parent fyne.CanvasObject
 		pos    fyne.Position
 	}
-	beforeCalls := []beforeCall{}
+	var beforeCalls []beforeCall
 	type afterCall struct {
 		obj    fyne.CanvasObject
 		parent fyne.CanvasObject
 	}
-	afterCalls := []afterCall{}
+	var afterCalls []afterCall
 
 	var i int
 	c.walkTree(tree, func(node *RenderCacheNode, pos fyne.Position) {
@@ -117,9 +117,9 @@ func TestCanvas_walkTree(t *testing.T) {
 	//
 	// test that second walk gives access to the cache
 	//
-	secondRunBeforePainterData := []nodeInfo{}
-	secondRunAfterPainterData := []nodeInfo{}
-	nodes := []*RenderCacheNode{}
+	var secondRunBeforePainterData []nodeInfo
+	var secondRunAfterPainterData []nodeInfo
+	var nodes []*RenderCacheNode
 
 	c.walkTree(tree, func(node *RenderCacheNode, pos fyne.Position) {
 		secondRunBeforePainterData = append(secondRunBeforePainterData, node.painterData.(nodeInfo))
@@ -165,8 +165,8 @@ func TestCanvas_walkTree(t *testing.T) {
 	deleteAt(rightCol, 1)
 	thirdCol := container.NewVBox()
 	content.Add(thirdCol)
-	thirdRunBeforePainterData := []nodeInfo{}
-	thirdRunAfterPainterData := []nodeInfo{}
+	var thirdRunBeforePainterData []nodeInfo
+	var thirdRunAfterPainterData []nodeInfo
 
 	i = 0
 	c.walkTree(tree, func(node *RenderCacheNode, pos fyne.Position) {
@@ -209,8 +209,8 @@ func TestCanvas_walkTree(t *testing.T) {
 	insert(leftCol, leftNewObj2a, 1)
 	rightNewObj0 := canvas.NewRectangle(color.Gray16{Y: 30})
 	Prepend(rightCol, rightNewObj0)
-	fourthRunBeforePainterData := []nodeInfo{}
-	fourthRunAfterPainterData := []nodeInfo{}
+	var fourthRunBeforePainterData []nodeInfo
+	var fourthRunAfterPainterData []nodeInfo
 	nodes = []*RenderCacheNode{}
 
 	i = 0
@@ -291,8 +291,8 @@ func TestCanvas_walkTree(t *testing.T) {
 	//
 	deleteAt(leftCol, 1)
 	deleteAt(rightCol, 0)
-	fifthRunBeforePainterData := []nodeInfo{}
-	fifthRunAfterPainterData := []nodeInfo{}
+	var fifthRunBeforePainterData []nodeInfo
+	var fifthRunAfterPainterData []nodeInfo
 	nodes = []*RenderCacheNode{}
 
 	i = 0

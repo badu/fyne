@@ -52,6 +52,7 @@ func (f *FocusManager) Focus(obj fyne.Focusable) bool {
 			return true
 		}
 		if dis, ok := obj.(fyne.Disableable); ok && dis.Disabled() {
+			// TODO : @Badu - see about this
 			type selectableText interface {
 				SelectedText() string
 			}

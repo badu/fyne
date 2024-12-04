@@ -59,8 +59,15 @@ const (
 // Keyable describes any focusable canvas object that can accept desktop key events.
 // This is the traditional key down and up event that is not applicable to all devices.
 type Keyable interface {
-	fyne.Focusable
+	// FocusGained is a hook called by the focus handling logic after this object gained the focus.
+	FocusGained()
+	// FocusLost is a hook called by the focus handling logic after this object lost the focus.
+	FocusLost()
 
+	// TypedRune is a hook called by the input handling logic on text input events if this object is focused.
+	TypedRune(rune)
+	// TypedKey is a hook called by the input handling logic on key events if this object is focused.
+	TypedKey(*fyne.KeyEvent)
 	KeyDown(*fyne.KeyEvent)
 	KeyUp(*fyne.KeyEvent)
 }

@@ -81,7 +81,7 @@ func TestGridWrap_ScrollTo(t *testing.T) {
 
 	// override update item to keep track of greatest item rendered
 	oldUpdateFunc := g.UpdateItem
-	var greatest GridWrapItemID = -1
+	var greatest = -1
 	g.UpdateItem = func(id GridWrapItemID, item fyne.CanvasObject) {
 		if id > greatest {
 			greatest = id

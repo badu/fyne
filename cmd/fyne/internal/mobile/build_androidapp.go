@@ -78,7 +78,7 @@ func goAndroidBuild(pkg *packages.Package, bundleID string, androidArchs []strin
 		}
 	}
 
-	libFiles := []string{}
+	var libFiles []string
 	nmpkgs := make(map[string]map[string]bool) // map: arch -> extractPkgs' output
 
 	for _, arch := range androidArchs {

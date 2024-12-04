@@ -841,7 +841,7 @@ func (w *window) triggersShortcut(localizedKeyName fyne.KeyName, key fyne.KeyNam
 	// as a "Paste" shortcut.
 	// See https://github.com/fyne-io/fyne/pull/2587 for discussion.
 	keyName := localizedKeyName
-	resemblesShortcut := (modifier&(fyne.KeyModifierControl|fyne.KeyModifierSuper) != 0)
+	resemblesShortcut := modifier&(fyne.KeyModifierControl|fyne.KeyModifierSuper) != 0
 	if (localizedKeyName == fyne.KeyUnknown) && resemblesShortcut {
 		if key != fyne.KeyUnknown {
 			keyName = key
@@ -901,6 +901,7 @@ func (w *window) triggersShortcut(localizedKeyName fyne.KeyName, key fyne.KeyNam
 	if shortcut != nil {
 		if focused, ok := w.canvas.Focused().(fyne.Shortcutable); ok {
 			shouldRunShortcut := true
+			// TODO: @Badu - see this
 			type selectableText interface {
 				fyne.Disableable
 				SelectedText() string

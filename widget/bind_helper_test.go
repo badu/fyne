@@ -9,7 +9,7 @@ import (
 
 func TestBasicBinder(t *testing.T) {
 	var binder basicBinder
-	var value int = -1
+	var value = -1
 
 	item1 := binding.NewInt()
 

@@ -227,7 +227,7 @@ func TestPainter_paintLine_thin(t *testing.T) {
 	lines := [5]*canvas.Line{}
 	sws := []float32{4, 2, 1, 0.5, 0.3}
 	for i, sw := range sws {
-		lines[i] = canvas.NewLine(color.RGBA{255, 0, 0, 255})
+		lines[i] = canvas.NewLine(color.RGBA{R: 255, A: 255})
 		lines[i].StrokeWidth = sw
 		x := float32(i * 20)
 		lines[i].Position1 = fyne.NewPos(x, 10)

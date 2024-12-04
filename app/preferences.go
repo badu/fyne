@@ -28,7 +28,8 @@ var errEmptyPreferencesStore = errors.New("empty preferences store")
 
 // returned from storageWriter() - may be a file, browser local storage, etc
 type writeSyncCloser interface {
-	io.WriteCloser
+	Close() error
+	Write(p []byte) (n int, err error)
 	Sync() error
 }
 

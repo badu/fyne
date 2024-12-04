@@ -98,7 +98,7 @@ func TestDialog_InformationCallback(t *testing.T) {
 }
 
 func TestDialog_ErrorCallback(t *testing.T) {
-	err := errors.New("Error message")
+	err := errors.New("error message")
 	d := NewError(err, test.NewTempWindow(t, nil))
 	tapped := false
 	d.SetOnClosed(func() { tapped = true })

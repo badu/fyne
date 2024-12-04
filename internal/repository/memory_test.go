@@ -346,7 +346,7 @@ func TestInMemoryRepositoryListing(t *testing.T) {
 
 	listing, err := storage.List(foo)
 	assert.Nil(t, err)
-	stringListing := []string{}
+	var stringListing []string
 	for _, u := range listing {
 		stringListing = append(stringListing, u.String())
 	}

@@ -8,7 +8,7 @@ import (
 )
 
 func TestNot(t *testing.T) {
-	var b bool = true
+	var b = true
 
 	bb := BindBool(&b)
 	notbb := Not(bb)

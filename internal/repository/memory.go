@@ -275,7 +275,7 @@ func (m *InMemoryRepository) List(u fyne.URI) ([]fyne.URI, error) {
 	// Now we can simply loop over all the paths and find the ones with an
 	// appropriate prefix, then eliminate those with too many path
 	// components.
-	listing := []fyne.URI{}
+	var listing []fyne.URI
 	for p := range m.Data {
 		// We are going to compare ncomp with the number of elements in
 		// prefixSplit, which is guaranteed to have a trailing slash,

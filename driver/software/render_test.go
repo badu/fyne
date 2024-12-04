@@ -59,7 +59,7 @@ func TestRenderCanvas(t *testing.T) {
 func TestRender_ImageSize(t *testing.T) {
 	image := canvas.NewImageFromFile("../../theme/icons/fyne.png")
 	image.FillMode = canvas.ImageFillOriginal
-	bg := canvas.NewCircle(color.NRGBA{255, 0, 0, 128})
+	bg := canvas.NewCircle(color.NRGBA{R: 255, A: 128})
 	bg.StrokeColor = color.White
 	bg.StrokeWidth = 5
 
