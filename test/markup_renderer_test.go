@@ -513,8 +513,6 @@ type markupRendererTestWidget struct {
 	size   fyne.Size
 }
 
-var _ fyne.Widget = (*markupRendererTestWidget)(nil)
-
 func (w *markupRendererTestWidget) CreateRenderer() fyne.WidgetRenderer {
 	return &markupRendererTestWidgetRenderer{w: w}
 }
@@ -578,5 +576,3 @@ func (r *markupRendererTestWidgetRenderer) Objects() []fyne.CanvasObject {
 
 func (r *markupRendererTestWidgetRenderer) Refresh() {
 }
-
-var _ fyne.WidgetRenderer = (*markupRendererTestWidgetRenderer)(nil)

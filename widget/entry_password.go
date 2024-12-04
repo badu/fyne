@@ -7,10 +7,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-var _ desktop.Cursorable = (*passwordRevealer)(nil)
-var _ fyne.Tappable = (*passwordRevealer)(nil)
-var _ fyne.Widget = (*passwordRevealer)(nil)
-
 type passwordRevealer struct {
 	BaseWidget
 
@@ -50,8 +46,6 @@ func (r *passwordRevealer) Tapped(*fyne.PointEvent) {
 	})
 	fyne.CurrentApp().Driver().CanvasForObject(r).Focus(r.entry.super().(fyne.Focusable))
 }
-
-var _ fyne.WidgetRenderer = (*passwordRevealerRenderer)(nil)
 
 type passwordRevealerRenderer struct {
 	fyne.WidgetRenderer

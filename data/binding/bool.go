@@ -4,8 +4,6 @@ type not struct {
 	Bool
 }
 
-var _ Bool = (*not)(nil)
-
 // Not returns a Bool binding that invert the value of the given data binding.
 // This is providing the logical Not boolean operation as a data binding.
 //
@@ -26,8 +24,6 @@ func (n *not) Set(value bool) error {
 type and struct {
 	booleans
 }
-
-var _ Bool = (*and)(nil)
 
 // And returns a Bool binding that return true when all the passed Bool binding are
 // true and false otherwise. It does apply a logical and boolean operation on all passed
@@ -65,8 +61,6 @@ func (a *and) Set(value bool) error {
 type or struct {
 	booleans
 }
-
-var _ Bool = (*or)(nil)
 
 // Or returns a Bool binding that return true when at least one of the passed Bool binding
 // is true and false otherwise. It does apply a logical or boolean operation on all passed

@@ -33,8 +33,6 @@ func NewFormItem(text string, widget fyne.CanvasObject) *FormItem {
 	return &FormItem{Text: text, Widget: widget}
 }
 
-var _ fyne.Validatable = (*Form)(nil)
-
 // Form widget is two column grid where each row has a label and a widget (usually an input).
 // The last row of the grid will contain the appropriate form control buttons if any should be shown.
 // Setting OnSubmit will set the submit button to be visible and call back the function when tapped.

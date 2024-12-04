@@ -7,9 +7,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-// Declare conformity with Layout interface
-var _ fyne.Layout = (*gridWrapLayout)(nil)
-
 type gridWrapLayout struct {
 	CellSize fyne.Size
 	colCount int

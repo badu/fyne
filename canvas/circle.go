@@ -7,9 +7,6 @@ import (
 	"fyne.io/fyne/v2"
 )
 
-// Declare conformity with CanvasObject interface
-var _ fyne.CanvasObject = (*Circle)(nil)
-
 // Circle describes a colored circle primitive in a Fyne canvas
 type Circle struct {
 	Position1 fyne.Position // The current top-left position of the Circle

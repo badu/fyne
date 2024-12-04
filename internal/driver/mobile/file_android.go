@@ -32,9 +32,6 @@ type javaStream struct {
 	stream unsafe.Pointer // java.io.InputStream
 }
 
-// Declare conformity to ReadCloser interface
-var _ io.ReadCloser = (*javaStream)(nil)
-
 func (s *javaStream) Read(p []byte) (int, error) {
 	count := 0
 	err := app.RunOnJVM(func(_, env, ctx uintptr) error {
@@ -129,9 +126,6 @@ func nativeFileSave(f *fileSave) (io.WriteCloser, error) {
 	stream.stream = ret
 	return stream, nil
 }
-
-// Declare conformity to WriteCloser interface
-var _ io.WriteCloser = (*javaStream)(nil)
 
 func (s *javaStream) Write(p []byte) (int, error) {
 	err := app.RunOnJVM(func(_, env, ctx uintptr) error {

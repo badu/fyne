@@ -295,7 +295,6 @@ import "github.com/go-text/typesetting/fontscan"
 //	MetricsInvoked      bool
 //}
 //
-//var _ font.Face = (*mockFace)(nil)
 //
 //func (f *mockFace) Close() error {
 //	f.CloseInvoked = true
@@ -332,7 +331,6 @@ import "github.com/go-text/typesetting/fontscan"
 //	IndexInvoked bool
 //}
 //
-//var _ ttfFont = (*mockFont)(nil)
 //
 //func (f *mockFont) Index(r rune) truetype.Index {
 //	f.IndexInvoked = true

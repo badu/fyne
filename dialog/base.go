@@ -31,9 +31,6 @@ type Dialog interface {
 	MinSize() fyne.Size
 }
 
-// Declare conformity to Dialog interface
-var _ Dialog = (*dialog)(nil)
-
 type dialog struct {
 	callback    func(bool)
 	title       string

@@ -17,8 +17,6 @@ type OverlayStack struct {
 	propertyLock  sync.RWMutex
 }
 
-var _ fyne.OverlayStack = (*OverlayStack)(nil)
-
 // Add puts an overlay on the stack.
 //
 // Implements: fyne.OverlayStack

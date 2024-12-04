@@ -70,8 +70,6 @@ func (p *painter) Init() {
 
 type xjsContext struct{}
 
-var _ context = (*xjsContext)(nil)
-
 func (c *xjsContext) ActiveTexture(textureUnit uint32) {
 	gl.ActiveTexture(gl.Enum(textureUnit))
 }

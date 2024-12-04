@@ -17,9 +17,6 @@ var (
 	currentDPI         float32
 )
 
-// Declare conformity with Device
-var _ fyne.Device = (*device)(nil)
-
 func (*device) Locale() fyne.Locale {
 	return lang.SystemLocale()
 }

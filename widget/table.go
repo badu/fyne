@@ -18,14 +18,6 @@ const noCellMatch = math.MaxInt
 // allTableCellsID represents all table cells when refreshing requested cells
 var allTableCellsID = TableCellID{-1, -1}
 
-// Declare conformity with interfaces
-var _ desktop.Cursorable = (*Table)(nil)
-var _ fyne.Draggable = (*Table)(nil)
-var _ fyne.Focusable = (*Table)(nil)
-var _ desktop.Hoverable = (*Table)(nil)
-var _ fyne.Tappable = (*Table)(nil)
-var _ fyne.Widget = (*Table)(nil)
-
 // TableCellID is a type that represents a cell's position in a table based on its row and column location.
 type TableCellID struct {
 	Row int
@@ -1031,9 +1023,6 @@ func (t *Table) visibleRowHeights(rowHeight float32, rows int) (visible map[int]
 	return
 }
 
-// Declare conformity with WidgetRenderer interface.
-var _ fyne.WidgetRenderer = (*tableRenderer)(nil)
-
 type tableRenderer struct {
 	widget.BaseRenderer
 	t *Table
@@ -1154,9 +1143,6 @@ func (t *tableRenderer) calculateHeaderSizes(th fyne.Theme) {
 	t.t.stuckWidth = stuckWidth
 }
 
-// Declare conformity with Widget interface.
-var _ fyne.Widget = (*tableCells)(nil)
-
 type tableCells struct {
 	BaseWidget
 	t *Table
@@ -1190,9 +1176,6 @@ func (c *tableCells) Resize(s fyne.Size) {
 	c.BaseWidget.Resize(s)
 	c.Refresh() // trigger a redraw
 }
-
-// Declare conformity with WidgetRenderer interface.
-var _ fyne.WidgetRenderer = (*tableCellsRenderer)(nil)
 
 type tableCellsRenderer struct {
 	widget.BaseRenderer

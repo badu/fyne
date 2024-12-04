@@ -3,11 +3,8 @@ package app
 import (
 	"sync/atomic"
 
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/internal/async"
 )
-
-var _ fyne.Lifecycle = (*Lifecycle)(nil)
 
 // Lifecycle represents the various phases that an app can transition through.
 //

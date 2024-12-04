@@ -49,8 +49,6 @@ func newColorRecentPicker(callback func(color.Color)) fyne.CanvasObject {
 	return newColorButtonBox(stringsToColors(readRecentColors()...), theme.HistoryIcon(), callback)
 }
 
-var _ fyne.Widget = (*colorAdvancedPicker)(nil)
-
 // colorAdvancedPicker widget is a component for selecting a color.
 type colorAdvancedPicker struct {
 	widget.BaseWidget
@@ -253,8 +251,6 @@ func (p *colorAdvancedPicker) updateRGBA(r, g, b, a int) bool {
 	p.Hue, p.Saturation, p.Lightness = rgbToHsl(p.Red, p.Green, p.Blue)
 	return true
 }
-
-var _ fyne.WidgetRenderer = (*colorPickerRenderer)(nil)
 
 type colorPickerRenderer struct {
 	fyne.WidgetRenderer

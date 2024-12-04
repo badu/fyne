@@ -11,8 +11,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-var _ fyne.Widget = (*colorChannel)(nil)
-
 // colorChannel controls a channel of a color and triggers the callback when changed.
 type colorChannel struct {
 	widget.BaseWidget

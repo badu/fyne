@@ -16,9 +16,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-// Declare conformity with Canvas interface
-var _ fyne.Canvas = (*glCanvas)(nil)
-
 type glCanvas struct {
 	common.Canvas
 

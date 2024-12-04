@@ -10,9 +10,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-// Declare conformity with Widget interface.
-var _ fyne.Widget = (*DocTabs)(nil)
-
 // DocTabs container is used to display various pieces of content identified by tabs.
 // The tabs contain text and/or an icon and allow the user to switch between the content specified in each TabItem.
 // Each item is represented by a button at the edge of the container.
@@ -231,9 +228,6 @@ func (t *DocTabs) tabLocation() TabLocation {
 func (t *DocTabs) transitioning() bool {
 	return t.isTransitioning
 }
-
-// Declare conformity with WidgetRenderer interface.
-var _ fyne.WidgetRenderer = (*docTabsRenderer)(nil)
 
 type docTabsRenderer struct {
 	baseTabsRenderer

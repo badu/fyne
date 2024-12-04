@@ -1811,8 +1811,6 @@ type hoverableObject struct {
 	hoverable
 }
 
-var _ desktop.Hoverable = (*hoverable)(nil)
-
 type hoverable struct {
 	mouseInEvents    []any
 	mouseOutEvents   []any
@@ -1851,8 +1849,6 @@ type draggableObject struct {
 	draggable
 }
 
-var _ fyne.Draggable = (*draggable)(nil)
-
 type draggable struct {
 	events    []any
 	endEvents []any
@@ -1887,8 +1883,6 @@ type mouseableObject struct {
 	mouseable
 }
 
-var _ desktop.Mouseable = (*mouseable)(nil)
-
 type mouseable struct {
 	mouseEvents []any
 }
@@ -1916,8 +1910,6 @@ type tappableObject struct {
 	*canvas.Rectangle
 	tappable
 }
-
-var _ fyne.Tappable = (*tappable)(nil)
 
 type tappable struct {
 	tapEvents          []any
@@ -1947,9 +1939,6 @@ type draggableTappableObject struct {
 	draggable
 	tappable
 }
-
-var _ fyne.Focusable = (*focusable)(nil)
-var _ fyne.Disableable = (*focusable)(nil)
 
 type focusable struct {
 	canvas.Rectangle
@@ -2003,8 +1992,6 @@ type typedShortcutable struct {
 func (ts *typedShortcutable) TypedShortcut(s fyne.Shortcut) {
 	ts.capturedShortcuts = append(ts.capturedShortcuts, s)
 }
-
-var _ fyne.Scrollable = (*scrollable)(nil)
 
 type scrollable struct {
 	*canvas.Rectangle

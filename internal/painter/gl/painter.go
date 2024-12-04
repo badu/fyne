@@ -74,9 +74,6 @@ type painter struct {
 	pixScale              float32 // pre-calculate scale*texScale for each draw
 }
 
-// Declare conformity to Painter interface
-var _ Painter = (*painter)(nil)
-
 func (p *painter) Clear() {
 	r, g, b, a := theme.Color(theme.ColorNameBackground).RGBA()
 	p.ctx.ClearColor(float32(r)/max16bit, float32(g)/max16bit, float32(b)/max16bit, float32(a)/max16bit)

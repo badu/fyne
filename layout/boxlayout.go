@@ -45,9 +45,6 @@ func NewCustomPaddedVBoxLayout(padding float32) fyne.Layout {
 	}
 }
 
-// Declare conformity with Layout interface
-var _ fyne.Layout = (*vBoxLayout)(nil)
-
 type vBoxLayout struct {
 	paddingFunc func() float32
 }
@@ -127,9 +124,6 @@ func (v vBoxLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	}
 	return minSize
 }
-
-// Declare conformity with Layout interface
-var _ fyne.Layout = (*hBoxLayout)(nil)
 
 type hBoxLayout struct {
 	paddingFunc func() float32

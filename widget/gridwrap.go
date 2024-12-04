@@ -14,10 +14,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-// Declare conformity with interfaces.
-var _ fyne.Widget = (*GridWrap)(nil)
-var _ fyne.Focusable = (*GridWrap)(nil)
-
 // GridWrapItemID is the ID of an individual item in the GridWrap widget.
 //
 // Since: 2.4
@@ -345,9 +341,6 @@ func (l *GridWrap) contentMinSize() fyne.Size {
 	return fyne.NewSize(l.itemMin.Width, (l.itemMin.Height+padding)*rows-padding)
 }
 
-// Declare conformity with WidgetRenderer interface.
-var _ fyne.WidgetRenderer = (*gridWrapRenderer)(nil)
-
 type gridWrapRenderer struct {
 	objects []fyne.CanvasObject
 
@@ -388,11 +381,6 @@ func (l *gridWrapRenderer) Destroy() {
 func (l *gridWrapRenderer) Objects() []fyne.CanvasObject {
 	return l.objects
 }
-
-// Declare conformity with interfaces.
-var _ fyne.Widget = (*gridWrapItem)(nil)
-var _ fyne.Tappable = (*gridWrapItem)(nil)
-var _ desktop.Hoverable = (*gridWrapItem)(nil)
 
 type gridWrapItem struct {
 	BaseWidget
@@ -459,9 +447,6 @@ func (gw *gridWrapItem) Tapped(*fyne.PointEvent) {
 	}
 }
 
-// Declare conformity with the WidgetRenderer interface.
-var _ fyne.WidgetRenderer = (*gridWrapItemRenderer)(nil)
-
 type gridWrapItemRenderer struct {
 	widget.BaseRenderer
 
@@ -497,9 +482,6 @@ func (gw *gridWrapItemRenderer) Refresh() {
 	gw.item.background.Refresh()
 	canvas.Refresh(gw.item.super())
 }
-
-// Declare conformity with Layout interface.
-var _ fyne.Layout = (*gridWrapLayout)(nil)
 
 type gridItemAndID struct {
 	item *gridWrapItem

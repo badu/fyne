@@ -36,9 +36,6 @@ type secureReadCloser struct {
 	offset int
 }
 
-// Declare conformity to ReadCloser interface
-var _ io.ReadCloser = (*secureReadCloser)(nil)
-
 func (s *secureReadCloser) Read(p []byte) (int, error) {
 	if s.data == nil {
 		var length C.int
@@ -78,9 +75,6 @@ type secureWriteCloser struct {
 
 	offset int
 }
-
-// Declare conformity to WriteCloser interface
-var _ io.WriteCloser = (*secureWriteCloser)(nil)
 
 func (s *secureWriteCloser) Write(p []byte) (int, error) {
 	count := int(C.iosWriteToFile(s.handle, C.CBytes(p), C.int(len(p))))

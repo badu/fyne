@@ -6,9 +6,6 @@ import (
 	"fyne.io/fyne/v2"
 )
 
-// Declare conformity with CanvasObject interface
-var _ fyne.CanvasObject = (*Rectangle)(nil)
-
 // Rectangle describes a colored rectangle primitive in a Fyne canvas
 type Rectangle struct {
 	baseObject

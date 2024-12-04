@@ -642,8 +642,6 @@ type ThemedResource struct {
 	ColorName fyne.ThemeColorName
 }
 
-var _ fyne.ThemedResource = (*ThemedResource)(nil)
-
 // NewColoredResource creates a resource that adapts to the current theme setting using
 // the color named in the constructor.
 //
@@ -713,8 +711,6 @@ func (res *ThemedResource) Error() *ErrorThemedResource {
 type InvertedThemedResource struct {
 	source fyne.Resource
 }
-
-var _ fyne.ThemedResource = (*InvertedThemedResource)(nil)
 
 // NewInvertedThemedResource creates a resource that adapts to the current theme for use over highlighted elements.
 func NewInvertedThemedResource(orig fyne.Resource) *InvertedThemedResource {

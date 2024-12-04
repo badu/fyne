@@ -39,8 +39,6 @@ func TestLegacyWrapper_Size(t *testing.T) {
 	assert.Equal(t, oldTheme.TextSize(), int(newTheme.Size(SizeNameText)))
 }
 
-var _ fyne.LegacyTheme = (*legacyTheme)(nil)
-
 type legacyTheme struct {
 }
 

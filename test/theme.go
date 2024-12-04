@@ -217,8 +217,6 @@ type configurableTheme struct {
 	sizes  map[fyne.ThemeSizeName]float32
 }
 
-var _ fyne.Theme = (*configurableTheme)(nil)
-
 func (t *configurableTheme) Color(n fyne.ThemeColorName, _ fyne.ThemeVariant) color.Color {
 	if t.colors[n] == nil {
 		fyne.LogError(fmt.Sprintf("color %s not defined in theme %s", n, t.name), nil)

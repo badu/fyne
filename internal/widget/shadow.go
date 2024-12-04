@@ -8,8 +8,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-var _ fyne.Widget = (*Shadow)(nil)
-
 // Shadow is a widget that renders a shadow.
 type Shadow struct {
 	Base

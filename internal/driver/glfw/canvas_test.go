@@ -553,8 +553,6 @@ func TestGlCanvas_SetContent(t *testing.T) {
 	}
 }
 
-var _ fyne.Layout = (*recordingLayout)(nil)
-
 type recordingLayout struct {
 	layoutEvents []any
 }

@@ -78,8 +78,6 @@ func (p *painter) Init() {
 
 type esContext struct{}
 
-var _ context = (*esContext)(nil)
-
 func (c *esContext) ActiveTexture(textureUnit uint32) {
 	gl.ActiveTexture(textureUnit)
 }

@@ -10,9 +10,6 @@ import (
 type glDevice struct {
 }
 
-// Declare conformity with Device
-var _ fyne.Device = (*glDevice)(nil)
-
 func (*glDevice) Locale() fyne.Locale {
 	return lang.SystemLocale()
 }

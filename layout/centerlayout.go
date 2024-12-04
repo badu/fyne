@@ -2,9 +2,6 @@ package layout
 
 import "fyne.io/fyne/v2"
 
-// Declare conformity with Layout interface
-var _ fyne.Layout = (*centerLayout)(nil)
-
 type centerLayout struct {
 }
 

@@ -24,8 +24,6 @@ type RadioGroup struct {
 	_selIdx int
 }
 
-var _ fyne.Widget = (*RadioGroup)(nil)
-
 // NewRadioGroup creates a new radio group widget with the set options and change handler
 //
 // Since: 1.4

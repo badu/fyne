@@ -5,9 +5,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-// Declare conformity with Layout interface
-var _ fyne.Layout = (*paddedLayout)(nil)
-
 type paddedLayout struct{}
 
 // Layout is called to pack all child objects into a specified size.

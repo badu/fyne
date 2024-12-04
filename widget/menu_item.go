@@ -37,8 +37,6 @@ var keySymbols = map[fyne.KeyName]rune{
 	fyne.KeyUp:        '↑',
 }
 
-var _ fyne.Widget = (*menuItem)(nil)
-
 // menuItem is a widget for displaying a fyne.menuItem.
 type menuItem struct {
 	widget.Base

@@ -8,9 +8,6 @@ import (
 	"fyne.io/fyne/v2"
 )
 
-// Declare conformity with CanvasObject interface
-var _ fyne.CanvasObject = (*Raster)(nil)
-
 // Raster describes a raster image area that can render in a Fyne canvas
 type Raster struct {
 	baseObject

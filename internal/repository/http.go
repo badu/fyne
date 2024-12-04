@@ -5,11 +5,7 @@ import (
 	"net/http"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/storage/repository"
 )
-
-// declare conformance with repository types
-var _ repository.Repository = (*HTTPRepository)(nil)
 
 type remoteFile struct {
 	*http.Response

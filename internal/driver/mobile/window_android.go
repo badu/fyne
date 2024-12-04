@@ -7,9 +7,6 @@ import (
 	"fyne.io/fyne/v2/internal/driver/mobile/app"
 )
 
-// Assert we are satisfying the driver.NativeWindow interface
-var _ fyneDriver.NativeWindow = (*window)(nil)
-
 func (w *window) RunNative(f func(context any)) {
 	app.RunOnJVM(func(vm, env, ctx uintptr) error {
 		data := &fyneDriver.AndroidWindowContext{

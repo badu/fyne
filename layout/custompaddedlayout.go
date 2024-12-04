@@ -4,9 +4,6 @@ import (
 	"fyne.io/fyne/v2"
 )
 
-// Declare conformity with Layout interface
-var _ fyne.Layout = (*CustomPaddedLayout)(nil)
-
 // CustomPaddedLayout is a layout similar to PaddedLayout, but uses
 // custom values for padding on each side, rather than the theme padding value.
 //

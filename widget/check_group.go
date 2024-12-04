@@ -23,8 +23,6 @@ type CheckGroup struct {
 	items []*Check
 }
 
-var _ fyne.Widget = (*CheckGroup)(nil)
-
 // NewCheckGroup creates a new check group widget with the set options and change handler
 //
 // Since: 2.1

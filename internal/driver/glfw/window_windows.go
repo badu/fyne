@@ -56,9 +56,6 @@ func (w *window) computeCanvasSize(width, height int) fyne.Size {
 	return fyne.NewSize(scale.ToFyneCoordinate(w.canvas, width), scale.ToFyneCoordinate(w.canvas, height))
 }
 
-// assert we are implementing driver.NativeWindow
-var _ driver.NativeWindow = (*window)(nil)
-
 func (w *window) RunNative(f func(any)) {
 	var hwnd uintptr
 	if v := w.view(); v != nil {

@@ -2,8 +2,6 @@ package widget
 
 import "fyne.io/fyne/v2"
 
-var _ fyne.WidgetRenderer = (*SimpleRenderer)(nil)
-
 // SimpleRenderer is a basic renderer that satisfies widget.Renderer interface by wrapping
 // a single fyne.CanvasObject.
 //

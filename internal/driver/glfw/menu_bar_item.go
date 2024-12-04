@@ -9,10 +9,6 @@ import (
 	publicWidget "fyne.io/fyne/v2/widget"
 )
 
-var _ desktop.Hoverable = (*menuBarItem)(nil)
-var _ fyne.Focusable = (*menuBarItem)(nil)
-var _ fyne.Widget = (*menuBarItem)(nil)
-
 // menuBarItem is a widget for displaying an item for a fyne.Menu in a MenuBar.
 type menuBarItem struct {
 	widget.Base

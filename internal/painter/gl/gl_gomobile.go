@@ -114,8 +114,6 @@ type mobileContext struct {
 	glContext gl.Context
 }
 
-var _ context = (*mobileContext)(nil)
-
 func (c *mobileContext) ActiveTexture(textureUnit uint32) {
 	c.glContext.ActiveTexture(gl.Enum(textureUnit))
 }

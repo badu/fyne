@@ -8,9 +8,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-// Declare conformity with Widget interface.
-var _ fyne.Widget = (*AppTabs)(nil)
-
 // AppTabs container is used to split your application into various different areas identified by tabs.
 // The tabs contain text and/or an icon and allow the user to switch between the content specified in each TabItem.
 // Each item is represented by a button at the edge of the container.
@@ -269,9 +266,6 @@ func (t *AppTabs) tabLocation() TabLocation {
 func (t *AppTabs) transitioning() bool {
 	return t.isTransitioning
 }
-
-// Declare conformity with WidgetRenderer interface.
-var _ fyne.WidgetRenderer = (*appTabsRenderer)(nil)
 
 type appTabsRenderer struct {
 	baseTabsRenderer

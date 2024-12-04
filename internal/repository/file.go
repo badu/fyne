@@ -16,17 +16,6 @@ import (
 // for string processing
 const fileSchemePrefix string = "file://"
 
-// declare conformance with repository types
-var _ repository.Repository = (*FileRepository)(nil)
-var _ repository.WritableRepository = (*FileRepository)(nil)
-var _ repository.HierarchicalRepository = (*FileRepository)(nil)
-var _ repository.ListableRepository = (*FileRepository)(nil)
-var _ repository.MovableRepository = (*FileRepository)(nil)
-var _ repository.CopyableRepository = (*FileRepository)(nil)
-
-var _ fyne.URIReadCloser = (*file)(nil)
-var _ fyne.URIWriteCloser = (*file)(nil)
-
 type file struct {
 	*os.File
 	uri fyne.URI

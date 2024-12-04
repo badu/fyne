@@ -10,8 +10,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-var _ fyne.Widget = (*Activity)(nil)
-
 // Activity is used to indicate that something is happening that should be waited for,
 // or is in the background (depending on usage).
 //
@@ -73,8 +71,6 @@ func (a *Activity) CreateRenderer() fyne.WidgetRenderer {
 
 	return r
 }
-
-var _ fyne.WidgetRenderer = (*activityRenderer)(nil)
 
 type activityRenderer struct {
 	anim   *fyne.Animation

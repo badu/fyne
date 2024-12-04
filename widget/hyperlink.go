@@ -11,9 +11,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-var _ fyne.Focusable = (*Hyperlink)(nil)
-var _ fyne.Widget = (*Hyperlink)(nil)
-
 // Hyperlink widget is a text component with appropriate padding and layout.
 // When clicked, the default web browser should open with a URL
 type Hyperlink struct {
@@ -295,8 +292,6 @@ func (hl *Hyperlink) syncSegments() {
 	hl.provider.Segments[0].(*TextSegment).Style.SizeName = sizeName
 	hl.textSize = fyne.MeasureText(hl.Text, th.Size(sizeName), hl.TextStyle)
 }
-
-var _ fyne.WidgetRenderer = (*hyperlinkRenderer)(nil)
 
 type hyperlinkRenderer struct {
 	hl    *Hyperlink

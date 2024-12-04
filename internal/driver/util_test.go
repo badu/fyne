@@ -431,8 +431,6 @@ func TestWalkWholeObjectTree(t *testing.T) {
 	assert.Equal(t, []fyne.CanvasObject{base, child1, child2, child3}, walked)
 }
 
-var _ fyne.Widget = (*objectTree)(nil)
-
 type objectTree struct {
 	children []fyne.CanvasObject
 	hidden   bool
@@ -481,8 +479,6 @@ func (o *objectTree) CreateRenderer() fyne.WidgetRenderer {
 	return r
 }
 
-var _ fyne.WidgetRenderer = (*objectTreeRenderer)(nil)
-
 type objectTreeRenderer struct {
 	internal_widget.BaseRenderer
 }
@@ -501,9 +497,6 @@ type scrollable struct {
 	pos  fyne.Position
 	size fyne.Size
 }
-
-var _ fyne.CanvasObject = (*scrollable)(nil)
-var _ fyne.Scrollable = (*scrollable)(nil)
 
 func (s *scrollable) Hide() {
 	panic("implement me")

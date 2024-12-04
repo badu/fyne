@@ -30,9 +30,6 @@ func (sc *SettingsSchema) StoragePath() string {
 	return filepath.Join(rootConfigDir(), "settings.json")
 }
 
-// Declare conformity with Settings interface
-var _ fyne.Settings = (*settings)(nil)
-
 type settings struct {
 	propertyLock   sync.RWMutex
 	theme          fyne.Theme

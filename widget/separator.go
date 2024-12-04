@@ -1,14 +1,13 @@
 package widget
 
 import (
+	"fmt"
 	"image/color"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/theme"
 )
-
-var _ fyne.Widget = (*Separator)(nil)
 
 // Separator is a widget for displaying a separator with themeable color.
 //
@@ -57,8 +56,6 @@ func (s *Separator) MinSize() fyne.Size {
 	s.ExtendBaseWidget(s)
 	return s.BaseWidget.MinSize()
 }
-
-var _ fyne.WidgetRenderer = (*separatorRenderer)(nil)
 
 type separatorRenderer struct {
 	fyne.WidgetRenderer

@@ -15,9 +15,6 @@ import (
 	"fyne.io/fyne/v2/storage/repository"
 )
 
-// Declare conformity with App interface
-var _ fyne.App = (*fyneApp)(nil)
-
 type fyneApp struct {
 	driver   fyne.Driver
 	icon     fyne.Resource

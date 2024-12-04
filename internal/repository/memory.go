@@ -10,20 +10,6 @@ import (
 	"fyne.io/fyne/v2/storage/repository"
 )
 
-// declare conformance to interfaces
-var _ io.ReadCloser = (*nodeReaderWriter)(nil)
-var _ io.WriteCloser = (*nodeReaderWriter)(nil)
-var _ fyne.URIReadCloser = (*nodeReaderWriter)(nil)
-var _ fyne.URIWriteCloser = (*nodeReaderWriter)(nil)
-
-// declare conformance with repository types
-var _ repository.Repository = (*InMemoryRepository)(nil)
-var _ repository.WritableRepository = (*InMemoryRepository)(nil)
-var _ repository.HierarchicalRepository = (*InMemoryRepository)(nil)
-var _ repository.CopyableRepository = (*InMemoryRepository)(nil)
-var _ repository.MovableRepository = (*InMemoryRepository)(nil)
-var _ repository.ListableRepository = (*InMemoryRepository)(nil)
-
 // nodeReaderWriter allows reading or writing to elements in a InMemoryRepository
 type nodeReaderWriter struct {
 	path        string

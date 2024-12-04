@@ -11,9 +11,6 @@ import (
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
 
-// Declare conformity with Clipboard interface
-var _ fyne.Clipboard = (*clipboard)(nil)
-
 // clipboard represents the system clipboard
 type clipboard struct{}
 

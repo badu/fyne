@@ -3,9 +3,6 @@ package layout // import "fyne.io/fyne/v2/layout"
 
 import "fyne.io/fyne/v2"
 
-// Declare conformity with Layout interface
-var _ fyne.Layout = (*stackLayout)(nil)
-
 type stackLayout struct{}
 
 // NewStackLayout returns a new StackLayout instance. Objects are stacked

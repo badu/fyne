@@ -48,8 +48,6 @@ type ShortcutPaste struct {
 	Clipboard Clipboard
 }
 
-var _ KeyboardShortcut = (*ShortcutPaste)(nil)
-
 // Key returns the [KeyName] for this shortcut.
 //
 // Implements: [KeyboardShortcut]
@@ -73,8 +71,6 @@ func (se *ShortcutPaste) ShortcutName() string {
 type ShortcutCopy struct {
 	Clipboard Clipboard
 }
-
-var _ KeyboardShortcut = (*ShortcutCopy)(nil)
 
 // Key returns the [KeyName] for this shortcut.
 //
@@ -100,8 +96,6 @@ type ShortcutCut struct {
 	Clipboard Clipboard
 }
 
-var _ KeyboardShortcut = (*ShortcutCut)(nil)
-
 // Key returns the [KeyName] for this shortcut.
 //
 // Implements: [KeyboardShortcut]
@@ -123,8 +117,6 @@ func (se *ShortcutCut) ShortcutName() string {
 
 // ShortcutSelectAll describes a shortcut selectAll action.
 type ShortcutSelectAll struct{}
-
-var _ KeyboardShortcut = (*ShortcutSelectAll)(nil)
 
 // Key returns the [KeyName] for this shortcut.
 //
@@ -150,8 +142,6 @@ func (se *ShortcutSelectAll) ShortcutName() string {
 // Since: 2.5
 type ShortcutUndo struct{}
 
-var _ KeyboardShortcut = (*ShortcutUndo)(nil)
-
 // Key returns the [KeyName] for this shortcut.
 //
 // Implements: [KeyboardShortcut]
@@ -175,8 +165,6 @@ func (se *ShortcutUndo) ShortcutName() string {
 //
 // Since: 2.5
 type ShortcutRedo struct{}
-
-var _ KeyboardShortcut = (*ShortcutRedo)(nil)
 
 // Key returns the [KeyName] for this shortcut.
 //

@@ -8,9 +8,6 @@ import (
 	"fyne.io/fyne/v2/driver"
 )
 
-// assert we are implementing driver.NativeWindow
-var _ driver.NativeWindow = (*window)(nil)
-
 func (w *window) RunNative(f func(any)) {
 	runOnMain(func() {
 		var waylandSurface uintptr

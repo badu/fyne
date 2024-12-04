@@ -497,10 +497,6 @@ const (
 	buttonIconTop
 )
 
-var _ fyne.Widget = (*tabButton)(nil)
-var _ fyne.Tappable = (*tabButton)(nil)
-var _ desktop.Hoverable = (*tabButton)(nil)
-
 type tabButton struct {
 	widget.DisableableWidget
 	hovered       bool
@@ -746,10 +742,6 @@ func (r *tabButtonRenderer) padding() fyne.Size {
 	}
 	return fyne.NewSize(padding, padding*2)
 }
-
-var _ fyne.Widget = (*tabCloseButton)(nil)
-var _ fyne.Tappable = (*tabCloseButton)(nil)
-var _ desktop.Hoverable = (*tabCloseButton)(nil)
 
 type tabCloseButton struct {
 	widget.BaseWidget

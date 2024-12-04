@@ -16,8 +16,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-var _ fyne.Canvas = (*canvas)(nil)
-
 type canvas struct {
 	common.Canvas
 	content        fyne.CanvasObject

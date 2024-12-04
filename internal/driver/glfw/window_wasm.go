@@ -41,9 +41,6 @@ const (
 
 var cursorMap map[desktop.Cursor]*Cursor
 
-// Declare conformity to Window interface
-var _ fyne.Window = (*window)(nil)
-
 type window struct {
 	common.Window
 

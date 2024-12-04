@@ -11,8 +11,6 @@ type pool interface {
 	Release(fyne.CanvasObject)
 }
 
-var _ pool = (*syncPool)(nil)
-
 type syncPool struct {
 	sync.Pool
 }

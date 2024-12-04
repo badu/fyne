@@ -8,8 +8,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-var _ fyne.Validatable = (*Entry)(nil)
-
 // Validate validates the current text in the widget.
 func (e *Entry) Validate() error {
 	if e.Validator == nil {
@@ -69,8 +67,6 @@ func (e *Entry) setValidationError(err error) bool {
 	return true
 }
 
-var _ fyne.Widget = (*validationStatus)(nil)
-
 type validationStatus struct {
 	BaseWidget
 	entry *Entry
@@ -94,8 +90,6 @@ func (r *validationStatus) CreateRenderer() fyne.WidgetRenderer {
 		entry:          r.entry,
 	}
 }
-
-var _ fyne.WidgetRenderer = (*validationStatusRenderer)(nil)
 
 type validationStatusRenderer struct {
 	fyne.WidgetRenderer

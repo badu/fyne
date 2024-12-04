@@ -9,8 +9,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-var _ fyne.Widget = (*InnerWindow)(nil)
-
 // InnerWindow defines a container that wraps content in a window border - that can then be placed inside
 // a regular container/canvas.
 //
@@ -108,8 +106,6 @@ func (w *InnerWindow) SetTitle(title string) {
 	w.title = title
 	w.Refresh()
 }
-
-var _ fyne.WidgetRenderer = (*innerWindowRenderer)(nil)
 
 type innerWindowRenderer struct {
 	*intWidget.ShadowingRenderer

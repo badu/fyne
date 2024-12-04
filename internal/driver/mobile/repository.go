@@ -6,12 +6,6 @@ import (
 	"fyne.io/fyne/v2/storage/repository"
 )
 
-// declare conformance with repository types
-var _ repository.Repository = (*mobileFileRepo)(nil)
-var _ repository.HierarchicalRepository = (*mobileFileRepo)(nil)
-var _ repository.ListableRepository = (*mobileFileRepo)(nil)
-var _ repository.WritableRepository = (*mobileFileRepo)(nil)
-
 type mobileFileRepo struct {
 }
 

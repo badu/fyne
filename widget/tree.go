@@ -18,10 +18,6 @@ const allTreeNodesID = "_ALLNODES"
 // TreeNodeID represents the unique id of a tree node.
 type TreeNodeID = string
 
-// Declare conformity with interfaces
-var _ fyne.Focusable = (*Tree)(nil)
-var _ fyne.Widget = (*Tree)(nil)
-
 // Tree widget displays hierarchical data.
 // Each node of the tree must be identified by a Unique TreeNodeID.
 //
@@ -524,8 +520,6 @@ func (t *Tree) walkAll(onNode func(TreeNodeID, TreeNodeID, bool, int)) {
 	t.walk(t.Root, "", 0, onNode)
 }
 
-var _ fyne.WidgetRenderer = (*treeRenderer)(nil)
-
 type treeRenderer struct {
 	widget.BaseRenderer
 	tree     *Tree
@@ -569,8 +563,6 @@ func (r *treeRenderer) updateMinSizes() {
 	}
 }
 
-var _ fyne.Widget = (*treeContent)(nil)
-
 type treeContent struct {
 	BaseWidget
 	tree     *Tree
@@ -605,8 +597,6 @@ func (c *treeContent) Resize(size fyne.Size) {
 
 	c.Refresh() // trigger a redraw
 }
-
-var _ fyne.WidgetRenderer = (*treeContentRenderer)(nil)
 
 type treeContentRenderer struct {
 	widget.BaseRenderer
@@ -836,10 +826,6 @@ func (r *treeContentRenderer) getLeaf() (l *leaf) {
 	return
 }
 
-var _ desktop.Hoverable = (*treeNode)(nil)
-var _ fyne.CanvasObject = (*treeNode)(nil)
-var _ fyne.Tappable = (*treeNode)(nil)
-
 type treeNode struct {
 	BaseWidget
 	tree     *Tree
@@ -921,8 +907,6 @@ func (n *treeNode) update(uid string, depth int) {
 	n.partialRefresh()
 }
 
-var _ fyne.WidgetRenderer = (*treeNodeRenderer)(nil)
-
 type treeNodeRenderer struct {
 	widget.BaseRenderer
 	treeNode   *treeNode
@@ -1002,8 +986,6 @@ func (r *treeNodeRenderer) partialRefresh() {
 	canvas.Refresh(r.treeNode.super())
 }
 
-var _ fyne.Widget = (*branch)(nil)
-
 type branch struct {
 	*treeNode
 }
@@ -1029,8 +1011,6 @@ func (b *branch) update(uid string, depth int) {
 	b.treeNode.update(uid, depth)
 	b.icon.(*branchIcon).update(uid)
 }
-
-var _ fyne.Tappable = (*branchIcon)(nil)
 
 type branchIcon struct {
 	Icon
@@ -1063,8 +1043,6 @@ func (i *branchIcon) update(uid string) {
 	i.uid = uid
 	i.Refresh()
 }
-
-var _ fyne.Widget = (*leaf)(nil)
 
 type leaf struct {
 	*treeNode

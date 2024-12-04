@@ -3,12 +3,8 @@
 package glfw
 
 import (
-	"fyne.io/fyne/v2"
 	glfw "github.com/fyne-io/glfw-js"
 )
-
-// Declare conformity with Clipboard interface
-var _ fyne.Clipboard = (*clipboard)(nil)
 
 // clipboard represents the system clipboard
 type clipboard struct {

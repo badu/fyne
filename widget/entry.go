@@ -24,18 +24,6 @@ const (
 	multiLineRows   = 3
 )
 
-// Declare conformity with interfaces
-var _ fyne.Disableable = (*Entry)(nil)
-var _ fyne.Draggable = (*Entry)(nil)
-var _ fyne.Focusable = (*Entry)(nil)
-var _ fyne.Tappable = (*Entry)(nil)
-var _ fyne.Widget = (*Entry)(nil)
-var _ desktop.Mouseable = (*Entry)(nil)
-var _ desktop.Keyable = (*Entry)(nil)
-var _ mobile.Keyboardable = (*Entry)(nil)
-var _ mobile.Touchable = (*Entry)(nil)
-var _ fyne.Tabbable = (*Entry)(nil)
-
 // Entry widget allows simple text to be input when focused.
 type Entry struct {
 	DisableableWidget
@@ -1649,8 +1637,6 @@ func (e *Entry) setFieldsAndRefresh(f func()) {
 	impl.Refresh()
 }
 
-var _ fyne.WidgetRenderer = (*entryRenderer)(nil)
-
 type entryRenderer struct {
 	box, border *canvas.Rectangle
 	scroll      *widget.Scroll
@@ -1888,8 +1874,6 @@ func (r *entryRenderer) ensureValidationSetup() {
 	}
 }
 
-var _ fyne.Widget = (*entryContent)(nil)
-
 type entryContent struct {
 	BaseWidget
 
@@ -1933,8 +1917,6 @@ func (e *entryContent) DragEnd() {
 func (e *entryContent) Dragged(d *fyne.DragEvent) {
 	e.entry.Dragged(d)
 }
-
-var _ fyne.WidgetRenderer = (*entryContentRenderer)(nil)
 
 type entryContentRenderer struct {
 	cursor    *canvas.Rectangle
@@ -2274,9 +2256,6 @@ type entryMergeableUndoAction interface {
 	// item without merging.
 	TryMerge(next entryMergeableUndoAction) bool
 }
-
-// Declare conformity with entryMergeableUndoAction interface
-var _ entryMergeableUndoAction = (*entryModifyAction)(nil)
 
 // entryModifyAction implements entryMergeableUndoAction.
 // It represents the insertion/deletion of a single string at a

@@ -9,8 +9,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-var _ fyne.Widget = (*MenuBar)(nil)
-
 // MenuBar is a widget for displaying a fyne.MainMenu in a bar.
 type MenuBar struct {
 	widget.Base
@@ -171,10 +169,6 @@ type menuBarUnderlay struct {
 	action func()
 }
 
-var _ fyne.Widget = (*menuBarUnderlay)(nil)
-var _ fyne.Tappable = (*menuBarUnderlay)(nil)     // deactivate menu on click outside
-var _ desktop.Hoverable = (*menuBarUnderlay)(nil) // block hover events on main content
-
 func (u *menuBarUnderlay) CreateRenderer() fyne.WidgetRenderer {
 	return &menuUnderlayRenderer{}
 }
@@ -195,8 +189,6 @@ func (u *menuBarUnderlay) Tapped(*fyne.PointEvent) {
 type menuUnderlayRenderer struct {
 	widget.BaseRenderer
 }
-
-var _ fyne.WidgetRenderer = (*menuUnderlayRenderer)(nil)
 
 func (r *menuUnderlayRenderer) Layout(fyne.Size) {
 }

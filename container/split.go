@@ -8,9 +8,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-// Declare conformity with CanvasObject interface
-var _ fyne.CanvasObject = (*Split)(nil)
-
 // Split defines a container whose size is split between two children.
 //
 // Since: 1.4
@@ -78,8 +75,6 @@ func (s *Split) SetOffset(offset float64) {
 	s.Offset = offset
 	s.Refresh()
 }
-
-var _ fyne.WidgetRenderer = (*splitContainerRenderer)(nil)
 
 type splitContainerRenderer struct {
 	split   *Split
@@ -213,12 +208,6 @@ func (r *splitContainerRenderer) minTrailingHeight() float32 {
 	return 0
 }
 
-// Declare conformity with interfaces
-var _ fyne.CanvasObject = (*divider)(nil)
-var _ fyne.Draggable = (*divider)(nil)
-var _ desktop.Cursorable = (*divider)(nil)
-var _ desktop.Hoverable = (*divider)(nil)
-
 type divider struct {
 	widget.BaseWidget
 	split          *Split
@@ -305,8 +294,6 @@ func (d *divider) MouseOut() {
 	d.hovered = false
 	d.split.Refresh()
 }
-
-var _ fyne.WidgetRenderer = (*dividerRenderer)(nil)
 
 type dividerRenderer struct {
 	divider    *divider

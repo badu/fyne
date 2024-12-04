@@ -5,9 +5,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-// Declare conformity with Layout interface
-var _ fyne.Layout = (*borderLayout)(nil)
-
 type borderLayout struct {
 	top, bottom, left, right fyne.CanvasObject
 }

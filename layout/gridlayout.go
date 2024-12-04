@@ -7,9 +7,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-// Declare conformity with Layout interface
-var _ fyne.Layout = (*gridLayout)(nil)
-
 type gridLayout struct {
 	Cols            int
 	vertical, adapt bool

@@ -58,9 +58,6 @@ func (r *scrollBarRenderer) Refresh() {
 	r.background.Refresh()
 }
 
-var _ desktop.Hoverable = (*scrollBar)(nil)
-var _ fyne.Draggable = (*scrollBar)(nil)
-
 type scrollBar struct {
 	Base
 	area            *scrollBarArea
@@ -203,8 +200,6 @@ func (r *scrollBarAreaRenderer) barSizeAndOffset(contentOffset, contentLength, s
 	}
 	return
 }
-
-var _ desktop.Hoverable = (*scrollBarArea)(nil)
 
 type scrollBarArea struct {
 	Base

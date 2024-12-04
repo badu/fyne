@@ -8,9 +8,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-var _ fyne.Widget = (*Menu)(nil)
-var _ fyne.Tappable = (*Menu)(nil)
-
 // Menu is a widget for displaying a fyne.Menu.
 type Menu struct {
 	BaseWidget
@@ -314,8 +311,6 @@ type menuBox struct {
 	items []fyne.CanvasObject
 }
 
-var _ fyne.Widget = (*menuBox)(nil)
-
 func newMenuBox(items []fyne.CanvasObject) *menuBox {
 	b := &menuBox{items: items}
 	b.ExtendBaseWidget(b)
@@ -342,8 +337,6 @@ type menuBoxRenderer struct {
 	background *canvas.Rectangle
 	cont       *fyne.Container
 }
-
-var _ fyne.WidgetRenderer = (*menuBoxRenderer)(nil)
 
 func (r *menuBoxRenderer) Layout(size fyne.Size) {
 	s := fyne.NewSize(size.Width, size.Height)

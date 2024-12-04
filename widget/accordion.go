@@ -7,8 +7,6 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-var _ fyne.Widget = (*Accordion)(nil)
-
 // Accordion displays a list of AccordionItems.
 // Each item is represented by a button that reveals a detailed view when tapped.
 type Accordion struct {

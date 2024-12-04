@@ -60,10 +60,6 @@ type driver struct {
 	running         atomic.Bool
 }
 
-// Declare conformity with Driver
-var _ fyne.Driver = (*driver)(nil)
-var _ ConfiguredDriver = (*driver)(nil)
-
 func init() {
 	runtime.LockOSThread()
 }

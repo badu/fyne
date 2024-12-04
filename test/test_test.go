@@ -234,8 +234,6 @@ func readMarkup(t *testing.T, path string) string {
 	return string(raw)
 }
 
-var _ fyne.Draggable = (*draggable)(nil)
-
 type draggable struct {
 	widget.BaseWidget
 	event      *fyne.DragEvent
@@ -249,8 +247,6 @@ func (d *draggable) DragEnd() {
 func (d *draggable) Dragged(event *fyne.DragEvent) {
 	d.event = event
 }
-
-var _ fyne.Focusable = (*focusable)(nil)
 
 type focusable struct {
 	widget.BaseWidget
@@ -270,8 +266,6 @@ func (f *focusable) TypedKey(event *fyne.KeyEvent) {
 
 func (f *focusable) TypedRune(r rune) {
 }
-
-var _ fyne.Scrollable = (*scrollable)(nil)
 
 type scrollable struct {
 	widget.BaseWidget

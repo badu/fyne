@@ -22,9 +22,6 @@ type directory struct {
 	fyne.URI
 }
 
-// Declare conformity to the ListableURI interface
-var _ fyne.ListableURI = (*directory)(nil)
-
 func (f *file) Open() (io.ReadCloser, error) {
 	return os.Open(f.path)
 }

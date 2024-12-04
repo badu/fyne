@@ -18,10 +18,6 @@ import (
 // ListItemID uniquely identifies an item within a list.
 type ListItemID = int
 
-// Declare conformity with interfaces.
-var _ fyne.Widget = (*List)(nil)
-var _ fyne.Focusable = (*List)(nil)
-
 // List is a widget that pools list items for performance and
 // lays the items out in a vertical direction inside of a scroller.
 // By default, List requires that all items are the same size, but specific
@@ -448,9 +444,6 @@ func (l *listLayout) calculateVisibleRowHeights(itemHeight float32, length int, 
 	return
 }
 
-// Declare conformity with WidgetRenderer interface.
-var _ fyne.WidgetRenderer = (*listRenderer)(nil)
-
 type listRenderer struct {
 	widget.BaseRenderer
 
@@ -488,11 +481,6 @@ func (l *listRenderer) Refresh() {
 	}
 	canvas.Refresh(l.list.super())
 }
-
-// Declare conformity with interfaces.
-var _ fyne.Widget = (*listItem)(nil)
-var _ fyne.Tappable = (*listItem)(nil)
-var _ desktop.Hoverable = (*listItem)(nil)
 
 type listItem struct {
 	BaseWidget
@@ -559,9 +547,6 @@ func (li *listItem) Tapped(*fyne.PointEvent) {
 	}
 }
 
-// Declare conformity with the WidgetRenderer interface.
-var _ fyne.WidgetRenderer = (*listItemRenderer)(nil)
-
 type listItemRenderer struct {
 	widget.BaseRenderer
 
@@ -597,9 +582,6 @@ func (li *listItemRenderer) Refresh() {
 	li.item.background.Refresh()
 	canvas.Refresh(li.item.super())
 }
-
-// Declare conformity with Layout interface.
-var _ fyne.Layout = (*listLayout)(nil)
 
 type listItemAndID struct {
 	item *listItem

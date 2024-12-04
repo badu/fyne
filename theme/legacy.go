@@ -14,8 +14,6 @@ func FromLegacy(t fyne.LegacyTheme) fyne.Theme {
 	return &legacyWrapper{old: t}
 }
 
-var _ fyne.Theme = (*legacyWrapper)(nil)
-
 type legacyWrapper struct {
 	old fyne.LegacyTheme
 }

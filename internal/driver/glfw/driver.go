@@ -29,9 +29,6 @@ var mainGoroutineID uint64
 
 var curWindow *window
 
-// Declare conformity with Driver
-var _ fyne.Driver = (*gLDriver)(nil)
-
 // A workaround on Apple M1/M2, just use 1 thread until fixed upstream.
 const drawOnMainThread bool = runtime.GOOS == "darwin" && runtime.GOARCH == "arm64"
 

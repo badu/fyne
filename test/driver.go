@@ -25,9 +25,6 @@ type driver struct {
 	windowsMutex sync.RWMutex
 }
 
-// Declare conformity with Driver
-var _ fyne.Driver = (*driver)(nil)
-
 // NewDriver sets up and registers a new dummy driver for test purpose
 func NewDriver() fyne.Driver {
 	drv := &driver{windowsMutex: sync.RWMutex{}}

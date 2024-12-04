@@ -96,9 +96,6 @@ type FileDialog struct {
 	initialView ViewLayout
 }
 
-// Declare conformity to Dialog interface
-var _ Dialog = (*FileDialog)(nil)
-
 func (f *fileDialog) makeUI() fyne.CanvasObject {
 	if f.file.save {
 		saveName := widget.NewEntry()

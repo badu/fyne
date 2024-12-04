@@ -9,9 +9,6 @@ import (
 type device struct {
 }
 
-// Declare conformity with Device
-var _ fyne.Device = (*device)(nil)
-
 func (d *device) Orientation() fyne.DeviceOrientation {
 	return fyne.OrientationVertical
 }

@@ -23,9 +23,6 @@ type preferences struct {
 	needsSaveBeforeExit bool
 }
 
-// Declare conformity with Preferences interface
-var _ fyne.Preferences = (*preferences)(nil)
-
 // sentinel error to signal an empty preferences storage backend was loaded
 var errEmptyPreferencesStore = errors.New("empty preferences store")
 
