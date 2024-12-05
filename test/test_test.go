@@ -132,8 +132,8 @@ func TestDrag(t *testing.T) {
 
 	test.Drag(c, fyne.NewPos(15, 15), 17, 42)
 	assert.Equal(t, &fyne.DragEvent{
-		PointEvent: fyne.PointEvent{Position: fyne.Position{X: 5, Y: 5}},
-		Dragged:    fyne.NewDelta(17, 42),
+		Position: fyne.Position{X: 5, Y: 5},
+		Dragged:  fyne.NewDelta(17, 42),
 	}, d.event)
 	assert.True(t, d.wasDragged)
 }

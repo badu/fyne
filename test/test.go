@@ -142,8 +142,8 @@ func Drag(c fyne.Canvas, pos fyne.Position, deltaX, deltaY float32) {
 		return
 	}
 	e := &fyne.DragEvent{
-		PointEvent: fyne.PointEvent{Position: p},
-		Dragged:    fyne.Delta{DX: deltaX, DY: deltaY},
+		Position: p,
+		Dragged:  fyne.Delta{DX: deltaX, DY: deltaY},
 	}
 	o.(fyne.Draggable).Dragged(e)
 	o.(fyne.Draggable).DragEnd()

@@ -84,7 +84,7 @@ func (s *Slider) Dragged(e *fyne.DragEvent) {
 	if s.disabled {
 		return
 	}
-	ratio := s.getRatio(&e.PointEvent)
+	ratio := s.getRatio(&fyne.PointEvent{AbsolutePosition: e.AbsolutePosition, Position: e.Position})
 	lastValue := s.Value
 
 	s.updateValue(ratio)

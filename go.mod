@@ -4,7 +4,9 @@ go 1.21
 
 require (
 	fyne.io/systray v1.11.0
+	github.com/ActiveState/termtest/conpty v0.5.0
 	github.com/BurntSushi/toml v1.4.0
+	github.com/creack/pty v1.1.24
 	github.com/fogleman/gg v1.3.0
 	github.com/fredbi/uri v1.1.0
 	github.com/fsnotify/fsnotify v1.7.0
@@ -40,6 +42,7 @@ require (
 )
 
 require (
+	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
 	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

@@ -99,7 +99,7 @@ func TestEntry_DragSelect(t *testing.T) {
 	me := &desktop.MouseEvent{PointEvent: *ev1, Button: desktop.MouseButtonPrimary}
 	entry.MouseDown(me)
 	for ; ev1.Position.X < ev2.Position.X; ev1.Position.X++ {
-		de := &fyne.DragEvent{PointEvent: *ev1, Dragged: fyne.NewDelta(1, 0)}
+		de := &fyne.DragEvent{Position: ev1.Position, AbsolutePosition: ev1.AbsolutePosition, Dragged: fyne.NewDelta(1, 0)}
 		entry.Dragged(de)
 	}
 	me = &desktop.MouseEvent{PointEvent: *ev1, Button: desktop.MouseButtonPrimary}
@@ -125,7 +125,7 @@ func TestEntry_DragSelectLargeStep(t *testing.T) {
 	entry.MouseDown(me)
 
 	delta := ev2.Position.Subtract(ev1.Position)
-	de := &fyne.DragEvent{PointEvent: *ev2, Dragged: fyne.NewDelta(delta.X, delta.Y)}
+	de := &fyne.DragEvent{Position: ev2.Position, AbsolutePosition: ev2.AbsolutePosition, Dragged: fyne.NewDelta(delta.X, delta.Y)}
 	entry.Dragged(de)
 
 	me = &desktop.MouseEvent{PointEvent: *ev2, Button: desktop.MouseButtonPrimary}
@@ -142,9 +142,9 @@ func TestEntry_DragSelectEmpty(t *testing.T) {
 	ev2 := getClickPosition("Testing", 0)
 
 	// Test empty selection - drag from 'e' to 'e' (empty)
-	de := &fyne.DragEvent{PointEvent: *ev1, Dragged: fyne.NewDelta(1, 0)}
+	de := &fyne.DragEvent{Position: ev1.Position, AbsolutePosition: ev1.AbsolutePosition, Dragged: fyne.NewDelta(1, 0)}
 	entry.Dragged(de)
-	de = &fyne.DragEvent{PointEvent: *ev1, Dragged: fyne.NewDelta(1, 0)}
+	de = &fyne.DragEvent{Position: ev1.Position, AbsolutePosition: ev1.AbsolutePosition, Dragged: fyne.NewDelta(1, 0)}
 	entry.Dragged(de)
 
 	entry.propertyLock.RLock()
@@ -159,9 +159,9 @@ func TestEntry_DragSelectEmpty(t *testing.T) {
 
 	// Test non-empty selection - drag from 'T' to 'g' (empty)
 	ev1 = getClickPosition("", 0)
-	de = &fyne.DragEvent{PointEvent: *ev1, Dragged: fyne.NewDelta(1, 0)}
+	de = &fyne.DragEvent{Position: ev1.Position, AbsolutePosition: ev1.AbsolutePosition, Dragged: fyne.NewDelta(1, 0)}
 	entry.Dragged(de)
-	de = &fyne.DragEvent{PointEvent: *ev2, Dragged: fyne.NewDelta(1, 0)}
+	de = &fyne.DragEvent{Position: ev2.Position, AbsolutePosition: ev2.AbsolutePosition, Dragged: fyne.NewDelta(1, 0)}
 	entry.Dragged(de)
 
 	entry.propertyLock.RLock()
@@ -187,9 +187,9 @@ func TestEntry_DragSelectWithScroll(t *testing.T) {
 	// mouse down and drag from 'a' to 'i'
 	me := &desktop.MouseEvent{PointEvent: *ev1, Button: desktop.MouseButtonPrimary}
 	entry.MouseDown(me)
-	de := &fyne.DragEvent{PointEvent: *ev1, Dragged: fyne.NewDelta(1, 0)}
+	de := &fyne.DragEvent{Position: ev1.Position, AbsolutePosition: ev1.AbsolutePosition, Dragged: fyne.NewDelta(1, 0)}
 	entry.Dragged(de)
-	de = &fyne.DragEvent{PointEvent: *ev2, Dragged: fyne.NewDelta(1, 0)}
+	de = &fyne.DragEvent{Position: ev2.Position, AbsolutePosition: ev2.AbsolutePosition, Dragged: fyne.NewDelta(1, 0)}
 	entry.Dragged(de)
 	me = &desktop.MouseEvent{PointEvent: *ev1, Button: desktop.MouseButtonPrimary}
 	entry.MouseUp(me)
@@ -314,7 +314,7 @@ func TestEntry_MouseClickAndDragOutsideText(t *testing.T) {
 
 	me := &desktop.MouseEvent{PointEvent: *ev, Button: desktop.MouseButtonPrimary}
 	entry.MouseDown(me)
-	de := &fyne.DragEvent{PointEvent: *ev, Dragged: fyne.NewDelta(1, 0)}
+	de := &fyne.DragEvent{Position: ev.Position, AbsolutePosition: ev.AbsolutePosition, Dragged: fyne.NewDelta(1, 0)}
 	entry.Dragged(de)
 	entry.MouseUp(me)
 	assert.False(t, entry.selecting)

@@ -318,8 +318,8 @@ func TestSplitContainer_divider_drag(t *testing.T) {
 		assert.Equal(t, 0.5, split.Offset)
 
 		divider.Dragged(&fyne.DragEvent{
-			PointEvent: fyne.PointEvent{Position: fyne.NewPos(13, 9)},
-			Dragged:    fyne.NewDelta(10, 0),
+			Position: fyne.NewPos(13, 9),
+			Dragged:  fyne.NewDelta(10, 0),
 		})
 		assert.Equal(t, 0.6, split.Offset)
 
@@ -328,19 +328,19 @@ func TestSplitContainer_divider_drag(t *testing.T) {
 
 		// test max limit
 		divider.Dragged(&fyne.DragEvent{
-			PointEvent: fyne.PointEvent{Position: fyne.NewPos(53, 9)},
-			Dragged:    fyne.NewDelta(54, 0),
+			Position: fyne.NewPos(53, 9),
+			Dragged:  fyne.NewDelta(54, 0),
 		})
 		divider.Dragged(&fyne.DragEvent{
-			PointEvent: fyne.PointEvent{Position: fyne.NewPos(53, 9)},
-			Dragged:    fyne.NewDelta(54, 0),
+			Position: fyne.NewPos(53, 9),
+			Dragged:  fyne.NewDelta(54, 0),
 		})
 		assert.Equal(t, 0.9, split.Offset)
 
 		// test returns to position after over-drag
 		divider.Dragged(&fyne.DragEvent{
-			PointEvent: fyne.PointEvent{Position: fyne.NewPos(-97, 9)},
-			Dragged:    fyne.NewDelta(-108, 0),
+			Position: fyne.NewPos(-97, 9),
+			Dragged:  fyne.NewDelta(-108, 0),
 		})
 		divider.DragEnd()
 		assert.Equal(t, 0.6, split.Offset)
@@ -352,8 +352,8 @@ func TestSplitContainer_divider_drag(t *testing.T) {
 		assert.Equal(t, 0.5, split.Offset)
 
 		divider.Dragged(&fyne.DragEvent{
-			PointEvent: fyne.PointEvent{Position: fyne.NewPos(13, 9)},
-			Dragged:    fyne.NewDelta(0, 10),
+			Position: fyne.NewPos(13, 9),
+			Dragged:  fyne.NewDelta(0, 10),
 		})
 		assert.Equal(t, 0.6, split.Offset)
 
@@ -362,19 +362,19 @@ func TestSplitContainer_divider_drag(t *testing.T) {
 
 		// test max limit
 		divider.Dragged(&fyne.DragEvent{
-			PointEvent: fyne.PointEvent{Position: fyne.NewPos(9, 53)},
-			Dragged:    fyne.NewDelta(0, 54),
+			Position: fyne.NewPos(9, 53),
+			Dragged:  fyne.NewDelta(0, 54),
 		})
 		divider.Dragged(&fyne.DragEvent{
-			PointEvent: fyne.PointEvent{Position: fyne.NewPos(9, 53)},
-			Dragged:    fyne.NewDelta(0, 54),
+			Position: fyne.NewPos(9, 53),
+			Dragged:  fyne.NewDelta(0, 54),
 		})
 		assert.Equal(t, 0.9, split.Offset)
 
 		// test returns to position after over-drag
 		divider.Dragged(&fyne.DragEvent{
-			PointEvent: fyne.PointEvent{Position: fyne.NewPos(9, -97)},
-			Dragged:    fyne.NewDelta(0, -108),
+			Position: fyne.NewPos(9, -97),
+			Dragged:  fyne.NewDelta(0, -108),
 		})
 		divider.DragEnd()
 		assert.Equal(t, 0.6, split.Offset)
