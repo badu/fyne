@@ -3,15 +3,23 @@ package mobile
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/internal/async"
 	"fyne.io/fyne/v2/internal/cache"
 	"fyne.io/fyne/v2/internal/driver/common"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"sync"
 )
 
+var DonePool = sync.Pool{
+	New: func() any {
+		return make(chan struct{})
+	},
+}
+
 type window struct {
-	common.Window
+	eventQueue *async.UnboundedFuncChan
 
 	title              string
 	visible            bool
@@ -24,6 +32,40 @@ type window struct {
 	icon      fyne.Resource
 	menu      *fyne.MainMenu
 	handle    uintptr // the window handle - currently just Android
+}
+
+// DestroyEventQueue destroys the event queue.
+func (w *window) DestroyEventQueue() {
+	w.eventQueue.Close()
+}
+
+// InitEventQueue initializes the event queue.
+func (w *window) InitEventQueue() {
+	// This channel should be closed when the window is closed.
+	w.eventQueue = async.NewUnboundedFuncChan()
+}
+
+// QueueEvent uses this method to queue up a callback that handles an event. This ensures
+// user interaction events for a given window are processed in order.
+func (w *window) QueueEvent(fn func()) {
+	w.eventQueue.In() <- fn
+}
+
+// RunEventQueue runs the event queue. This should called inside a go routine.
+// This function blocks.
+func (w *window) RunEventQueue() {
+	for fn := range w.eventQueue.Out() {
+		fn()
+	}
+}
+
+// WaitForEvents wait for all the events.
+func (w *window) WaitForEvents() {
+	done := DonePool.Get().(chan struct{})
+	defer DonePool.Put(done)
+
+	w.eventQueue.In() <- func() { done <- struct{}{} }
+	<-done
 }
 
 func (w *window) Title() string {

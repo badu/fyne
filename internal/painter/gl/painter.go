@@ -6,7 +6,6 @@ import (
 	"image"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/internal/driver"
 	"fyne.io/fyne/v2/theme"
 )
 
@@ -54,9 +53,17 @@ type Painter interface {
 	StopClipping()
 }
 
+// WithContext allows drivers to execute within another context.
+// Mostly this helps GLFW code execute within the painter's GL context.
+type WithContext interface {
+	RunWithContext(f func())
+	RescaleContext()
+	Context() any
+}
+
 // NewPainter creates a new GL based renderer for the provided canvas.
 // If it is a master painter it will also initialise OpenGL
-func NewPainter(c fyne.Canvas, ctx driver.WithContext) Painter {
+func NewPainter(c fyne.Canvas, ctx WithContext) Painter {
 	p := &painter{canvas: c, contextProvider: ctx}
 	p.SetFrameBufferScale(1.0)
 	return p
@@ -65,7 +72,7 @@ func NewPainter(c fyne.Canvas, ctx driver.WithContext) Painter {
 type painter struct {
 	canvas                fyne.Canvas
 	ctx                   context
-	contextProvider       driver.WithContext
+	contextProvider       WithContext
 	program               Program
 	lineProgram           Program
 	rectangleProgram      Program

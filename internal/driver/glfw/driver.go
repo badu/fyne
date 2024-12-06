@@ -4,6 +4,7 @@ package glfw
 
 import (
 	"bytes"
+	"fyne.io/fyne/v2/internal/cache"
 	"image"
 	"os"
 	"runtime"
@@ -15,7 +16,6 @@ import (
 	"fyne.io/fyne/v2/internal/animation"
 	intapp "fyne.io/fyne/v2/internal/app"
 	"fyne.io/fyne/v2/internal/driver"
-	"fyne.io/fyne/v2/internal/driver/common"
 	"fyne.io/fyne/v2/internal/painter"
 	intRepo "fyne.io/fyne/v2/internal/repository"
 	"fyne.io/fyne/v2/storage/repository"
@@ -69,8 +69,13 @@ func (d *gLDriver) RenderedTextSize(text string, textSize float32, style fyne.Te
 	return painter.RenderedTextSize(text, textSize, style, source)
 }
 
+// CanvasForObject returns the canvas for the specified object.
+func CanvasForObject(obj fyne.CanvasObject) fyne.Canvas {
+	return cache.GetCanvasForObject(obj)
+}
+
 func (d *gLDriver) CanvasForObject(obj fyne.CanvasObject) fyne.Canvas {
-	return common.CanvasForObject(obj)
+	return CanvasForObject(obj)
 }
 
 func (d *gLDriver) AbsolutePositionForObject(co fyne.CanvasObject) fyne.Position {

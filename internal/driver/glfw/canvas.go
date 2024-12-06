@@ -10,11 +10,18 @@ import (
 	"fyne.io/fyne/v2/internal"
 	"fyne.io/fyne/v2/internal/app"
 	"fyne.io/fyne/v2/internal/build"
-	"fyne.io/fyne/v2/internal/driver"
 	"fyne.io/fyne/v2/internal/driver/common"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
+
+// WithContext allows drivers to execute within another context.
+// Mostly this helps GLFW code execute within the painter's GL context.
+type WithContext interface {
+	RunWithContext(f func())
+	RescaleContext()
+	Context() any
+}
 
 type glCanvas struct {
 	common.Canvas
@@ -32,7 +39,7 @@ type glCanvas struct {
 
 	scale, detectedScale, texScale float32
 
-	context         driver.WithContext
+	context         WithContext
 	webExtraWindows *container.MultipleWindows
 }
 

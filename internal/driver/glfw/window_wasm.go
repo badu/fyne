@@ -11,15 +11,13 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
-	"fyne.io/fyne/v2/internal/driver/common"
 	"fyne.io/fyne/v2/internal/painter/gl"
 	"fyne.io/fyne/v2/internal/scale"
 
 	"github.com/fyne-io/glfw-js"
 )
 
-type Cursor struct {
-}
+type Cursor struct{}
 
 const defaultTitle = "Fyne Application"
 
@@ -41,8 +39,14 @@ const (
 
 var cursorMap map[desktop.Cursor]*Cursor
 
+var DonePool = sync.Pool{
+	New: func() any {
+		return make(chan struct{})
+	},
+}
+
 type window struct {
-	common.Window
+	eventQueue *async.UnboundedFuncChan
 
 	viewport   *glfw.Window
 	viewLock   sync.RWMutex
@@ -92,6 +96,40 @@ type window struct {
 	shouldExpand                    bool
 
 	pending []func()
+}
+
+// DestroyEventQueue destroys the event queue.
+func (w *window) DestroyEventQueue() {
+	w.eventQueue.Close()
+}
+
+// InitEventQueue initializes the event queue.
+func (w *window) InitEventQueue() {
+	// This channel should be closed when the window is closed.
+	w.eventQueue = async.NewUnboundedFuncChan()
+}
+
+// QueueEvent uses this method to queue up a callback that handles an event. This ensures
+// user interaction events for a given window are processed in order.
+func (w *window) QueueEvent(fn func()) {
+	w.eventQueue.In() <- fn
+}
+
+// RunEventQueue runs the event queue. This should called inside a go routine.
+// This function blocks.
+func (w *window) RunEventQueue() {
+	for fn := range w.eventQueue.Out() {
+		fn()
+	}
+}
+
+// WaitForEvents wait for all the events.
+func (w *window) WaitForEvents() {
+	done := DonePool.Get().(chan struct{})
+	defer DonePool.Put(done)
+
+	w.eventQueue.In() <- func() { done <- struct{}{} }
+	<-done
 }
 
 func (w *window) SetFullScreen(full bool) {

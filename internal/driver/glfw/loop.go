@@ -9,7 +9,6 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/internal/app"
 	"fyne.io/fyne/v2/internal/cache"
-	"fyne.io/fyne/v2/internal/driver/common"
 	"fyne.io/fyne/v2/internal/painter"
 	"fyne.io/fyne/v2/internal/scale"
 )
@@ -46,8 +45,8 @@ func runOnMain(f func()) {
 		return
 	}
 
-	done := common.DonePool.Get().(chan struct{})
-	defer common.DonePool.Put(done)
+	done := DonePool.Get().(chan struct{})
+	defer DonePool.Put(done)
 
 	funcQueue <- funcData{f: f, done: done}
 
@@ -60,8 +59,8 @@ func runOnDraw(w *window, f func()) {
 		runOnMain(func() { w.RunWithContext(f) })
 		return
 	}
-	done := common.DonePool.Get().(chan struct{})
-	defer common.DonePool.Put(done)
+	done := DonePool.Get().(chan struct{})
+	defer DonePool.Put(done)
 
 	drawFuncQueue <- drawData{f: f, win: w, done: done}
 	<-done
