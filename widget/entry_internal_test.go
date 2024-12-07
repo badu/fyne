@@ -262,7 +262,7 @@ func TestEntry_EraseSelection(t *testing.T) {
 	// T e s t i n g
 	// T e[s t i]n g
 	// T e s t i n g
-	e := NewMultiLineEntry()
+	e := NewEntry(EntryWithMultiline())
 	e.SetText("Testing\nTesting\nTesting")
 	e.CursorRow = 1
 	e.CursorColumn = 2
@@ -360,7 +360,7 @@ func TestEntry_PasteFromClipboard(t *testing.T) {
 }
 
 func TestEntry_PasteFromClipboard_MultilineWrapping(t *testing.T) {
-	entry := NewMultiLineEntry()
+	entry := NewEntry(EntryWithMultiline())
 	entry.Wrapping = fyne.TextWrapWord
 
 	w := test.NewApp().NewWindow("")

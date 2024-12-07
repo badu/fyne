@@ -55,7 +55,7 @@ func (e *textEdit) buildToolbar() *widget.Toolbar {
 
 // makeUI loads a new text editor
 func (e *textEdit) makeUI() fyne.CanvasObject {
-	e.entry = widget.NewMultiLineEntry()
+	e.entry = widget.NewEntry(widget.EntryWithMultiline())
 	e.cursorRow = widget.NewLabel(widget.LabelWithStaticText("1"))
 	e.cursorCol = widget.NewLabel(widget.LabelWithStaticText("1"))
 

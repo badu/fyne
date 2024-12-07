@@ -205,7 +205,7 @@ func makeEntryTab(_ fyne.Window) fyne.CanvasObject {
 	entryDisabled.Disable()
 	entryValidated := newNumEntry()
 	entryValidated.SetPlaceHolder("Must contain a number")
-	entryMultiLine := widget.NewMultiLineEntry()
+	entryMultiLine := widget.NewEntry(widget.EntryWithMultiline())
 	entryMultiLine.SetPlaceHolder("MultiLine Entry")
 	entryMultiLine.SetMinRowsVisible(4)
 
@@ -245,7 +245,7 @@ func makeTextTab(_ fyne.Window) fyne.CanvasObject {
 	}
 	hyperlink := widget.NewHyperlink("Hyperlink", link)
 
-	entryLoremIpsum := widget.NewMultiLineEntry()
+	entryLoremIpsum := widget.NewEntry(widget.EntryWithMultiline())
 	entryLoremIpsum.SetText(loremIpsum)
 
 	label.Alignment = fyne.TextAlignLeading
@@ -456,13 +456,13 @@ func makeFormTab(_ fyne.Window) fyne.CanvasObject {
 	email.SetPlaceHolder("test@example.com")
 	email.Validator = validation.NewRegexp(`\w{1,}@\w{1,}\.\w{1,4}`, "not a valid email")
 
-	password := widget.NewPasswordEntry()
+	password := widget.NewEntry(widget.EntryWithPassword())
 	password.SetPlaceHolder("Password")
 
 	disabled := widget.NewRadioGroup([]string{"Option 1", "Option 2"}, func(string) {})
 	disabled.Horizontal = true
 	disabled.Disable()
-	largeText := widget.NewMultiLineEntry()
+	largeText := widget.NewEntry(widget.EntryWithMultiline())
 
 	form := &widget.Form{
 		Items: []*widget.FormItem{

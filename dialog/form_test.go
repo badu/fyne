@@ -160,7 +160,7 @@ func validatingFormDialog(result *formDialogResult, parent fyne.Window) *FormDia
 		Text:   "Only accepts 'abc'",
 		Widget: validatingEntry,
 	}
-	controlEntry := widget.NewPasswordEntry()
+	controlEntry := widget.NewEntry(widget.EntryWithPassword())
 	controlItem := &widget.FormItem{
 		Text:   "I accept anything",
 		Widget: controlEntry,
@@ -182,7 +182,7 @@ func controlFormDialog(result *formDialogResult, parent fyne.Window) *FormDialog
 		Text:   "I accept anything",
 		Widget: controlEntry,
 	}
-	controlEntry2 := widget.NewPasswordEntry()
+	controlEntry2 := widget.NewEntry(widget.EntryWithPassword())
 	controlItem2 := &widget.FormItem{
 		Text:   "I accept anything",
 		Widget: controlEntry2,

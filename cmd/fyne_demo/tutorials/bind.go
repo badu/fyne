@@ -13,7 +13,7 @@ func bindingScreen(_ fyne.Window) fyne.CanvasObject {
 	f := 0.2
 	data := binding.BindFloat(&f)
 	label := widget.NewLabel(widget.LabelWithBindedText(binding.FloatToStringWithFormat(data, "Float value: %0.2f")))
-	entry := widget.NewEntryWithData(binding.FloatToString(data))
+	entry := widget.NewEntry(widget.EntryWithBinded(binding.FloatToString(data)))
 	floats := container.NewGridWithColumns(2, label, entry)
 
 	slide := widget.NewSliderWithData(0, 1, data)
@@ -56,7 +56,7 @@ func bindingScreen(_ fyne.Window) fyne.CanvasObject {
 	boolData := binding.NewBool()
 	check := widget.NewCheck(widget.CheckWithLabel("Check me!"), widget.CheckWithBinded(boolData))
 	checkLabel := widget.NewLabel(widget.LabelWithBindedText(binding.BoolToString(boolData)))
-	checkEntry := widget.NewEntryWithData(binding.BoolToString(boolData))
+	checkEntry := widget.NewEntry(widget.EntryWithBinded(binding.BoolToString(boolData)))
 	checks := container.NewGridWithColumns(3, check, checkLabel, checkEntry)
 	item := container.NewVBox(floats, slide, bar, buttons, widget.NewSeparator(), checks, widget.NewSeparator())
 
@@ -126,9 +126,9 @@ func createBoundItem(v binding.DataItem) fyne.CanvasObject {
 		s.Step = 0.01
 		return s
 	case binding.Int:
-		return widget.NewEntryWithData(binding.IntToString(val))
+		return widget.NewEntry(widget.EntryWithBinded(binding.IntToString(val)))
 	case binding.String:
-		return widget.NewEntryWithData(val)
+		return widget.NewEntry(widget.EntryWithBinded(val))
 	default:
 		return widget.NewLabel(widget.LabelWithStaticText(""))
 	}

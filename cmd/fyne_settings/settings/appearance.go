@@ -282,7 +282,7 @@ func (p *previewTheme) Size(n fyne.ThemeSizeName) float32 {
 
 func createPreviewWidget() fyne.CanvasObject {
 	username := widget.NewEntry()
-	password := widget.NewPasswordEntry()
+	password := widget.NewEntry(widget.EntryWithPassword())
 	form := widget.NewForm(widget.NewFormItem("Username", username),
 		widget.NewFormItem("Password", password))
 	form.OnCancel = func() {}

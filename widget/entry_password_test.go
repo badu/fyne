@@ -12,7 +12,7 @@ import (
 )
 
 func TestNewPasswordEntry(t *testing.T) {
-	p := widget.NewPasswordEntry()
+	p := widget.NewEntry(widget.EntryWithPassword())
 	p.Text = "visible"
 	r := test.TempWidgetRenderer(t, p)
 

@@ -96,36 +96,41 @@ type Entry struct {
 	doubleTappedAtUnixMillis int64
 }
 
+type EntryOption func(*Entry)
+
+func EntryWithBinded(data binding.String) EntryOption {
+	return func(e *Entry) {
+		e.Bind(data)
+	}
+}
+
+func EntryWithMultiline() EntryOption {
+	return func(e *Entry) {
+		e.MultiLine = true
+	}
+}
+
+func EntryWithPassword() EntryOption {
+	return func(e *Entry) {
+		e.Password = true
+		e.ActionItem = newPasswordRevealer(e)
+	}
+}
+
+func EntryWithWrapping(wrapping fyne.TextWrap) EntryOption {
+	return func(e *Entry) {
+		e.Wrapping = wrapping
+	}
+}
+
 // NewEntry creates a new single line entry widget.
-func NewEntry() *Entry {
-	e := &Entry{Wrapping: fyne.TextWrap(fyne.TextTruncateClip)}
-	e.ExtendBaseWidget(e)
-	return e
-}
-
-// NewEntryWithData returns an Entry widget connected to the specified data source.
-//
-// Since: 2.0
-func NewEntryWithData(data binding.String) *Entry {
-	entry := NewEntry()
-	entry.Bind(data)
-
-	return entry
-}
-
-// NewMultiLineEntry creates a new entry that allows multiple lines
-func NewMultiLineEntry() *Entry {
-	e := &Entry{MultiLine: true, Wrapping: fyne.TextWrap(fyne.TextTruncateClip)}
-	e.ExtendBaseWidget(e)
-	return e
-}
-
-// NewPasswordEntry creates a new entry password widget
-func NewPasswordEntry() *Entry {
-	e := &Entry{Password: true, Wrapping: fyne.TextWrap(fyne.TextTruncateClip)}
-	e.ExtendBaseWidget(e)
-	e.ActionItem = newPasswordRevealer(e)
-	return e
+func NewEntry(options ...EntryOption) *Entry {
+	result := &Entry{Wrapping: fyne.TextWrap(fyne.TextTruncateClip)}
+	for _, opt := range options {
+		opt(result)
+	}
+	result.ExtendBaseWidget(result)
+	return result
 }
 
 // AcceptsTab returns if Entry accepts the Tab key or not.
