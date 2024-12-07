@@ -13,11 +13,32 @@ import (
 // collectionScreen loads a tab panel for collection widgets
 func collectionScreen(_ fyne.Window) fyne.CanvasObject {
 	content := container.NewVBox(
-		widget.NewLabelWithStyle("func Length() int", fyne.TextAlignLeading, fyne.TextStyle{Monospace: true}),
-		widget.NewLabelWithStyle("func CreateItem() fyne.CanvasObject", fyne.TextAlignLeading, fyne.TextStyle{Monospace: true}),
-		widget.NewLabelWithStyle("func UpdateItem(ListItemID, fyne.CanvasObject)", fyne.TextAlignLeading, fyne.TextStyle{Monospace: true}),
-		widget.NewLabelWithStyle("func OnSelected(ListItemID)", fyne.TextAlignLeading, fyne.TextStyle{Monospace: true}),
-		widget.NewLabelWithStyle("func OnUnselected(ListItemID)", fyne.TextAlignLeading, fyne.TextStyle{Monospace: true}))
+		widget.NewLabel(
+			widget.LabelWithStaticText("func Length() int"),
+			widget.LabelWithAlignment(fyne.TextAlignLeading),
+			widget.LabelWithStyle(fyne.TextStyle{Monospace: true}),
+		),
+		widget.NewLabel(
+			widget.LabelWithStaticText("func CreateItem() fyne.CanvasObject"),
+			widget.LabelWithAlignment(fyne.TextAlignLeading),
+			widget.LabelWithStyle(fyne.TextStyle{Monospace: true}),
+		),
+		widget.NewLabel(
+			widget.LabelWithStaticText("func UpdateItem(ListItemID, fyne.CanvasObject)"),
+			widget.LabelWithAlignment(fyne.TextAlignLeading),
+			widget.LabelWithStyle(fyne.TextStyle{Monospace: true}),
+		),
+		widget.NewLabel(
+			widget.LabelWithStaticText("func OnSelected(ListItemID)"),
+			widget.LabelWithAlignment(fyne.TextAlignLeading),
+			widget.LabelWithStyle(fyne.TextStyle{Monospace: true}),
+		),
+		widget.NewLabel(
+			widget.LabelWithStaticText("func OnUnselected(ListItemID)"),
+			widget.LabelWithAlignment(fyne.TextAlignLeading),
+			widget.LabelWithStyle(fyne.TextStyle{Monospace: true}),
+		),
+	)
 	return container.NewCenter(content)
 }
 
@@ -28,7 +49,7 @@ func makeGridWrapTab(_ fyne.Window) fyne.CanvasObject {
 	}
 
 	icon := widget.NewIcon(nil)
-	label := widget.NewLabel("Select An Item From The List")
+	label := widget.NewLabel(widget.LabelWithStaticText("Select An Item From The List"))
 	vbox := container.NewVBox(icon, label)
 
 	grid := widget.NewGridWrap(
@@ -36,7 +57,7 @@ func makeGridWrapTab(_ fyne.Window) fyne.CanvasObject {
 			return len(data)
 		},
 		func() fyne.CanvasObject {
-			text := widget.NewLabel("Template Object")
+			text := widget.NewLabel(widget.LabelWithStaticText("Template Object"))
 			text.Alignment = fyne.TextAlignCenter
 			return container.NewVBox(container.NewPadded(widget.NewIcon(theme.DocumentIcon())), text)
 		},
@@ -66,7 +87,7 @@ func makeListTab(_ fyne.Window) fyne.CanvasObject {
 	}
 
 	icon := widget.NewIcon(nil)
-	label := widget.NewLabel("Select An Item From The List")
+	label := widget.NewLabel(widget.LabelWithStaticText("Select An Item From The List"))
 	hbox := container.NewHBox(icon, label)
 
 	list := widget.NewList(
@@ -74,7 +95,7 @@ func makeListTab(_ fyne.Window) fyne.CanvasObject {
 			return len(data)
 		},
 		func() fyne.CanvasObject {
-			return container.NewHBox(widget.NewIcon(theme.DocumentIcon()), widget.NewLabel("Template Object"))
+			return container.NewHBox(widget.NewIcon(theme.DocumentIcon()), widget.NewLabel(widget.LabelWithStaticText("Template Object")))
 		},
 		func(id widget.ListItemID, item fyne.CanvasObject) {
 			if id == 5 || id == 6 {
@@ -103,7 +124,7 @@ func makeTableTab(_ fyne.Window) fyne.CanvasObject {
 	t := widget.NewTableWithHeaders(
 		func() (int, int) { return 500, 150 },
 		func() fyne.CanvasObject {
-			return widget.NewLabel("Cell 000, 000")
+			return widget.NewLabel(widget.LabelWithStaticText("Cell 000, 000"))
 		},
 		func(id widget.TableCellID, cell fyne.CanvasObject) {
 			label := cell.(*widget.Label)

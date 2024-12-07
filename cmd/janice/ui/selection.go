@@ -104,12 +104,12 @@ func (f *selectionFrame) set(uid string) {
 			})
 			f.selectedPath.Add(l)
 		} else {
-			l := widget.NewLabel(n.Key)
+			l := widget.NewLabel(widget.LabelWithStaticText(n.Key))
 			l.TextStyle.Bold = true
 			f.selectedPath.Add(l)
 		}
 		if !isLast {
-			l := widget.NewLabel("＞")
+			l := widget.NewLabel(widget.LabelWithStaticText("＞"))
 			l.Importance = widget.LowImportance
 			f.selectedPath.Add(l)
 		}

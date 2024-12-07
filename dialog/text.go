@@ -35,7 +35,7 @@ func createBeforeShowHook(d *dialog, message string) func() {
 	// Until issue #4648 is resolved, we need to create a label here
 	// rather than just using fyne.MeasureText, because the label's minsize
 	// also depends on the internal padding that label adds, which is unknown here
-	noWrapWidth := widget.NewLabel(message).MinSize().Width + padWidth + theme.Padding()*2
+	noWrapWidth := widget.NewLabel(widget.LabelWithStaticText(message)).MinSize().Width + padWidth + theme.Padding()*2
 	return func() {
 		if d.desiredSize.IsZero() {
 			maxWinWitth := d.parent.Canvas().Size().Width * maxTextDialogWinPcntWidth

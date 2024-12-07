@@ -17,7 +17,7 @@ func TestThemeOverride_AddChild(t *testing.T) {
 	group := NewHBox(b)
 	override := NewThemeOverride(group, test.Theme())
 
-	child := widget.NewLabel("Added")
+	child := widget.NewLabel(widget.LabelWithStaticText("Added"))
 	assert.NotEqual(t, cache.WidgetTheme(b), cache.WidgetTheme(child))
 
 	group.Add(child)

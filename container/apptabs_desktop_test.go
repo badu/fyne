@@ -19,8 +19,8 @@ import (
 func TestAppTabs_ChangeItemIcon(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Icon: theme.CancelIcon(), Content: widget.NewLabel("Text1")}
-	item2 := &container.TabItem{Icon: theme.ConfirmIcon(), Content: widget.NewLabel("Text2")}
+	item1 := &container.TabItem{Icon: theme.CancelIcon(), Content: widget.NewLabel(widget.LabelWithStaticText("Text1"))}
+	item2 := &container.TabItem{Icon: theme.ConfirmIcon(), Content: widget.NewLabel(widget.LabelWithStaticText("Text2"))}
 	tabs := container.NewAppTabs(item1, item2)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -42,8 +42,8 @@ func TestAppTabs_ChangeItemIcon(t *testing.T) {
 func TestAppTabs_ChangeItemText(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text1")}
-	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Text2")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text1"))}
+	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Text2"))}
 	tabs := container.NewAppTabs(item1, item2)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -65,7 +65,7 @@ func TestAppTabs_ChangeItemText(t *testing.T) {
 func TestAppTabs_DynamicTabs(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text 1")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text 1"))}
 	tabs := container.NewAppTabs(item1)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -75,7 +75,7 @@ func TestAppTabs_DynamicTabs(t *testing.T) {
 
 	test.AssertRendersToMarkup(t, "apptabs/desktop/dynamic_initial.xml", c)
 
-	appendedItem := container.NewTabItem("Test2", widget.NewLabel("Text 2"))
+	appendedItem := container.NewTabItem("Test2", widget.NewLabel(widget.LabelWithStaticText("Text 2")))
 	tabs.Append(appendedItem)
 	assert.Equal(t, 2, len(tabs.Items))
 	assert.Equal(t, "Test2", tabs.Items[1].Text)
@@ -102,9 +102,9 @@ func TestAppTabs_DynamicTabs(t *testing.T) {
 	test.AssertRendersToMarkup(t, "apptabs/desktop/dynamic_appended_another_three.xml", c)
 
 	tabs.SetItems([]*container.TabItem{
-		container.NewTabItem("Test6", widget.NewLabel("Text 6")),
-		container.NewTabItem("Test7", widget.NewLabel("Text 7")),
-		container.NewTabItem("Test8", widget.NewLabel("Text 8")),
+		container.NewTabItem("Test6", widget.NewLabel(widget.LabelWithStaticText("Text 6"))),
+		container.NewTabItem("Test7", widget.NewLabel(widget.LabelWithStaticText("Text 7"))),
+		container.NewTabItem("Test8", widget.NewLabel(widget.LabelWithStaticText("Text 8"))),
 	})
 	assert.Equal(t, 3, len(tabs.Items))
 	assert.Equal(t, "Test6", tabs.Items[0].Text)
@@ -116,8 +116,8 @@ func TestAppTabs_DynamicTabs(t *testing.T) {
 func TestAppTabs_HoverButtons(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text1")}
-	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Text2")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text1"))}
+	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Text2"))}
 	tabs := container.NewAppTabs(item1, item2)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -136,8 +136,8 @@ func TestAppTabs_HoverButtons(t *testing.T) {
 	test.MoveMouse(c, fyne.NewPos(10, 10))
 	test.AssertRendersToMarkup(t, "apptabs/desktop/hover_first.xml", c)
 
-	tabs.Append(&container.TabItem{Text: "Test3", Content: widget.NewLabel("Text3")})
-	tabs.Append(&container.TabItem{Text: "Test4", Content: widget.NewLabel("Text4")})
+	tabs.Append(&container.TabItem{Text: "Test3", Content: widget.NewLabel(widget.LabelWithStaticText("Text3"))})
+	tabs.Append(&container.TabItem{Text: "Test4", Content: widget.NewLabel(widget.LabelWithStaticText("Text4"))})
 
 	test.MoveMouse(c, fyne.NewPos(136, 10))
 	test.AssertRendersToMarkup(t, "apptabs/desktop/hover_overflow.xml", c)
@@ -245,9 +245,9 @@ func TestAppTabs_Layout(t *testing.T) {
 func TestAppTabs_SetTabLocation(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text 1")}
-	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Text 2")}
-	item3 := &container.TabItem{Text: "Test3", Content: widget.NewLabel("Text 3")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text 1"))}
+	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Text 2"))}
+	item3 := &container.TabItem{Text: "Test3", Content: widget.NewLabel(widget.LabelWithStaticText("Text 3"))}
 	tabs := container.NewAppTabs(item1, item2, item3)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -277,9 +277,9 @@ func TestAppTabs_SetTabLocation(t *testing.T) {
 func TestAppTabs_Tapped(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text 1")}
-	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Text 2")}
-	item3 := &container.TabItem{Text: "Test3", Content: widget.NewLabel("Text 3")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text 1"))}
+	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Text 2"))}
+	item3 := &container.TabItem{Text: "Test3", Content: widget.NewLabel(widget.LabelWithStaticText("Text 3"))}
 	tabs := container.NewAppTabs(item1, item2, item3)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -302,7 +302,7 @@ func TestAppTabs_Tapped(t *testing.T) {
 	require.Equal(t, 0, tabs.SelectedIndex())
 	test.AssertRendersToMarkup(t, "apptabs/desktop/tapped_first_selected.xml", c)
 
-	tabs.Append(&container.TabItem{Text: "Test4", Content: widget.NewLabel("Text 4")})
+	tabs.Append(&container.TabItem{Text: "Test4", Content: widget.NewLabel(widget.LabelWithStaticText("Text 4"))})
 
 	test.TapCanvas(c, fyne.NewPos(186, 10))
 	test.AssertRendersToMarkup(t, "apptabs/desktop/tapped_overflow_tabs.xml", c)
@@ -312,9 +312,9 @@ func TestAppTabs_TappedAndDisabled(t *testing.T) {
 	test.NewApp()
 	defer test.NewApp()
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text 1")}
-	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Text 2")}
-	item3 := &container.TabItem{Text: "Test3", Content: widget.NewLabel("Text 3")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text 1"))}
+	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Text 2"))}
+	item3 := &container.TabItem{Text: "Test3", Content: widget.NewLabel(widget.LabelWithStaticText("Text 3"))}
 	tabs := container.NewAppTabs(item1, item2, item3)
 	tabs.DisableItem(item3)
 	w := test.NewWindow(tabs)
@@ -323,7 +323,7 @@ func TestAppTabs_TappedAndDisabled(t *testing.T) {
 	w.Resize(fyne.NewSize(200, 100))
 	c := w.Canvas()
 
-	tabs.Append(&container.TabItem{Text: "Test4", Content: widget.NewLabel("Text 4")})
+	tabs.Append(&container.TabItem{Text: "Test4", Content: widget.NewLabel(widget.LabelWithStaticText("Text 4"))})
 
 	test.TapCanvas(c, fyne.NewPos(186, 10))
 	test.AssertRendersToMarkup(t, "apptabs/desktop/tapped_overflow_tabs_disabled.xml", c)

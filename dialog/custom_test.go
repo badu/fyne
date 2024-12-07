@@ -18,7 +18,7 @@ func TestShowCustom_ApplyTheme(t *testing.T) {
 
 	w := test.NewTempWindow(t, canvas.NewRectangle(color.Transparent))
 
-	label := widget.NewLabel("Content")
+	label := widget.NewLabel(widget.LabelWithStaticText("Content"))
 	label.Alignment = fyne.TextAlignCenter
 
 	d := NewCustom("Title", "OK", label, w)
@@ -38,7 +38,7 @@ func TestShowCustom_Resize(t *testing.T) {
 	w := test.NewTempWindow(t, canvas.NewRectangle(color.Transparent))
 	w.Resize(fyne.NewSize(300, 300))
 
-	label := widget.NewLabel("Content")
+	label := widget.NewLabel(widget.LabelWithStaticText("Content"))
 	label.Alignment = fyne.TextAlignCenter
 	d := NewCustom("Title", "OK", label, w)
 
@@ -53,7 +53,7 @@ func TestCustom_ApplyThemeOnShow(t *testing.T) {
 	w := test.NewTempWindow(t, canvas.NewRectangle(color.Transparent))
 	w.Resize(fyne.NewSize(200, 300))
 
-	label := widget.NewLabel("Content")
+	label := widget.NewLabel(widget.LabelWithStaticText("Content"))
 	label.Alignment = fyne.TextAlignCenter
 	d := NewCustom("Title", "OK", label, w)
 
@@ -79,7 +79,7 @@ func TestCustom_ResizeOnShow(t *testing.T) {
 	size := fyne.NewSize(200, 300)
 	w.Resize(size)
 
-	label := widget.NewLabel("Content")
+	label := widget.NewLabel(widget.LabelWithStaticText("Content"))
 	label.Alignment = fyne.TextAlignCenter
 	d := NewCustom("Title", "OK", label, w).dialog
 
@@ -100,7 +100,7 @@ func TestConfirm_SetButtons(t *testing.T) {
 	size := fyne.NewSize(200, 300)
 	w.Resize(size)
 
-	label := widget.NewLabel("Custom buttons")
+	label := widget.NewLabel(widget.LabelWithStaticText("Custom buttons"))
 	d := NewCustom("Test", "Initial", label, w)
 	test.ApplyTheme(t, test.Theme())
 
@@ -123,7 +123,7 @@ func TestConfirmWithoutButtons(t *testing.T) {
 	w.Resize(size)
 
 	test.ApplyTheme(t, test.Theme())
-	label := widget.NewLabel("No buttons")
+	label := widget.NewLabel(widget.LabelWithStaticText("No buttons"))
 	ShowCustomWithoutButtons("Empty", label, w)
 	test.AssertRendersToImage(t, "dialog-custom-without-buttons.png", w.Canvas())
 }
@@ -134,7 +134,7 @@ func TestCustomConfirm_Importance(t *testing.T) {
 	size := fyne.NewSize(200, 300)
 	w.Resize(size)
 
-	label := widget.NewLabel("This is dangerous!")
+	label := widget.NewLabel(widget.LabelWithStaticText("This is dangerous!"))
 	d := NewCustomConfirm("Delete me?", "Delete", "Dismiss", label, nil, w)
 	d.SetConfirmImportance(widget.DangerImportance)
 

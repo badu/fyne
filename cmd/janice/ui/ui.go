@@ -64,10 +64,11 @@ func NewUI(app fyne.App) (*UI, error) {
 
 	// main frame
 	welcomeText := widget.NewLabel(
-		"Welcome to " + appName + ".\n" +
+		widget.LabelWithStaticText("Welcome to " + appName + ".\n" +
 			"Open a JSON file through the File Open menu\n" +
 			"or drag and drop the file on this window\n" +
 			"or import from the clipboard.\n",
+		),
 	)
 	welcomeText.Importance = widget.MediumImportance
 	welcomeText.Alignment = fyne.TextAlignCenter
@@ -239,7 +240,7 @@ func (u *UI) setTitle(fileName string) {
 // loadDocument loads a JSON file
 // Shows a loader modal while loading
 func (u *UI) loadDocument(reader fyne.URIReadCloser) {
-	infoText := widget.NewLabel("")
+	infoText := widget.NewLabel(widget.LabelWithStaticText(""))
 	pb1 := widget.NewProgressBarInfinite()
 	pb2 := widget.NewProgressBar()
 	pb2.Hide()

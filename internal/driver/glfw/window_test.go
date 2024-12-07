@@ -1759,8 +1759,8 @@ func TestWindow_ClosedBeforeShow(t *testing.T) {
 func TestWindow_SetContent_Twice(t *testing.T) {
 	w := createWindow("Test").(*window)
 
-	e1 := widget.NewLabel("1")
-	e2 := widget.NewLabel("2")
+	e1 := widget.NewLabel(widget.LabelWithStaticText("1"))
+	e2 := widget.NewLabel(widget.LabelWithStaticText("2"))
 
 	w.SetContent(e1)
 	assert.True(t, e1.Visible())

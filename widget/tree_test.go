@@ -34,14 +34,14 @@ func TestNewTreeWithData(t *testing.T) {
 
 	tree := widget.NewTreeWithData(data,
 		func(bool) fyne.CanvasObject {
-			return widget.NewLabel("Template Object")
+			return widget.NewLabel(widget.LabelWithStaticText("Template Object"))
 		},
 		func(data binding.DataItem, _ bool, item fyne.CanvasObject) {
 			item.(*widget.Label).Bind(data.(binding.String))
 		},
 	)
 
-	template := widget.NewLabel("Template Object")
+	template := widget.NewLabel(widget.LabelWithStaticText("Template Object"))
 
 	assert.Equal(t, 1000, len(tree.ChildUIDs("")))
 	assert.Equal(t, 10, len(tree.ChildUIDs("1")))

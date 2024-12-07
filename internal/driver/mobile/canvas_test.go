@@ -56,7 +56,7 @@ func Test_canvas_ChildMinSizeChangeAffectsAncestorsUpToRoot(t *testing.T) {
 func Test_canvas_Dragged(t *testing.T) {
 	dragged := false
 	var draggedObj fyne.Draggable
-	scroll := container.NewScroll(widget.NewLabel("Hi\nHi\nHi"))
+	scroll := container.NewScroll(widget.NewLabel(widget.LabelWithStaticText("Hi\nHi\nHi")))
 	c := newCanvas(fyne.CurrentDevice()).(*canvas)
 	c.SetContent(scroll)
 	c.Resize(fyne.NewSize(40, 24))
@@ -83,7 +83,7 @@ func Test_canvas_Dragged(t *testing.T) {
 func Test_canvas_DraggingOutOfWidget(t *testing.T) {
 	c := newCanvas(fyne.CurrentDevice()).(*canvas)
 	slider := widget.NewSlider(0.0, 100.0)
-	c.SetContent(container.NewGridWithRows(2, slider, widget.NewLabel("Outside")))
+	c.SetContent(container.NewGridWithRows(2, slider, widget.NewLabel(widget.LabelWithStaticText("Outside"))))
 	c.Resize(fyne.NewSize(100, 200))
 
 	assert.Zero(t, slider.Value)
@@ -218,9 +218,9 @@ func Test_canvas_PixelCoordinateAtPosition(t *testing.T) {
 func Test_canvas_ResizeWithModalPopUpOverlay(t *testing.T) {
 	c := newCanvas(fyne.CurrentDevice()).(*canvas)
 
-	c.SetContent(widget.NewLabel("Content"))
+	c.SetContent(widget.NewLabel(widget.LabelWithStaticText("Content")))
 
-	popup := widget.NewModalPopUp(widget.NewLabel("PopUp"), c)
+	popup := widget.NewModalPopUp(widget.NewLabel(widget.LabelWithStaticText("PopUp")), c)
 	popupBgSize := fyne.NewSize(200, 200)
 	popup.Show()
 	popup.Resize(popupBgSize)
@@ -236,7 +236,7 @@ func Test_canvas_ResizeWithModalPopUpOverlay(t *testing.T) {
 }
 
 func Test_canvas_Tappable(t *testing.T) {
-	content := &touchableLabel{Label: widget.NewLabel("Hi\nHi\nHi")}
+	content := &touchableLabel{Label: widget.NewLabel(widget.LabelWithStaticText("Hi\nHi\nHi"))}
 	content.ExtendBaseWidget(content)
 	c := newCanvas(fyne.CurrentDevice()).(*canvas)
 	c.SetContent(content)

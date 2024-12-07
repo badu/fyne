@@ -11,7 +11,7 @@ import (
 )
 
 func TestAppTabs_tabButtonRenderer_SetText(t *testing.T) {
-	item := &TabItem{Text: "Test", Content: widget.NewLabel("Content")}
+	item := &TabItem{Text: "Test", Content: widget.NewLabel(widget.LabelWithStaticText("Content"))}
 	tabs := NewAppTabs(item)
 	tabRenderer := cache.Renderer(tabs).(*appTabsRenderer)
 	button := tabRenderer.bar.Objects[0].(*fyne.Container).Objects[0].(*tabButton)
@@ -31,8 +31,8 @@ func TestAppTabs_tabButtonRenderer_SetText(t *testing.T) {
 }
 
 func Test_tabButtonRenderer_DeleteAdd(t *testing.T) {
-	item1 := &TabItem{Text: "Test", Content: widget.NewLabel("Content")}
-	item2 := &TabItem{Text: "Delete", Content: widget.NewLabel("Delete")}
+	item1 := &TabItem{Text: "Test", Content: widget.NewLabel(widget.LabelWithStaticText("Content"))}
+	item2 := &TabItem{Text: "Delete", Content: widget.NewLabel(widget.LabelWithStaticText("Delete"))}
 	tabs := NewAppTabs(item1, item2)
 	tabRenderer := cache.Renderer(tabs).(*appTabsRenderer)
 	indicator := tabRenderer.indicator
@@ -49,7 +49,7 @@ func Test_tabButtonRenderer_DeleteAdd(t *testing.T) {
 }
 
 func Test_tabButtonRenderer_EmptyDeleteAdd(t *testing.T) {
-	item1 := &TabItem{Text: "Test", Content: widget.NewLabel("Content")}
+	item1 := &TabItem{Text: "Test", Content: widget.NewLabel(widget.LabelWithStaticText("Content"))}
 	tabs := NewAppTabs()
 
 	// ensure enough space for buttons to be created.

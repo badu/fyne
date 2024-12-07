@@ -31,9 +31,14 @@ type fileDialogItem struct {
 }
 
 func (i *fileDialogItem) CreateRenderer() fyne.WidgetRenderer {
-	text := widget.NewLabelWithStyle(i.name, fyne.TextAlignCenter, fyne.TextStyle{})
-	text.Truncation = fyne.TextTruncateEllipsis
-	text.Wrapping = fyne.TextWrapBreak
+	text := widget.NewLabel(
+		widget.LabelWithStaticText(i.name),
+		widget.LabelWithAlignment(fyne.TextAlignCenter),
+		widget.LabelWithStyle(fyne.TextStyle{}),
+		widget.LabelWithTruncation(fyne.TextTruncateEllipsis),
+		widget.LabelWithWrapping(fyne.TextWrapBreak),
+	)
+
 	icon := widget.NewFileIcon(i.location)
 
 	return &fileItemRenderer{
@@ -41,7 +46,7 @@ func (i *fileDialogItem) CreateRenderer() fyne.WidgetRenderer {
 		icon:         icon,
 		text:         text,
 		objects:      []fyne.CanvasObject{icon, text},
-		fileTextSize: widget.NewLabel("M\nM").MinSize().Height, // cache two-line label height,
+		fileTextSize: widget.NewLabel(widget.LabelWithStaticText("M\nM")).MinSize().Height, // cache two-line label height,
 	}
 }
 
@@ -133,7 +138,7 @@ func (s *fileItemRenderer) MinSize() fyne.Size {
 }
 
 func (s *fileItemRenderer) Refresh() {
-	s.fileTextSize = widget.NewLabel("M\nM").MinSize().Height // cache two-line label height
+	s.fileTextSize = widget.NewLabel(widget.LabelWithStaticText("M\nM")).MinSize().Height // cache two-line label height
 
 	s.text.SetText(s.item.name)
 	s.icon.SetURI(s.item.location)

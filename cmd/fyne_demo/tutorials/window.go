@@ -16,12 +16,12 @@ func windowScreen(_ fyne.Window) fyne.CanvasObject {
 	windowGroup := container.NewVBox(
 		widget.NewButton("New window", func() {
 			w := fyne.CurrentApp().NewWindow("Hello")
-			w.SetContent(widget.NewLabel("Hello World!"))
+			w.SetContent(widget.NewLabel(widget.LabelWithStaticText("Hello World!")))
 			w.Show()
 		}),
 		widget.NewButton("Fixed size window", func() {
 			w := fyne.CurrentApp().NewWindow("Fixed")
-			w.SetContent(container.NewCenter(widget.NewLabel("Hello World!")))
+			w.SetContent(container.NewCenter(widget.NewLabel(widget.LabelWithStaticText("Hello World!"))))
 
 			w.Resize(fyne.NewSize(240, 180))
 			w.SetFixedSize(true)
@@ -39,7 +39,7 @@ func windowScreen(_ fyne.Window) fyne.CanvasObject {
 		}),
 		widget.NewButton("Centered window", func() {
 			w := fyne.CurrentApp().NewWindow("Central")
-			w.SetContent(container.NewCenter(widget.NewLabel("Hello World!")))
+			w.SetContent(container.NewCenter(widget.NewLabel(widget.LabelWithStaticText("Hello World!"))))
 
 			w.CenterOnScreen()
 			w.Show()
@@ -47,7 +47,7 @@ func windowScreen(_ fyne.Window) fyne.CanvasObject {
 		widget.NewButton("Show/Hide window", func() {
 			if visibilityWindow == nil {
 				visibilityWindow = fyne.CurrentApp().NewWindow("Hello")
-				visibilityWindow.SetContent(widget.NewLabel("Hello World!"))
+				visibilityWindow.SetContent(widget.NewLabel(widget.LabelWithStaticText("Hello World!")))
 				visibilityWindow.Show()
 				visibilityWindow.SetOnClosed(func() {
 					visibilityWindow = nil
@@ -67,8 +67,13 @@ func windowScreen(_ fyne.Window) fyne.CanvasObject {
 		windowGroup.Objects = append(windowGroup.Objects,
 			widget.NewButton("Splash Window (only use on start)", func() {
 				w := drv.CreateSplashWindow()
-				w.SetContent(widget.NewLabelWithStyle("Hello World!\n\nMake a splash!",
-					fyne.TextAlignCenter, fyne.TextStyle{Bold: true}))
+				w.SetContent(
+					widget.NewLabel(
+						widget.LabelWithStaticText("Hello World!\n\nMake a splash!"),
+						widget.LabelWithAlignment(fyne.TextAlignCenter),
+						widget.LabelWithStyle(fyne.TextStyle{Bold: true}),
+					),
+				)
 				w.Show()
 
 				go func() {

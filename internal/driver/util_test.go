@@ -16,10 +16,10 @@ import (
 )
 
 func TestAbsolutePositionForObject(t *testing.T) {
-	t1r1c1 := widget.NewLabel("row 1 col 1")
-	t1r1c2 := widget.NewLabel("row 1 col 2")
-	t1r2c1 := widget.NewLabel("row 2 col 1")
-	t1r2c2 := widget.NewLabel("row 2 col 2")
+	t1r1c1 := widget.NewLabel(widget.LabelWithStaticText("row 1 col 1"))
+	t1r1c2 := widget.NewLabel(widget.LabelWithStaticText("row 1 col 2"))
+	t1r2c1 := widget.NewLabel(widget.LabelWithStaticText("row 2 col 1"))
+	t1r2c2 := widget.NewLabel(widget.LabelWithStaticText("row 2 col 2"))
 	t1r2c2.Hide()
 	t1r1 := container.NewWithoutLayout(t1r1c1, t1r1c2)
 	t1r2 := container.NewWithoutLayout(t1r2c1, t1r2c2)
@@ -33,10 +33,10 @@ func TestAbsolutePositionForObject(t *testing.T) {
 	t1r2.Move(fyne.NewPos(12, 12))
 	tree1.Move(fyne.NewPos(1, 1))
 
-	t2r1c1 := widget.NewLabel("row 1 col 1")
-	t2r1c2 := widget.NewLabel("row 1 col 2")
-	t2r2c1 := widget.NewLabel("row 2 col 1")
-	t2r2c2 := widget.NewLabel("row 2 col 2")
+	t2r1c1 := widget.NewLabel(widget.LabelWithStaticText("row 1 col 1"))
+	t2r1c2 := widget.NewLabel(widget.LabelWithStaticText("row 1 col 2"))
+	t2r2c1 := widget.NewLabel(widget.LabelWithStaticText("row 2 col 1"))
+	t2r2c2 := widget.NewLabel(widget.LabelWithStaticText("row 2 col 2"))
 	t2r1 := container.NewWithoutLayout(t2r1c1, t2r1c2)
 	t2r2 := container.NewWithoutLayout(t2r2c1, t2r2c2)
 	tree2 := container.NewWithoutLayout(t2r1, t2r2)
@@ -49,8 +49,8 @@ func TestAbsolutePositionForObject(t *testing.T) {
 	t2r2.Move(fyne.NewPos(22, 22))
 	tree2.Move(fyne.NewPos(2, 2))
 
-	t3r1 := widget.NewLabel("row 1")
-	t3r2 := widget.NewLabel("row 2")
+	t3r1 := widget.NewLabel(widget.LabelWithStaticText("row 1"))
+	t3r2 := widget.NewLabel(widget.LabelWithStaticText("row 2"))
 	tree3 := container.NewWithoutLayout(t3r1, t3r2)
 
 	t3r1.Move(fyne.NewPos(31, 31))
@@ -59,7 +59,7 @@ func TestAbsolutePositionForObject(t *testing.T) {
 
 	trees := []fyne.CanvasObject{tree1, tree2, tree3}
 
-	outsideTrees := widget.NewLabel("outside trees")
+	outsideTrees := widget.NewLabel(widget.LabelWithStaticText("outside trees"))
 	outsideTrees.Move(fyne.NewPos(10, 10))
 
 	tests := map[string]struct {

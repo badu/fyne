@@ -22,7 +22,7 @@ type Badge struct {
 
 // NewBadge returns a new instance of a [Badge] widget.
 func NewBadge(text string) *Badge {
-	w := &Badge{Label: widget.NewLabel(text)}
+	w := &Badge{Label: widget.NewLabel(widget.LabelWithStaticText(text))}
 	w.ExtendBaseWidget(w)
 	return w
 }

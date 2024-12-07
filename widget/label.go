@@ -27,31 +27,52 @@ type Label struct {
 	binder   basicBinder
 }
 
-// NewLabel creates a new label widget with the set text content
-func NewLabel(text string) *Label {
-	return NewLabelWithStyle(text, fyne.TextAlignLeading, fyne.TextStyle{})
-}
+type LabelOption func(*Label)
 
-// NewLabelWithData returns an Label widget connected to the specified data source.
-//
-// Since: 2.0
-func NewLabelWithData(data binding.String) *Label {
-	label := NewLabel("")
-	label.Bind(data)
-
-	return label
-}
-
-// NewLabelWithStyle creates a new label widget with the set text content
-func NewLabelWithStyle(text string, alignment fyne.TextAlign, style fyne.TextStyle) *Label {
-	l := &Label{
-		Text:      text,
-		Alignment: alignment,
-		TextStyle: style,
+func LabelWithStaticText(text string) LabelOption {
+	return func(l *Label) {
+		l.Text = text
 	}
+}
 
-	l.ExtendBaseWidget(l)
-	return l
+func LabelWithBindedText(data binding.String) LabelOption {
+	return func(l *Label) {
+		l.Bind(data)
+	}
+}
+
+func LabelWithAlignment(alignment fyne.TextAlign) LabelOption {
+	return func(l *Label) {
+		l.Alignment = alignment
+	}
+}
+
+func LabelWithStyle(style fyne.TextStyle) LabelOption {
+	return func(l *Label) {
+		l.TextStyle = style
+	}
+}
+
+func LabelWithTruncation(truncation fyne.TextTruncation) LabelOption {
+	return func(l *Label) {
+		l.Truncation = truncation
+	}
+}
+
+func LabelWithWrapping(wrapping fyne.TextWrap) LabelOption {
+	return func(l *Label) {
+		l.Wrapping = wrapping
+	}
+}
+
+// NewLabel creates a new label widget with the set text content
+func NewLabel(options ...LabelOption) *Label {
+	result := &Label{}
+	for _, opt := range options {
+		opt(result)
+	}
+	result.ExtendBaseWidget(result)
+	return result
 }
 
 // Bind connects the specified data source to this Label.
@@ -123,47 +144,50 @@ func (l *Label) syncSegments() {
 	l.propertyLock.RLock()
 	defer l.propertyLock.RUnlock()
 
-	var color fyne.ThemeColorName
-	switch l.Importance {
-	case LowImportance:
-		color = theme.ColorNameDisabled
-	case MediumImportance:
-		color = theme.ColorNameForeground
-	case HighImportance:
-		color = theme.ColorNamePrimary
-	case DangerImportance:
-		color = theme.ColorNameError
-	case WarningImportance:
-		color = theme.ColorNameWarning
-	case SuccessImportance:
-		color = theme.ColorNameSuccess
-	default:
-		color = theme.ColorNameForeground
-	}
-
 	l.provider.Wrapping = l.Wrapping
 	l.provider.Truncation = l.Truncation
+
 	l.provider.Segments[0].(*TextSegment).Style = RichTextStyle{
 		Alignment: l.Alignment,
-		ColorName: color,
 		Inline:    true,
 		TextStyle: l.TextStyle,
 	}
 	l.provider.Segments[0].(*TextSegment).Text = l.Text
+
+	switch l.Importance {
+	case LowImportance:
+		l.provider.Segments[0].(*TextSegment).Style.ColorName = theme.ColorNameDisabled
+	case MediumImportance:
+		l.provider.Segments[0].(*TextSegment).Style.ColorName = theme.ColorNameForeground
+	case HighImportance:
+		l.provider.Segments[0].(*TextSegment).Style.ColorName = theme.ColorNamePrimary
+	case DangerImportance:
+		l.provider.Segments[0].(*TextSegment).Style.ColorName = theme.ColorNameError
+	case WarningImportance:
+		l.provider.Segments[0].(*TextSegment).Style.ColorName = theme.ColorNameWarning
+	case SuccessImportance:
+		l.provider.Segments[0].(*TextSegment).Style.ColorName = theme.ColorNameSuccess
+	default:
+		l.provider.Segments[0].(*TextSegment).Style.ColorName = theme.ColorNameForeground
+	}
+
 }
 
 func (l *Label) updateFromData(data binding.DataItem) {
 	if data == nil {
 		return
 	}
+
 	textSource, ok := data.(binding.String)
 	if !ok {
 		return
 	}
+
 	val, err := textSource.Get()
 	if err != nil {
 		fyne.LogError("Error getting current data value", err)
 		return
 	}
+
 	l.SetText(val)
 }

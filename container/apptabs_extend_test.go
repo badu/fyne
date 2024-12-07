@@ -26,8 +26,8 @@ func newExtendedAppTabs(items ...*TabItem) *extendedAppTabs {
 
 func TestAppTabs_Extended_Tapped(t *testing.T) {
 	tabs := newExtendedAppTabs(
-		NewTabItem("Test1", widget.NewLabel("Test1")),
-		NewTabItem("Test2", widget.NewLabel("Test2")),
+		NewTabItem("Test1", widget.NewLabel(widget.LabelWithStaticText("Test1"))),
+		NewTabItem("Test2", widget.NewLabel(widget.LabelWithStaticText("Test2"))),
 	)
 	tabs.Resize(fyne.NewSize(150, 150)) // Ensure AppTabs is big enough to show both tab buttons
 	r := test.TempWidgetRenderer(t, tabs).(*appTabsRenderer)

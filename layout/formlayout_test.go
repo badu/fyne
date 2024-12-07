@@ -147,7 +147,7 @@ func TestFormLayout_MinSize(t *testing.T) {
 	assert.Equal(t, fyne.NewSize(expectedRowWidth, expectedRowHeight), layoutMin)
 
 	text := canvas.NewText("Text", color.Black)
-	value := widget.NewLabel("Text")
+	value := widget.NewLabel(widget.LabelWithStaticText("Text"))
 	l = layout.NewFormLayout()
 	layoutMin = l.MinSize([]fyne.CanvasObject{text, value})
 	// check that the text minsize is padded to match a label

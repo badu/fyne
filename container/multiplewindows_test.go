@@ -13,12 +13,12 @@ func TestMultipleWindows_Add(t *testing.T) {
 	m := NewMultipleWindows()
 	assert.Zero(t, len(m.Windows))
 
-	m.Add(NewInnerWindow("1", widget.NewLabel("Inside")))
+	m.Add(NewInnerWindow("1", widget.NewLabel(widget.LabelWithStaticText("Inside"))))
 	assert.Equal(t, 1, len(m.Windows))
 }
 
 func TestMultipleWindows_Drag(t *testing.T) {
-	w := NewInnerWindow("1", widget.NewLabel("Inside"))
+	w := NewInnerWindow("1", widget.NewLabel(widget.LabelWithStaticText("Inside")))
 	m := NewMultipleWindows(w)
 	_ = test.TempWidgetRenderer(t, m) // initialise display
 	assert.Equal(t, 1, len(m.Windows))

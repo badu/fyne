@@ -15,7 +15,7 @@ import (
 )
 
 func TestRender(t *testing.T) {
-	obj := widget.NewLabel("Hi")
+	obj := widget.NewLabel(widget.LabelWithStaticText("Hi"))
 	test.AssertImageMatches(t, "label.png", Render(obj, test.Theme()))
 	painter.ClearFontCache() // avoid side effects of the cause of #4937
 	test.AssertImageMatches(t, "label_ugly_theme.png", Render(obj, test.NewTheme()))
@@ -42,7 +42,7 @@ func TestRender_Focus(t *testing.T) {
 func TestRenderCanvas(t *testing.T) {
 	obj := container.NewAppTabs(
 		container.NewTabItem("Tab 1", container.NewVBox(
-			widget.NewLabel("Label"),
+			widget.NewLabel(widget.LabelWithStaticText("Label")),
 			widget.NewButton("Button", func() {}),
 		)))
 

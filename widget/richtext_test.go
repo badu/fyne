@@ -360,7 +360,7 @@ func TestText_Color(t *testing.T) {
 }
 
 func TestTextRenderer_ApplyTheme(t *testing.T) {
-	label := NewLabel("Test\nLine2")
+	label := NewLabel(LabelWithStaticText("Test\nLine2"))
 	texts := labelTextRenderTexts(label)
 
 	text1 := texts[0]
@@ -382,7 +382,7 @@ func TestTextRenderer_ApplyTheme(t *testing.T) {
 }
 
 func TestTextProvider_LineSizeToColumn(t *testing.T) {
-	label := NewLabel("Test")
+	label := NewLabel(LabelWithStaticText("Test"))
 	label.CreateRenderer() // TODO make this a simple refresh call once it's in
 	provider := label.provider
 

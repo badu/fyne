@@ -45,7 +45,7 @@ func Test_mobileDriver_AbsolutePositionForObject(t *testing.T) {
 			d := &driver{}
 			w := d.CreateWindow("main")
 			w.SetPadded(tt.windowPadded)
-			l := widget.NewLabel("main window")
+			l := widget.NewLabel(widget.LabelWithStaticText("main window"))
 			if !tt.windowIsChild {
 				o = l
 			}
@@ -53,13 +53,13 @@ func Test_mobileDriver_AbsolutePositionForObject(t *testing.T) {
 			w.Show()
 			w.Resize(size)
 			w = d.CreateWindow("child1")
-			w.SetContent(widget.NewLabel("first child"))
+			w.SetContent(widget.NewLabel(widget.LabelWithStaticText("first child")))
 			if tt.windowIsChild {
 				w.Show()
 			}
 			w.Resize(size)
 			w = d.CreateWindow("child2 - hidden")
-			w.SetContent(widget.NewLabel("second child"))
+			w.SetContent(widget.NewLabel(widget.LabelWithStaticText("second child")))
 			w.Resize(size)
 			w = d.CreateWindow("child3")
 			r := fynecanvas.NewRectangle(color.White)
@@ -72,7 +72,7 @@ func Test_mobileDriver_AbsolutePositionForObject(t *testing.T) {
 			}
 			w.Resize(size)
 			w = d.CreateWindow("child4 - hidden")
-			w.SetContent(widget.NewLabel("fourth child"))
+			w.SetContent(widget.NewLabel(widget.LabelWithStaticText("fourth child")))
 			w.Resize(size)
 
 			got := d.AbsolutePositionForObject(o)

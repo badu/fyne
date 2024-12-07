@@ -21,7 +21,7 @@ func texScaleString(c fyne.Canvas) string {
 }
 
 func prependTo(g *fyne.Container, s string) {
-	g.Objects = append([]fyne.CanvasObject{widget.NewLabel(s)}, g.Objects...)
+	g.Objects = append([]fyne.CanvasObject{widget.NewLabel(widget.LabelWithStaticText(s))}, g.Objects...)
 	g.Refresh()
 }
 
@@ -37,8 +37,8 @@ func setScaleText(scale, tex *widget.Label, win fyne.Window) {
 // advancedScreen loads a panel that shows details and settings that are a bit
 // more detailed than normally needed.
 func advancedScreen(win fyne.Window) fyne.CanvasObject {
-	scale := widget.NewLabel("")
-	tex := widget.NewLabel("")
+	scale := widget.NewLabel(widget.LabelWithStaticText(""))
+	tex := widget.NewLabel(widget.LabelWithStaticText(""))
 
 	screen := widget.NewCard("Screen info", "", widget.NewForm(
 		&widget.FormItem{Text: "Scale", Widget: scale},
@@ -47,7 +47,7 @@ func advancedScreen(win fyne.Window) fyne.CanvasObject {
 
 	go setScaleText(scale, tex, win)
 
-	label := widget.NewLabel("Just type...")
+	label := widget.NewLabel(widget.LabelWithStaticText("Just type..."))
 	generic := container.NewVBox()
 	desk := container.NewVBox()
 
@@ -73,7 +73,7 @@ func advancedScreen(win fyne.Window) fyne.CanvasObject {
 	if !ok {
 		buildStatus = "No helper text provided at compile time."
 	}
-	labelBuildStatus := widget.NewLabel(buildStatus)
+	labelBuildStatus := widget.NewLabel(widget.LabelWithStaticText(buildStatus))
 
 	return container.NewHBox(
 		container.NewVBox(screen,

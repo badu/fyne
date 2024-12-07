@@ -27,7 +27,7 @@ type Slider struct {
 func NewSlider(min, max float64) *Slider {
 	d := binding.NewFloat()
 	w := &Slider{
-		label:  widget.NewLabelWithData(binding.FloatToStringWithFormat(d, "%v")),
+		label:  widget.NewLabel(widget.LabelWithBindedText(binding.FloatToStringWithFormat(d, "%v"))),
 		slider: widget.NewSliderWithData(min, max, d),
 		data:   d,
 	}
@@ -50,7 +50,7 @@ func (w *Slider) SetStep(step float64) {
 }
 
 func (w *Slider) updateLayout() {
-	x := widget.NewLabel(fmt.Sprintf("%v", w.slider.Max+w.slider.Step))
+	x := widget.NewLabel(widget.LabelWithStaticText(fmt.Sprintf("%v", w.slider.Max+w.slider.Step)))
 	minW := x.MinSize().Width
 	w.layout = layout.NewColumns(minW, minW)
 }

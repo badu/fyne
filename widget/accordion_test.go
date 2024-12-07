@@ -14,7 +14,7 @@ import (
 )
 
 func TestAccordion(t *testing.T) {
-	ai := widget.NewAccordionItem("foo", widget.NewLabel("foobar"))
+	ai := widget.NewAccordionItem("foo", widget.NewLabel(widget.LabelWithStaticText("foobar")))
 	t.Run("Initializer", func(t *testing.T) {
 		ac := &widget.Accordion{Items: []*widget.AccordionItem{ai}}
 		assert.Equal(t, 1, len(ac.Items))
@@ -27,7 +27,7 @@ func TestAccordion(t *testing.T) {
 
 func TestAccordion_Append(t *testing.T) {
 	ac := widget.NewAccordion()
-	ac.Append(widget.NewAccordionItem("foo", widget.NewLabel("foobar")))
+	ac.Append(widget.NewAccordionItem("foo", widget.NewLabel(widget.LabelWithStaticText("foobar"))))
 	assert.Equal(t, 1, len(ac.Items))
 }
 
@@ -35,8 +35,8 @@ func TestAccordion_ChangeTheme(t *testing.T) {
 	test.NewTempApp(t)
 
 	ac := widget.NewAccordion()
-	ac.Append(widget.NewAccordionItem("foo0", widget.NewLabel("foobar0")))
-	ac.Append(widget.NewAccordionItem("foo1", widget.NewLabel("foobar1")))
+	ac.Append(widget.NewAccordionItem("foo0", widget.NewLabel(widget.LabelWithStaticText("foobar0"))))
+	ac.Append(widget.NewAccordionItem("foo1", widget.NewLabel(widget.LabelWithStaticText("foobar1"))))
 
 	w := test.NewWindow(ac)
 	defer w.Close()
@@ -57,7 +57,7 @@ func TestAccordion_Close(t *testing.T) {
 		ac := widget.NewAccordion()
 		ac.Append(&widget.AccordionItem{
 			Title:  "foo",
-			Detail: widget.NewLabel("foobar"),
+			Detail: widget.NewLabel(widget.LabelWithStaticText("foobar")),
 			Open:   true,
 		})
 		ac.Close(0)
@@ -68,7 +68,7 @@ func TestAccordion_Close(t *testing.T) {
 		ac := widget.NewAccordion()
 		ac.Append(&widget.AccordionItem{
 			Title:  "foo",
-			Detail: widget.NewLabel("foobar"),
+			Detail: widget.NewLabel(widget.LabelWithStaticText("foobar")),
 			Open:   true,
 		})
 		ac.Close(-1)
@@ -78,7 +78,7 @@ func TestAccordion_Close(t *testing.T) {
 		ac := widget.NewAccordion()
 		ac.Append(&widget.AccordionItem{
 			Title:  "foo",
-			Detail: widget.NewLabel("foobar"),
+			Detail: widget.NewLabel(widget.LabelWithStaticText("foobar")),
 			Open:   true,
 		})
 		ac.Close(1)
@@ -88,9 +88,9 @@ func TestAccordion_Close(t *testing.T) {
 
 func TestAccordion_CloseAll(t *testing.T) {
 	ac := widget.NewAccordion()
-	ac.Append(widget.NewAccordionItem("foo0", widget.NewLabel("foobar0")))
-	ac.Append(widget.NewAccordionItem("foo1", widget.NewLabel("foobar1")))
-	ac.Append(widget.NewAccordionItem("foo2", widget.NewLabel("foobar2")))
+	ac.Append(widget.NewAccordionItem("foo0", widget.NewLabel(widget.LabelWithStaticText("foobar0"))))
+	ac.Append(widget.NewAccordionItem("foo1", widget.NewLabel(widget.LabelWithStaticText("foobar1"))))
+	ac.Append(widget.NewAccordionItem("foo2", widget.NewLabel(widget.LabelWithStaticText("foobar2"))))
 
 	ac.CloseAll()
 	assert.False(t, ac.Items[0].Open)
@@ -110,7 +110,7 @@ func TestAccordion_Layout(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 			},
 		},
@@ -118,7 +118,7 @@ func TestAccordion_Layout(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 			},
 			opened: []int{0},
@@ -127,11 +127,11 @@ func TestAccordion_Layout(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 		},
@@ -139,11 +139,11 @@ func TestAccordion_Layout(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 			opened: []int{0, 1},
@@ -153,7 +153,7 @@ func TestAccordion_Layout(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 			},
 		},
@@ -162,7 +162,7 @@ func TestAccordion_Layout(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 			},
 			opened: []int{0},
@@ -172,11 +172,11 @@ func TestAccordion_Layout(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 		},
@@ -185,11 +185,11 @@ func TestAccordion_Layout(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 			opened: []int{0, 1},
@@ -226,7 +226,7 @@ func TestAccordion_Layout_Expanded(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 			},
 		},
@@ -234,7 +234,7 @@ func TestAccordion_Layout_Expanded(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 			},
 			opened: []int{0},
@@ -243,11 +243,11 @@ func TestAccordion_Layout_Expanded(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 		},
@@ -255,11 +255,11 @@ func TestAccordion_Layout_Expanded(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 			opened: []int{0, 1},
@@ -269,7 +269,7 @@ func TestAccordion_Layout_Expanded(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 			},
 		},
@@ -278,7 +278,7 @@ func TestAccordion_Layout_Expanded(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 			},
 			opened: []int{0},
@@ -288,11 +288,11 @@ func TestAccordion_Layout_Expanded(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 		},
@@ -301,11 +301,11 @@ func TestAccordion_Layout_Expanded(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("11111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("11111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 			opened: []int{0, 1},
@@ -360,7 +360,7 @@ func TestAccordion_MinSize(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("111111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("111111")),
 				},
 			},
 			want: fyne.NewSize(minWidthA1, minSizeA.Height+theme.InnerPadding()),
@@ -369,7 +369,7 @@ func TestAccordion_MinSize(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("111111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("111111")),
 				},
 			},
 			opened: []int{0},
@@ -379,11 +379,11 @@ func TestAccordion_MinSize(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("111111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("111111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 			want: fyne.NewSize(minWidthA1B2, minSizeA.Height+minSizeB.Height+theme.InnerPadding()*2+theme.Padding()),
@@ -392,11 +392,11 @@ func TestAccordion_MinSize(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("111111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("111111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 			opened: []int{0, 1},
@@ -407,7 +407,7 @@ func TestAccordion_MinSize(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("111111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("111111")),
 				},
 			},
 			want: fyne.NewSize(minWidthA1, minSizeA.Height+theme.InnerPadding()),
@@ -417,7 +417,7 @@ func TestAccordion_MinSize(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("111111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("111111")),
 				},
 			},
 			opened: []int{0},
@@ -428,11 +428,11 @@ func TestAccordion_MinSize(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("111111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("111111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 			want: fyne.NewSize(minWidthA1B2, minSizeA.Height+minSizeB.Height+theme.InnerPadding()*2+theme.Padding()),
@@ -442,11 +442,11 @@ func TestAccordion_MinSize(t *testing.T) {
 			items: []*widget.AccordionItem{
 				{
 					Title:  "A",
-					Detail: widget.NewLabel("111111"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("111111")),
 				},
 				{
 					Title:  "B",
-					Detail: widget.NewLabel("2222222222"),
+					Detail: widget.NewLabel(widget.LabelWithStaticText("2222222222")),
 				},
 			},
 			opened: []int{0, 1},
@@ -472,9 +472,9 @@ func TestAccordion_MinSize(t *testing.T) {
 func TestAccordion_Open(t *testing.T) {
 	t.Run("Exists", func(t *testing.T) {
 		ac := widget.NewAccordion()
-		ac.Append(widget.NewAccordionItem("foo0", widget.NewLabel("foobar0")))
-		ac.Append(widget.NewAccordionItem("foo1", widget.NewLabel("foobar1")))
-		ac.Append(widget.NewAccordionItem("foo2", widget.NewLabel("foobar2")))
+		ac.Append(widget.NewAccordionItem("foo0", widget.NewLabel(widget.LabelWithStaticText("foobar0"))))
+		ac.Append(widget.NewAccordionItem("foo1", widget.NewLabel(widget.LabelWithStaticText("foobar1"))))
+		ac.Append(widget.NewAccordionItem("foo2", widget.NewLabel(widget.LabelWithStaticText("foobar2"))))
 		assert.False(t, ac.Items[0].Open)
 		assert.False(t, ac.Items[1].Open)
 		assert.False(t, ac.Items[2].Open)
@@ -499,14 +499,14 @@ func TestAccordion_Open(t *testing.T) {
 	})
 	t.Run("BelowBounds", func(t *testing.T) {
 		ac := widget.NewAccordion()
-		ac.Append(widget.NewAccordionItem("foo", widget.NewLabel("foobar")))
+		ac.Append(widget.NewAccordionItem("foo", widget.NewLabel(widget.LabelWithStaticText("foobar"))))
 		assert.False(t, ac.Items[0].Open)
 		ac.Open(-1)
 		assert.False(t, ac.Items[0].Open)
 	})
 	t.Run("AboveBounds", func(t *testing.T) {
 		ac := widget.NewAccordion()
-		ac.Append(widget.NewAccordionItem("foo", widget.NewLabel("foobar")))
+		ac.Append(widget.NewAccordionItem("foo", widget.NewLabel(widget.LabelWithStaticText("foobar"))))
 		assert.False(t, ac.Items[0].Open)
 		ac.Open(1)
 		assert.False(t, ac.Items[0].Open)
@@ -515,9 +515,9 @@ func TestAccordion_Open(t *testing.T) {
 
 func TestAccordion_OpenAll(t *testing.T) {
 	ac := widget.NewAccordion()
-	ac.Append(widget.NewAccordionItem("foo0", widget.NewLabel("foobar0")))
-	ac.Append(widget.NewAccordionItem("foo1", widget.NewLabel("foobar1")))
-	ac.Append(widget.NewAccordionItem("foo2", widget.NewLabel("foobar2")))
+	ac.Append(widget.NewAccordionItem("foo0", widget.NewLabel(widget.LabelWithStaticText("foobar0"))))
+	ac.Append(widget.NewAccordionItem("foo1", widget.NewLabel(widget.LabelWithStaticText("foobar1"))))
+	ac.Append(widget.NewAccordionItem("foo2", widget.NewLabel(widget.LabelWithStaticText("foobar2"))))
 
 	ac.OpenAll()
 	// Cannot open all items if !accordion.MultiOpen
@@ -534,7 +534,7 @@ func TestAccordion_OpenAll(t *testing.T) {
 }
 
 func TestAccordion_Remove(t *testing.T) {
-	ai := widget.NewAccordionItem("foo", widget.NewLabel("foobar"))
+	ai := widget.NewAccordionItem("foo", widget.NewLabel(widget.LabelWithStaticText("foobar")))
 	ac := widget.NewAccordion(ai)
 	ac.Remove(ai)
 	assert.Equal(t, 0, len(ac.Items))
@@ -551,7 +551,7 @@ func TestAccordion_RemoveIndex(t *testing.T) {
 	} {
 		t.Run(name, func(t *testing.T) {
 			ac := widget.NewAccordion()
-			ac.Append(widget.NewAccordionItem("foo", widget.NewLabel("foobar")))
+			ac.Append(widget.NewAccordionItem("foo", widget.NewLabel(widget.LabelWithStaticText("foobar"))))
 			ac.RemoveIndex(tt.index)
 			assert.Equal(t, tt.length, len(ac.Items))
 		})

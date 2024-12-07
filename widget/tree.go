@@ -102,7 +102,7 @@ func NewTreeWithStrings(data map[string][]string) (t *Tree) {
 			return
 		},
 		CreateNode: func(branch bool) fyne.CanvasObject {
-			return NewLabel("Template Object")
+			return NewLabel(LabelWithStaticText("Template Object"))
 		},
 		UpdateNode: func(uid string, branch bool, node fyne.CanvasObject) {
 			node.(*Label).SetText(uid)

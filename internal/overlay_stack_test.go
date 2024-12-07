@@ -14,11 +14,11 @@ import (
 
 func TestOverlayStack(t *testing.T) {
 	s := &internal.OverlayStack{Canvas: test.NewCanvas()}
-	o1 := widget.NewLabel("A")
-	o2 := widget.NewLabel("B")
-	o3 := widget.NewLabel("C")
-	o4 := widget.NewLabel("D")
-	o5 := widget.NewLabel("E")
+	o1 := widget.NewLabel(widget.LabelWithStaticText("A"))
+	o2 := widget.NewLabel(widget.LabelWithStaticText("B"))
+	o3 := widget.NewLabel(widget.LabelWithStaticText("C"))
+	o4 := widget.NewLabel(widget.LabelWithStaticText("D"))
+	o5 := widget.NewLabel(widget.LabelWithStaticText("E"))
 
 	// initial empty
 	assert.Empty(t, s.List())

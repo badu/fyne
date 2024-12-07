@@ -336,7 +336,7 @@ func TestPainter_paintRectangle_stroke(t *testing.T) {
 
 func TestPainter_paintText_clipped(t *testing.T) {
 	test.ApplyTheme(t, test.Theme())
-	scroll := container.NewScroll(widget.NewLabel("some text\nis here\nand here"))
+	scroll := container.NewScroll(widget.NewLabel(widget.LabelWithStaticText("some text\nis here\nand here")))
 	scroll.Move(fyne.NewPos(10, 10))
 	scroll.Resize(fyne.NewSize(50, 50))
 	scroll.Scrolled(&fyne.ScrollEvent{Scrolled: fyne.NewDelta(-10, -10)})

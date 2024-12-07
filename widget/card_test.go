@@ -14,7 +14,7 @@ import (
 )
 
 func TestCard_SetImage(t *testing.T) {
-	c := widget.NewCard("Title", "sub", widget.NewLabel("Content"))
+	c := widget.NewCard("Title", "sub", widget.NewLabel(widget.LabelWithStaticText("Content")))
 	r := test.TempWidgetRenderer(t, c)
 	assert.Equal(t, 4, len(r.Objects())) // the 3 above plus shadow
 
@@ -23,11 +23,11 @@ func TestCard_SetImage(t *testing.T) {
 }
 
 func TestCard_SetContent(t *testing.T) {
-	c := widget.NewCard("Title", "sub", widget.NewLabel("Content"))
+	c := widget.NewCard("Title", "sub", widget.NewLabel(widget.LabelWithStaticText("Content")))
 	r := test.TempWidgetRenderer(t, c)
 	assert.Equal(t, 4, len(r.Objects())) // the 3 above plus shadow
 
-	newContent := widget.NewLabel("New")
+	newContent := widget.NewLabel(widget.LabelWithStaticText("New"))
 	c.SetContent(newContent)
 	assert.Equal(t, 4, len(r.Objects()))
 	assert.Equal(t, newContent, r.Objects()[3])
@@ -116,7 +116,7 @@ func TestCard_Layout(t *testing.T) {
 }
 
 func TestCard_MinSize(t *testing.T) {
-	content := widget.NewLabel("simple")
+	content := widget.NewLabel(widget.LabelWithStaticText("simple"))
 	card := &widget.Card{Content: content}
 
 	inner := card.MinSize().Subtract(fyne.NewSize(theme.InnerPadding()+theme.Padding(), theme.InnerPadding()+theme.Padding())) // shadow + content pad
@@ -124,7 +124,7 @@ func TestCard_MinSize(t *testing.T) {
 }
 
 func TestCard_Refresh(t *testing.T) {
-	text := widget.NewLabel("Test")
+	text := widget.NewLabel(widget.LabelWithStaticText("Test"))
 	card := widget.NewCard("", "", text)
 	w := test.NewTempWindow(t, card)
 	test.AssertRendersToMarkup(t, "card/content_label.xml", w.Canvas())

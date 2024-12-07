@@ -9,6 +9,10 @@ import (
 	"fyne.io/fyne/v2/internal/cache"
 )
 
+type IDirty interface {
+	SetDirty()
+}
+
 // Base provides a helper that handles basic widget behaviours.
 type Base struct {
 	hidden   atomic.Bool
@@ -137,7 +141,7 @@ func Repaint(obj fyne.CanvasObject) {
 
 	c := app.Driver().CanvasForObject(obj)
 	if c != nil {
-		if paint, ok := c.(interface{ SetDirty() }); ok {
+		if paint, ok := c.(IDirty); ok {
 			paint.SetDirty()
 		}
 	}

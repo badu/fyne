@@ -20,7 +20,7 @@ func TestDocTabs_ApplyTheme(t *testing.T) {
 	test.NewTempApp(t)
 
 	w := test.NewWindow(
-		container.NewDocTabs(&container.TabItem{Text: "Test", Content: widget.NewLabel("Text")}),
+		container.NewDocTabs(&container.TabItem{Text: "Test", Content: widget.NewLabel(widget.LabelWithStaticText("Text"))}),
 	)
 	defer w.Close()
 	w.SetPadded(false)
@@ -36,8 +36,8 @@ func TestDocTabs_ApplyTheme(t *testing.T) {
 func TestDocTabs_ChangeItemContent(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text1")}
-	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Text2")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text1"))}
+	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Text2"))}
 	tabs := container.NewDocTabs(item1, item2)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -47,11 +47,11 @@ func TestDocTabs_ChangeItemContent(t *testing.T) {
 
 	test.AssertRendersToMarkup(t, "doctabs/desktop/change_content_initial.xml", c)
 
-	item1.Content = widget.NewLabel("Text3")
+	item1.Content = widget.NewLabel(widget.LabelWithStaticText("Text3"))
 	tabs.Refresh()
 	test.AssertRendersToMarkup(t, "doctabs/desktop/change_content_change_visible.xml", c)
 
-	item2.Content = widget.NewLabel("Text4")
+	item2.Content = widget.NewLabel(widget.LabelWithStaticText("Text4"))
 	tabs.Refresh()
 	test.AssertRendersToMarkup(t, "doctabs/desktop/change_content_change_hidden.xml", c)
 }
@@ -59,8 +59,8 @@ func TestDocTabs_ChangeItemContent(t *testing.T) {
 func TestDocTabs_ChangeItemIcon(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Icon: theme.CancelIcon(), Content: widget.NewLabel("Text1")}
-	item2 := &container.TabItem{Icon: theme.ConfirmIcon(), Content: widget.NewLabel("Text2")}
+	item1 := &container.TabItem{Icon: theme.CancelIcon(), Content: widget.NewLabel(widget.LabelWithStaticText("Text1"))}
+	item2 := &container.TabItem{Icon: theme.ConfirmIcon(), Content: widget.NewLabel(widget.LabelWithStaticText("Text2"))}
 	tabs := container.NewDocTabs(item1, item2)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -82,8 +82,8 @@ func TestDocTabs_ChangeItemIcon(t *testing.T) {
 func TestDocTabs_ChangeItemText(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text1")}
-	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Text2")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text1"))}
+	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Text2"))}
 	tabs := container.NewDocTabs(item1, item2)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -111,7 +111,7 @@ func TestDocTabs_ChangeItemText(t *testing.T) {
 func TestDocTabs_DynamicTabs(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text 1")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text 1"))}
 	tabs := container.NewDocTabs(item1)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -121,7 +121,7 @@ func TestDocTabs_DynamicTabs(t *testing.T) {
 
 	test.AssertRendersToMarkup(t, "doctabs/desktop/dynamic_initial.xml", c)
 
-	appendedItem := container.NewTabItem("Test2", widget.NewLabel("Text 2"))
+	appendedItem := container.NewTabItem("Test2", widget.NewLabel(widget.LabelWithStaticText("Text 2")))
 	tabs.Append(appendedItem)
 	assert.Equal(t, 2, len(tabs.Items))
 	assert.Equal(t, "Test2", tabs.Items[1].Text)
@@ -148,9 +148,9 @@ func TestDocTabs_DynamicTabs(t *testing.T) {
 	test.AssertRendersToMarkup(t, "doctabs/desktop/dynamic_appended_another_three.xml", c)
 
 	tabs.SetItems([]*container.TabItem{
-		container.NewTabItem("Test6", widget.NewLabel("Text 6")),
-		container.NewTabItem("Test7", widget.NewLabel("Text 7")),
-		container.NewTabItem("Test8", widget.NewLabel("Text 8")),
+		container.NewTabItem("Test6", widget.NewLabel(widget.LabelWithStaticText("Text 6"))),
+		container.NewTabItem("Test7", widget.NewLabel(widget.LabelWithStaticText("Text 7"))),
+		container.NewTabItem("Test8", widget.NewLabel(widget.LabelWithStaticText("Text 8"))),
 	})
 	assert.Equal(t, 3, len(tabs.Items))
 	assert.Equal(t, "Test6", tabs.Items[0].Text)
@@ -162,11 +162,11 @@ func TestDocTabs_DynamicTabs(t *testing.T) {
 func TestDocTabs_HoverButtons(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text1")}
-	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Text2")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text1"))}
+	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Text2"))}
 	tabs := container.NewDocTabs(item1, item2)
 	tabs.CreateTab = func() *container.TabItem {
-		return &container.TabItem{Text: "Another", Content: widget.NewLabel("Another Tab")}
+		return &container.TabItem{Text: "Another", Content: widget.NewLabel(widget.LabelWithStaticText("Another Tab"))}
 	}
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -297,9 +297,9 @@ func TestDocTabs_Layout(t *testing.T) {
 func TestDocTabs_SetTabLocation(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text 1")}
-	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Text 2")}
-	item3 := &container.TabItem{Text: "Test3", Content: widget.NewLabel("Text 3")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text 1"))}
+	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Text 2"))}
+	item3 := &container.TabItem{Text: "Test3", Content: widget.NewLabel(widget.LabelWithStaticText("Text 3"))}
 	tabs := container.NewDocTabs(item1, item2, item3)
 	w := test.NewWindow(tabs)
 	defer w.Close()
@@ -329,12 +329,12 @@ func TestDocTabs_SetTabLocation(t *testing.T) {
 func TestDocTabs_Tapped(t *testing.T) {
 	test.NewTempApp(t)
 
-	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Text 1")}
-	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Text 2")}
-	item3 := &container.TabItem{Text: "Test3", Content: widget.NewLabel("Text 3")}
+	item1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Text 1"))}
+	item2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Text 2"))}
+	item3 := &container.TabItem{Text: "Test3", Content: widget.NewLabel(widget.LabelWithStaticText("Text 3"))}
 	tabs := container.NewDocTabs(item1, item2, item3)
 	tabs.CreateTab = func() *container.TabItem {
-		return &container.TabItem{Text: "Another", Content: widget.NewLabel("Another Tab")}
+		return &container.TabItem{Text: "Another", Content: widget.NewLabel(widget.LabelWithStaticText("Another Tab"))}
 	}
 	w := test.NewWindow(tabs)
 	defer w.Close()

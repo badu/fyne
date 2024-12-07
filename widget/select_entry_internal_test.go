@@ -139,7 +139,7 @@ func TestSelectEntry_DropDownResize(t *testing.T) {
 func TestSelectEntry_MinSize(t *testing.T) {
 	smallOptions := []string{"A", "B", "C"}
 	largeOptions := []string{"Large Option A", "Larger Option B", "Very Large Option C"}
-	labelHeight := NewLabel("W").MinSize().Height
+	labelHeight := NewLabel(LabelWithStaticText("W")).MinSize().Height
 
 	// since we scroll content and don't prop window open with popup all combinations should be the same min
 	tests := map[string]struct {
@@ -221,5 +221,5 @@ func dropDownIconWidth() float32 {
 }
 
 func emptyTextWidth() float32 {
-	return NewLabel("M").MinSize().Width
+	return NewLabel(LabelWithStaticText("M")).MinSize().Width
 }

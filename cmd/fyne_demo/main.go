@@ -33,8 +33,8 @@ func main() {
 	w.SetMaster()
 
 	content := container.NewStack()
-	title := widget.NewLabel("Component name")
-	intro := widget.NewLabel("An introduction would probably go\nhere, as well as a")
+	title := widget.NewLabel(widget.LabelWithStaticText("Component name"))
+	intro := widget.NewLabel(widget.LabelWithStaticText("An introduction would probably go\nhere, as well as a"))
 	intro.Wrapping = fyne.TextWrapWord
 	setTutorial := func(t tutorials.Tutorial) {
 		if fyne.CurrentDevice().IsMobile() {
@@ -122,7 +122,7 @@ func makeMenu(a fyne.App, w fyne.Window) *fyne.MainMenu {
 	}
 	showAbout := func() {
 		w := a.NewWindow("About")
-		w.SetContent(widget.NewLabel("About Fyne Demo app..."))
+		w.SetContent(widget.NewLabel(widget.LabelWithStaticText("About Fyne Demo app...")))
 		w.Show()
 	}
 	aboutItem := fyne.NewMenuItem("About", showAbout)
@@ -216,7 +216,7 @@ func makeNav(setTutorial func(tutorial tutorials.Tutorial), loadPrevious bool) f
 			return ok && len(children) > 0
 		},
 		CreateNode: func(branch bool) fyne.CanvasObject {
-			return widget.NewLabel("Collection Widgets")
+			return widget.NewLabel(widget.LabelWithStaticText("Collection Widgets"))
 		},
 		UpdateNode: func(uid string, branch bool, obj fyne.CanvasObject) {
 			t, ok := tutorials.Tutorials[uid]

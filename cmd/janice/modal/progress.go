@@ -58,7 +58,7 @@ func NewProgress(title, message string, action func(progress binding.Float) erro
 	}
 	m.pb = widget.NewProgressBarWithData(m.pg)
 	m.pb.Max = max
-	content := container.NewVBox(widget.NewLabel(message), m.pb)
+	content := container.NewVBox(widget.NewLabel(widget.LabelWithStaticText(message)), m.pb)
 	m.d = dialog.NewCustomWithoutButtons(title, content, parent)
 	return m
 }
@@ -106,7 +106,7 @@ func NewProgressWithCancel(title, message string, action func(progress binding.F
 	m.pb = widget.NewProgressBarWithData(m.pg)
 	m.pb.Max = max
 	content := container.NewVBox(
-		widget.NewLabel(message),
+		widget.NewLabel(widget.LabelWithStaticText(message)),
 		m.pb,
 		container.NewPadded(),
 		container.NewCenter(widget.NewButton("Cancel", func() {
@@ -163,7 +163,7 @@ func NewProgressInfinite(title, message string, action func() error, parent fyne
 		action: action,
 		pb:     widget.NewProgressBarInfinite(),
 	}
-	content := container.NewVBox(widget.NewLabel(message), m.pb)
+	content := container.NewVBox(widget.NewLabel(widget.LabelWithStaticText(message)), m.pb)
 	m.d = dialog.NewCustomWithoutButtons(title, content, parent)
 	return m
 }
@@ -212,7 +212,7 @@ func NewProgressInfiniteWithCancel(
 		pb:     widget.NewProgressBarInfinite(),
 	}
 	content := container.NewVBox(
-		widget.NewLabel(message),
+		widget.NewLabel(widget.LabelWithStaticText(message)),
 		m.pb,
 		container.NewPadded(),
 		container.NewCenter(widget.NewButton("Cancel", func() {

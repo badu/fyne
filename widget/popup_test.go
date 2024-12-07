@@ -17,7 +17,7 @@ import (
 )
 
 func TestNewPopUp(t *testing.T) {
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	pop := NewPopUp(label, test.Canvas())
 	defer test.Canvas().Overlays().Remove(pop)
 
@@ -36,7 +36,7 @@ func TestShowPopUp(t *testing.T) {
 	w.Resize(fyne.NewSize(200, 200))
 	require.Nil(t, w.Canvas().Overlays().Top())
 
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	ShowPopUp(label, w.Canvas())
 	pop := w.Canvas().Overlays().Top()
 	if assert.NotNil(t, pop) {
@@ -53,7 +53,7 @@ func TestShowPopUpAtPosition(t *testing.T) {
 	c := test.NewCanvas()
 	c.Resize(fyne.NewSize(100, 100))
 	pos := fyne.NewPos(6, 9)
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	ShowPopUpAtPosition(label, c, pos)
 	pop := c.Overlays().Top()
 	if assert.NotNil(t, pop) {
@@ -65,9 +65,9 @@ func TestShowPopUpAtPosition(t *testing.T) {
 
 func TestShowPopUpAtRelativePosition(t *testing.T) {
 	pos := fyne.NewPos(6, 9)
-	label := NewLabel("Hi")
-	parent1 := NewLabel("Parent1")
-	parent2 := NewLabel("Parent2")
+	label := NewLabel(LabelWithStaticText("Hi"))
+	parent1 := NewLabel(LabelWithStaticText("Parent1"))
+	parent2 := NewLabel(LabelWithStaticText("Parent2"))
 	w := test.NewTempWindow(
 		t, &fyne.Container{Layout: layout.NewVBoxLayout(), Objects: []fyne.CanvasObject{parent1, parent2}})
 	w.Resize(fyne.NewSize(100, 200))
@@ -89,7 +89,7 @@ func TestShowModalPopUp(t *testing.T) {
 	w.Resize(fyne.NewSize(200, 199))
 	require.Nil(t, w.Canvas().Overlays().Top())
 
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	ShowModalPopUp(label, w.Canvas())
 	pop := w.Canvas().Overlays().Top()
 	if assert.NotNil(t, pop) {
@@ -106,7 +106,7 @@ func TestPopUp_Show(t *testing.T) {
 	c := test.NewCanvas()
 	cSize := fyne.NewSize(100, 100)
 	c.Resize(cSize)
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	pop := newPopUp(label, c)
 	require.Nil(t, c.Overlays().Top())
 
@@ -121,7 +121,7 @@ func TestPopUp_ShowAtPosition(t *testing.T) {
 	c := test.NewCanvas()
 	cSize := fyne.NewSize(100, 100)
 	c.Resize(cSize)
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	pop := newPopUp(label, c)
 	pos := fyne.NewPos(6, 9)
 	require.Nil(t, c.Overlays().Top())
@@ -135,7 +135,7 @@ func TestPopUp_ShowAtPosition(t *testing.T) {
 }
 
 func TestPopUp_Hide(t *testing.T) {
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	pop := NewPopUp(label, test.Canvas())
 	pop.Show()
 
@@ -146,7 +146,7 @@ func TestPopUp_Hide(t *testing.T) {
 }
 
 func TestPopUp_MinSize(t *testing.T) {
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	pop := NewPopUp(label, test.Canvas())
 
 	inner := pop.Content.MinSize()
@@ -159,8 +159,8 @@ func TestPopUp_MinSize(t *testing.T) {
 }
 
 func TestPopUp_Move(t *testing.T) {
-	label := NewLabel("Hi")
-	win := test.NewWindow(NewLabel("OK"))
+	label := NewLabel(LabelWithStaticText("Hi"))
+	win := test.NewWindow(NewLabel(LabelWithStaticText("OK")))
 	defer win.Close()
 	win.Resize(fyne.NewSize(70, 70))
 	pop := newPopUp(label, win.Canvas())
@@ -177,8 +177,8 @@ func TestPopUp_Move(t *testing.T) {
 }
 
 func TestPopUp_Move_Constrained(t *testing.T) {
-	label := NewLabel("Hi")
-	win := test.NewWindow(NewLabel("OK"))
+	label := NewLabel(LabelWithStaticText("Hi"))
+	win := test.NewWindow(NewLabel(LabelWithStaticText("OK")))
 	defer win.Close()
 	win.Resize(fyne.NewSize(60, 48))
 	pop := NewPopUp(label, win.Canvas())
@@ -200,8 +200,8 @@ func TestPopUp_Move_Constrained(t *testing.T) {
 }
 
 func TestPopUp_Move_ConstrainedWindowToSmall(t *testing.T) {
-	label := NewLabel("Hi")
-	win := test.NewWindow(NewLabel("OK"))
+	label := NewLabel(LabelWithStaticText("Hi"))
+	win := test.NewWindow(NewLabel(LabelWithStaticText("OK")))
 	defer win.Close()
 	win.Resize(fyne.NewSize(10, 5))
 	pop := NewPopUp(label, win.Canvas())
@@ -217,8 +217,8 @@ func TestPopUp_Move_ConstrainedWindowToSmall(t *testing.T) {
 }
 
 func TestPopUp_Resize(t *testing.T) {
-	label := NewLabel("Hi")
-	win := test.NewWindow(NewLabel("OK"))
+	label := NewLabel(LabelWithStaticText("Hi"))
+	win := test.NewWindow(NewLabel(LabelWithStaticText("OK")))
 	defer win.Close()
 	win.Resize(fyne.NewSize(80, 80))
 
@@ -236,7 +236,7 @@ func TestPopUp_Resize(t *testing.T) {
 }
 
 func TestPopUp_Tapped(t *testing.T) {
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	pop := NewPopUp(label, test.Canvas())
 	pop.Show()
 
@@ -247,7 +247,7 @@ func TestPopUp_Tapped(t *testing.T) {
 }
 
 func TestPopUp_TappedSecondary(t *testing.T) {
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	pop := NewPopUp(label, test.Canvas())
 	pop.Show()
 
@@ -261,20 +261,20 @@ func TestPopUp_Stacked(t *testing.T) {
 	assert.Nil(t, test.Canvas().Overlays().Top())
 	assert.Empty(t, test.Canvas().Overlays().List())
 
-	pop1 := NewPopUp(NewLabel("Hi"), test.Canvas())
+	pop1 := NewPopUp(NewLabel(LabelWithStaticText("Hi")), test.Canvas())
 	pop1.Show()
 	assert.True(t, pop1.Visible())
 	assert.Equal(t, pop1, test.Canvas().Overlays().Top())
 	assert.Equal(t, []fyne.CanvasObject{pop1}, test.Canvas().Overlays().List())
 
-	pop2 := NewPopUp(NewLabel("Hi"), test.Canvas())
+	pop2 := NewPopUp(NewLabel(LabelWithStaticText("Hi")), test.Canvas())
 	pop2.Show()
 	assert.True(t, pop1.Visible())
 	assert.True(t, pop2.Visible())
 	assert.Equal(t, pop2, test.Canvas().Overlays().Top())
 	assert.Equal(t, []fyne.CanvasObject{pop1, pop2}, test.Canvas().Overlays().List())
 
-	pop3 := NewPopUp(NewLabel("Hi"), test.Canvas())
+	pop3 := NewPopUp(NewLabel(LabelWithStaticText("Hi")), test.Canvas())
 	pop3.Show()
 	assert.True(t, pop1.Visible())
 	assert.True(t, pop2.Visible())
@@ -297,11 +297,11 @@ func TestPopUp_Stacked(t *testing.T) {
 }
 
 func TestPopUp_Layout(t *testing.T) {
-	win := test.NewWindow(NewLabel("OK"))
+	win := test.NewWindow(NewLabel(LabelWithStaticText("OK")))
 	defer win.Close()
 	win.Resize(fyne.NewSize(80, 80))
 
-	content := NewLabel("Hi")
+	content := NewLabel(LabelWithStaticText("Hi"))
 	pop := newPopUp(content, win.Canvas())
 	pos := fyne.NewPos(6, 9)
 	pop.ShowAtPosition(pos)
@@ -329,7 +329,7 @@ func TestPopUp_ApplyThemeOnShow(t *testing.T) {
 	w := test.NewTempWindow(t, canvas.NewRectangle(color.Transparent))
 	w.Resize(fyne.NewSize(200, 300))
 
-	pop := NewPopUp(NewLabel("Label"), w.Canvas())
+	pop := NewPopUp(NewLabel(LabelWithStaticText("Label")), w.Canvas())
 
 	test.ApplyTheme(t, test.Theme())
 	pop.Show()
@@ -353,7 +353,7 @@ func TestPopUp_ResizeOnShow(t *testing.T) {
 	size := fyne.NewSize(200, 300)
 	w.Resize(size)
 
-	pop := NewPopUp(NewLabel("Label"), w.Canvas())
+	pop := NewPopUp(NewLabel(LabelWithStaticText("Label")), w.Canvas())
 
 	pop.Show()
 	assert.Equal(t, size, pop.Size())
@@ -377,7 +377,7 @@ func TestPopUp_ResizeBeforeShow_CanvasSizeZero(t *testing.T) {
 	w.Resize(fyne.NewSize(0, 0))
 	assert.Zero(t, w.Canvas().Size())
 
-	pop := NewPopUp(NewLabel("Label"), w.Canvas())
+	pop := NewPopUp(NewLabel(LabelWithStaticText("Label")), w.Canvas())
 	popBgSize := fyne.NewSize(200, 200)
 	pop.Resize(popBgSize)
 	pop.Show()
@@ -393,7 +393,7 @@ func TestPopUp_ResizeBeforeShow_CanvasSizeZero(t *testing.T) {
 }
 
 func TestModalPopUp_Tapped(t *testing.T) {
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	pop := NewModalPopUp(label, test.Canvas())
 	pop.Show()
 	defer test.Canvas().Overlays().Remove(pop)
@@ -406,7 +406,7 @@ func TestModalPopUp_Tapped(t *testing.T) {
 }
 
 func TestModalPopUp_TappedSecondary(t *testing.T) {
-	label := NewLabel("Hi")
+	label := NewLabel(LabelWithStaticText("Hi"))
 	pop := NewModalPopUp(label, test.Canvas())
 	pop.Show()
 	defer test.Canvas().Overlays().Remove(pop)
@@ -419,8 +419,8 @@ func TestModalPopUp_TappedSecondary(t *testing.T) {
 }
 
 func TestModalPopUp_Resize(t *testing.T) {
-	label := NewLabel("Hi")
-	win := test.NewWindow(NewLabel("OK"))
+	label := NewLabel(LabelWithStaticText("Hi"))
+	win := test.NewWindow(NewLabel(LabelWithStaticText("OK")))
 	defer win.Close()
 	win.Resize(fyne.NewSize(80, 80))
 
@@ -438,8 +438,8 @@ func TestModalPopUp_Resize(t *testing.T) {
 }
 
 func TestModalPopUp_Resize_Constrained(t *testing.T) {
-	label := NewLabel("Hi")
-	win := test.NewTempWindow(t, NewLabel("OK"))
+	label := NewLabel(LabelWithStaticText("Hi"))
+	win := test.NewTempWindow(t, NewLabel(LabelWithStaticText("OK")))
 	win.Resize(fyne.NewSize(80, 80))
 	pop := NewModalPopUp(label, win.Canvas())
 
@@ -455,7 +455,7 @@ func TestModalPopUp_ApplyThemeOnShow(t *testing.T) {
 	w := test.NewTempWindow(t, canvas.NewRectangle(color.Transparent))
 	w.Resize(fyne.NewSize(200, 300))
 
-	pop := NewModalPopUp(NewLabel("Label"), w.Canvas())
+	pop := NewModalPopUp(NewLabel(LabelWithStaticText("Label")), w.Canvas())
 
 	test.ApplyTheme(t, test.Theme())
 	pop.Show()
@@ -479,7 +479,7 @@ func TestModalPopUp_ResizeOnShow(t *testing.T) {
 	size := fyne.NewSize(200, 300)
 	w.Resize(size)
 
-	pop := NewModalPopUp(NewLabel("Label"), w.Canvas())
+	pop := NewModalPopUp(NewLabel(LabelWithStaticText("Label")), w.Canvas())
 
 	pop.Show()
 	assert.Equal(t, size, pop.Size())
@@ -503,7 +503,7 @@ func TestModelPopUp_ResizeBeforeShow_CanvasSizeZero(t *testing.T) {
 	w.Resize(fyne.NewSize(0, 0))
 	assert.Zero(t, w.Canvas().Size())
 
-	pop := NewModalPopUp(NewLabel("Label"), w.Canvas())
+	pop := NewModalPopUp(NewLabel(LabelWithStaticText("Label")), w.Canvas())
 	popBgSize := fyne.NewSize(200, 200)
 	pop.Resize(popBgSize)
 	pop.Show()

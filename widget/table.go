@@ -639,7 +639,7 @@ func (t *Table) createHeader() fyne.CanvasObject {
 		return f()
 	}
 
-	l := NewLabel("00")
+	l := NewLabel(LabelWithStaticText("00"))
 	l.TextStyle.Bold = true
 	l.Alignment = fyne.TextAlignCenter
 	return l

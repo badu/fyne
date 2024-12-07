@@ -159,7 +159,7 @@ func (w *window) Show() {
 		exit := widget.NewButtonWithIcon("", theme.CancelIcon(), func() {
 			w.tryClose()
 		})
-		title := widget.NewLabel(w.title)
+		title := widget.NewLabel(widget.LabelWithStaticText(w.title))
 		title.Alignment = fyne.TextAlignCenter
 		w.canvas.setWindowHead(container.NewHBox(menuButton,
 			layout.NewSpacer(), title, layout.NewSpacer(), exit))

@@ -16,7 +16,7 @@ import (
 
 var (
 	treeSize        = float32(200)
-	templateMinSize = NewLabel("Template Object").MinSize()
+	templateMinSize = NewLabel(LabelWithStaticText("Template Object")).MinSize()
 )
 
 func indentation() float32 {

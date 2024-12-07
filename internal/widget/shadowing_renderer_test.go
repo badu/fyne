@@ -31,11 +31,11 @@ func TestShadowingRenderer_Objects(t *testing.T) {
 				shadowIndex = 1 // Shadow pointers are not the same. Avoid comparing.
 			}
 
-			objects := []fyne.CanvasObject{widget.NewLabel("A"), widget.NewLabel("B")}
+			objects := []fyne.CanvasObject{widget.NewLabel(widget.LabelWithStaticText("A")), widget.NewLabel(widget.LabelWithStaticText("B"))}
 			r := w.NewShadowingRenderer(objects, tt.level)
 			assert.Equal(t, append(tt.wantPrependedObjects, objects...), r.Objects()[shadowIndex:])
 
-			otherObjects := []fyne.CanvasObject{widget.NewLabel("X"), widget.NewLabel("Y")}
+			otherObjects := []fyne.CanvasObject{widget.NewLabel(widget.LabelWithStaticText("X")), widget.NewLabel(widget.LabelWithStaticText("Y"))}
 			r.SetObjects(otherObjects)
 			assert.Equal(t, append(tt.wantPrependedObjects, otherObjects...), r.Objects()[shadowIndex:])
 		})

@@ -75,7 +75,7 @@ func makeLayouts() fyne.CanvasObject {
 		container.New(layout, makeBox(150), makeBox(150), makeBox(150)),
 		container.New(layout, makeBox(30), makeBox(30), makeBox(30)),
 	)
-	x := widget.NewLabel("Columns")
+	x := widget.NewLabel(widget.LabelWithStaticText("Columns"))
 	x.TextStyle.Bold = true
 	return container.NewBorder(
 		container.NewVBox(x, widget.NewSeparator()),
@@ -114,7 +114,7 @@ func makeWidgets(w fyne.Window) fyne.CanvasObject {
 		}
 		return "off"
 	}
-	switchLabel1 := widget.NewLabel("")
+	switchLabel1 := widget.NewLabel(widget.LabelWithStaticText(""))
 	switch1 := kxwidget.NewSwitch(func(on bool) {
 		switchLabel1.SetText(textForBool(on))
 	})
@@ -122,7 +122,7 @@ func makeWidgets(w fyne.Window) fyne.CanvasObject {
 	switchLabel1.Text = textForBool(switch1.State())
 	switch1Box := container.NewHBox(switch1, switchLabel1)
 
-	switchLabel2 := widget.NewLabel("")
+	switchLabel2 := widget.NewLabel(widget.LabelWithStaticText(""))
 	switch2 := kxwidget.NewSwitch(func(on bool) {
 		switchLabel2.SetText(textForBool(on))
 	})
@@ -135,7 +135,7 @@ func makeWidgets(w fyne.Window) fyne.CanvasObject {
 	switch4 := kxwidget.NewSwitch(nil)
 	switch4.Disable()
 	addLabel := func(c fyne.CanvasObject, text string) fyne.CanvasObject {
-		return container.NewHBox(c, widget.NewLabel(text))
+		return container.NewHBox(c, widget.NewLabel(widget.LabelWithStaticText(text)))
 	}
 
 	f := &widget.Form{

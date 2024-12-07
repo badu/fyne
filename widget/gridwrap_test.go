@@ -189,7 +189,7 @@ func TestGridWrap_RefreshItem(t *testing.T) {
 			return len(data)
 		},
 		func() fyne.CanvasObject {
-			icon := NewLabel("dummy")
+			icon := NewLabel(LabelWithStaticText("dummy"))
 			return icon
 		},
 		func(id GridWrapItemID, item fyne.CanvasObject) {

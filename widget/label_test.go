@@ -15,7 +15,7 @@ import (
 )
 
 func TestLabel_Binding(t *testing.T) {
-	label := NewLabel("Init")
+	label := NewLabel(LabelWithStaticText("Init"))
 	assert.Equal(t, "Init", label.Text)
 
 	str := binding.NewString()
@@ -33,7 +33,7 @@ func TestLabel_Binding(t *testing.T) {
 }
 
 func TestLabel_Hide(t *testing.T) {
-	label := NewLabel("Test")
+	label := NewLabel(LabelWithStaticText("Test"))
 	label.CreateRenderer()
 	label.Hide()
 	label.Refresh()
@@ -47,7 +47,7 @@ func TestLabel_Hide(t *testing.T) {
 }
 
 func TestLabel_MinSize(t *testing.T) {
-	label := NewLabel("Test")
+	label := NewLabel(LabelWithStaticText("Test"))
 	minA := label.MinSize()
 
 	assert.Less(t, theme.InnerPadding(), minA.Width)
@@ -63,7 +63,7 @@ func TestLabel_MinSize(t *testing.T) {
 }
 
 func TestLabel_Resize(t *testing.T) {
-	label := NewLabel("Test")
+	label := NewLabel(LabelWithStaticText("Test"))
 	label.CreateRenderer()
 	size := fyne.NewSize(100, 20)
 	label.Resize(size)
@@ -124,9 +124,9 @@ func TestLabel_Alignment_Later(t *testing.T) {
 }
 
 func TestText_MinSize_MultiLine(t *testing.T) {
-	textOneLine := NewLabel("Break")
+	textOneLine := NewLabel(LabelWithStaticText("Break"))
 	min := textOneLine.MinSize()
-	textMultiLine := NewLabel("Bre\nak")
+	textMultiLine := NewLabel(LabelWithStaticText("Bre\nak"))
 	rich := test.TempWidgetRenderer(t, textMultiLine).Objects()[0].(*RichText)
 	min2 := textMultiLine.MinSize()
 
@@ -142,7 +142,7 @@ func TestText_MinSize_MultiLine(t *testing.T) {
 }
 
 func TestText_MinSizeAdjustsWithContent(t *testing.T) {
-	text := NewLabel("Line 1\nLine 2\n")
+	text := NewLabel(LabelWithStaticText("Line 1\nLine 2\n"))
 	initialMin := text.MinSize()
 
 	text.SetText("Line 1\nLine 2\nLonger Line\n")
@@ -155,7 +155,7 @@ func TestText_MinSizeAdjustsWithContent(t *testing.T) {
 }
 
 func TestLabel_ApplyTheme(t *testing.T) {
-	text := NewLabel("Line 1")
+	text := NewLabel(LabelWithStaticText("Line 1"))
 	text.Hide()
 	rich := test.TempWidgetRenderer(t, text).Objects()[0].(*RichText)
 
@@ -166,7 +166,7 @@ func TestLabel_ApplyTheme(t *testing.T) {
 }
 
 func TestLabel_CreateRendererDoesNotAffectSize(t *testing.T) {
-	text := NewLabel("Hello")
+	text := NewLabel(LabelWithStaticText("Hello"))
 	text.Resize(text.MinSize())
 	size := text.Size()
 	assert.NotEqual(t, fyne.NewSize(0, 0), size)
@@ -186,7 +186,7 @@ func TestLabel_ChangeTruncate(t *testing.T) {
 
 	c := test.NewCanvasWithPainter(software.NewPainter())
 	c.SetPadded(false)
-	text := NewLabel("Hello")
+	text := NewLabel(LabelWithStaticText("Hello"))
 	c.SetContent(text)
 	c.Resize(text.MinSize())
 	test.AssertRendersToMarkup(t, "label/default.xml", c)
@@ -202,7 +202,7 @@ func TestNewLabelWithData(t *testing.T) {
 	str := binding.NewString()
 	str.Set("Init")
 
-	label := NewLabelWithData(str)
+	label := NewLabel(LabelWithBindedText(str))
 	waitForBinding()
 	assert.Equal(t, "Init", label.Text)
 }
@@ -211,7 +211,7 @@ func TestLabelImportance(t *testing.T) {
 	test.NewTempApp(t)
 	test.ApplyTheme(t, test.Theme())
 
-	lbl := NewLabel("hello, fyne")
+	lbl := NewLabel(LabelWithStaticText("hello, fyne"))
 	w := test.NewWindow(lbl)
 	defer w.Close()
 

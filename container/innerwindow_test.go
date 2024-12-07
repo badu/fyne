@@ -12,7 +12,7 @@ import (
 )
 
 func TestInnerWindow_Close(t *testing.T) {
-	w := NewInnerWindow("Thing", widget.NewLabel("Content"))
+	w := NewInnerWindow("Thing", widget.NewLabel(widget.LabelWithStaticText("Content")))
 
 	outer := test.NewTempWindow(t, w)
 	outer.SetPadded(false)
@@ -37,31 +37,31 @@ func TestInnerWindow_Close(t *testing.T) {
 }
 
 func TestInnerWindow_MinSize(t *testing.T) {
-	w := NewInnerWindow("Thing", widget.NewLabel("Content"))
+	w := NewInnerWindow("Thing", widget.NewLabel(widget.LabelWithStaticText("Content")))
 
 	btnMin := widget.NewButtonWithIcon("", theme.WindowCloseIcon(), func() {}).MinSize()
-	labelMin := widget.NewLabel("Inner").MinSize()
+	labelMin := widget.NewLabel(widget.LabelWithStaticText("Inner")).MinSize()
 
 	winMin := w.MinSize()
 	assert.Equal(t, btnMin.Height+labelMin.Height+theme.Padding()*4, winMin.Height)
 	assert.Greater(t, winMin.Width, btnMin.Width*3+theme.Padding()*5)
 
-	w2 := NewInnerWindow("Much longer title that will truncate", widget.NewLabel("Content"))
+	w2 := NewInnerWindow("Much longer title that will truncate", widget.NewLabel(widget.LabelWithStaticText("Content")))
 	assert.Equal(t, winMin, w2.MinSize())
 }
 
 func TestInnerWindow_SetContent(t *testing.T) {
-	w := NewInnerWindow("Title", widget.NewLabel("Content"))
+	w := NewInnerWindow("Title", widget.NewLabel(widget.LabelWithStaticText("Content")))
 	r := cache.Renderer(w).(*innerWindowRenderer)
 	title := r.Objects()[4].(*fyne.Container)
 	assert.Equal(t, "Content", title.Objects[0].(*widget.Label).Text)
 
-	w.SetContent(widget.NewLabel("Content2"))
+	w.SetContent(widget.NewLabel(widget.LabelWithStaticText("Content2")))
 	assert.Equal(t, "Content2", title.Objects[0].(*widget.Label).Text)
 }
 
 func TestInnerWindow_SetPadded(t *testing.T) {
-	w := NewInnerWindow("Title", widget.NewLabel("Content"))
+	w := NewInnerWindow("Title", widget.NewLabel(widget.LabelWithStaticText("Content")))
 	minPadded := w.MinSize()
 
 	w.SetPadded(false)
@@ -72,7 +72,7 @@ func TestInnerWindow_SetPadded(t *testing.T) {
 }
 
 func TestInnerWindow_SetTitle(t *testing.T) {
-	w := NewInnerWindow("Title1", widget.NewLabel("Content"))
+	w := NewInnerWindow("Title1", widget.NewLabel(widget.LabelWithStaticText("Content")))
 	r := cache.Renderer(w).(*innerWindowRenderer)
 	title := r.bar.Objects[0].(*draggableLabel)
 	assert.Equal(t, "Title1", title.Text)

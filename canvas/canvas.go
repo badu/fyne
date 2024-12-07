@@ -2,6 +2,10 @@ package canvas
 
 import "fyne.io/fyne/v2"
 
+type IDirty interface {
+	SetDirty()
+}
+
 // Refresh instructs the containing canvas to refresh the specified obj.
 func Refresh(obj fyne.CanvasObject) {
 	app := fyne.CurrentApp()
@@ -23,10 +27,12 @@ func repaint(obj fyne.CanvasObject) {
 	}
 
 	c := app.Driver().CanvasForObject(obj)
-	if c != nil {
-		// TODO : @Badu - this
-		if paint, ok := c.(interface{ SetDirty() }); ok {
-			paint.SetDirty()
-		}
+	if c == nil {
+		return
 	}
+
+	if paint, ok := c.(IDirty); ok {
+		paint.SetDirty()
+	}
+
 }

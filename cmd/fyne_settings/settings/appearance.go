@@ -283,7 +283,9 @@ func createPreviewWidget() fyne.CanvasObject {
 	form.OnCancel = func() {}
 	form.OnSubmit = func() {}
 	content := container.NewVBox(
-		widget.NewLabelWithStyle("Theme Preview", fyne.TextAlignCenter, fyne.TextStyle{Bold: true}), form)
+		widget.NewLabel(widget.LabelWithStaticText("Theme Preview"), widget.LabelWithAlignment(fyne.TextAlignCenter), widget.LabelWithStyle(fyne.TextStyle{Bold: true})),
+		form,
+	)
 
 	over := container.NewStack(intWidget.NewShadow(intWidget.ShadowAround, intWidget.DialogLevel),
 		container.NewPadded(content))

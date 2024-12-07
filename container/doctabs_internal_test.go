@@ -11,7 +11,7 @@ import (
 )
 
 func TestDocTabs_tabButtonRenderer_SetText(t *testing.T) {
-	item := &TabItem{Text: "Test", Content: widget.NewLabel("Content")}
+	item := &TabItem{Text: "Test", Content: widget.NewLabel(widget.LabelWithStaticText("Content"))}
 	tabs := NewDocTabs(item)
 	tabRenderer := cache.Renderer(tabs).(*docTabsRenderer)
 	buttons := tabRenderer.bar.Objects[0].(*Scroll).Content.(*fyne.Container).Objects
@@ -32,9 +32,9 @@ func TestDocTabs_tabButtonRenderer_SetText(t *testing.T) {
 }
 
 func TestDocTabs_tabButtonRenderer_Remove(t *testing.T) {
-	items := []*TabItem{{Text: "1", Content: widget.NewLabel("Content1")},
-		{Text: "2", Content: widget.NewLabel("Content2")},
-		{Text: "3", Content: widget.NewLabel("Content3")}}
+	items := []*TabItem{{Text: "1", Content: widget.NewLabel(widget.LabelWithStaticText("Content1"))},
+		{Text: "2", Content: widget.NewLabel(widget.LabelWithStaticText("Content2"))},
+		{Text: "3", Content: widget.NewLabel(widget.LabelWithStaticText("Content3"))}}
 	tabs := NewDocTabs(items...)
 	tabs.Resize(fyne.NewSize(160, 160))
 	tabRenderer := cache.Renderer(tabs).(*docTabsRenderer)

@@ -128,7 +128,7 @@ func (f *searchBarFrame) doSearch() {
 	spinner := widget.NewActivity()
 	spinner.Start()
 	searchType := f.searchType.Selected
-	c := container.NewHBox(widget.NewLabel(fmt.Sprintf("Searching for %s with pattern: %s", searchType, search)), spinner)
+	c := container.NewHBox(widget.NewLabel(widget.LabelWithStaticText(fmt.Sprintf("Searching for %s with pattern: %s", searchType, search))), spinner)
 	b := widget.NewButton("Cancel", func() {
 		cancel()
 	})

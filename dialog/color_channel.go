@@ -35,7 +35,7 @@ func newColorChannel(name string, min, max, value int, onChanged func(int)) *col
 
 // CreateRenderer is a private method to Fyne which links this widget to its renderer
 func (c *colorChannel) CreateRenderer() fyne.WidgetRenderer {
-	label := widget.NewLabelWithStyle(c.name, fyne.TextAlignTrailing, fyne.TextStyle{Bold: true})
+	label := widget.NewLabel(widget.LabelWithStaticText(c.name), widget.LabelWithAlignment(fyne.TextAlignTrailing), widget.LabelWithStyle(fyne.TextStyle{Bold: true}))
 	entry := newColorChannelEntry(c)
 	slider := &widget.Slider{
 		Value:       0.0,

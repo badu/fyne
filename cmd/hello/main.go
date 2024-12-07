@@ -11,7 +11,7 @@ func main() {
 	a := app.New()
 	w := a.NewWindow("Hello")
 
-	hello := widget.NewLabel("Hello Fyne!")
+	hello := widget.NewLabel(widget.LabelWithStaticText("Hello Fyne!"))
 	w.SetContent(container.NewVBox(
 		hello,
 		widget.NewButton("Hi!", func() {

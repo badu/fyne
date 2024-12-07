@@ -26,8 +26,8 @@ func newExtendedDocTabs(items ...*TabItem) *extendedDocTabs {
 
 func TestDocTabs_Extended_Tapped(t *testing.T) {
 	tabs := newExtendedDocTabs(
-		NewTabItem("Test1", widget.NewLabel("Test1")),
-		NewTabItem("Test2", widget.NewLabel("Test2")),
+		NewTabItem("Test1", widget.NewLabel(widget.LabelWithStaticText("Test1"))),
+		NewTabItem("Test2", widget.NewLabel(widget.LabelWithStaticText("Test2"))),
 	)
 	tabs.Resize(fyne.NewSize(150, 150)) // Ensure DocTabs is big enough to show both tab buttons
 	r := test.TempWidgetRenderer(t, tabs).(*docTabsRenderer)

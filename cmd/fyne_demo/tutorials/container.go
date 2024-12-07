@@ -15,22 +15,30 @@ import (
 // containerScreen loads a tab panel for containers
 func containerScreen(_ fyne.Window) fyne.CanvasObject {
 	content := container.NewBorder(
-		widget.NewLabelWithStyle("Top", fyne.TextAlignCenter, fyne.TextStyle{}),
-		widget.NewLabelWithStyle("Bottom", fyne.TextAlignCenter, fyne.TextStyle{}),
-		widget.NewLabel("Left"),
-		widget.NewLabel("Right"),
-		widget.NewLabel("Border Container"))
+		widget.NewLabel(
+			widget.LabelWithStaticText("Top"),
+			widget.LabelWithAlignment(fyne.TextAlignCenter),
+			widget.LabelWithStyle(fyne.TextStyle{}),
+		),
+		widget.NewLabel(
+			widget.LabelWithStaticText("Bottom"),
+			widget.LabelWithAlignment(fyne.TextAlignCenter),
+			widget.LabelWithStyle(fyne.TextStyle{}),
+		),
+		widget.NewLabel(widget.LabelWithStaticText("Left")),
+		widget.NewLabel(widget.LabelWithStaticText("Right")),
+		widget.NewLabel(widget.LabelWithStaticText("Border Container")))
 	return container.NewCenter(content)
 }
 
 func makeAppTabsTab(_ fyne.Window) fyne.CanvasObject {
 	tabs := container.NewAppTabs(
-		container.NewTabItem("Tab 1", widget.NewLabel("Content of tab 1")),
-		container.NewTabItem("Tab 2 bigger", widget.NewLabel("Content of tab 2")),
-		container.NewTabItem("Tab 3", widget.NewLabel("Content of tab 3")),
+		container.NewTabItem("Tab 1", widget.NewLabel(widget.LabelWithStaticText("Content of tab 1"))),
+		container.NewTabItem("Tab 2 bigger", widget.NewLabel(widget.LabelWithStaticText("Content of tab 2"))),
+		container.NewTabItem("Tab 3", widget.NewLabel(widget.LabelWithStaticText("Content of tab 3"))),
 	)
 	for i := 4; i <= 12; i++ {
-		tabs.Append(container.NewTabItem(fmt.Sprintf("Tab %d", i), widget.NewLabel(fmt.Sprintf("Content of tab %d", i))))
+		tabs.Append(container.NewTabItem(fmt.Sprintf("Tab %d", i), widget.NewLabel(widget.LabelWithStaticText(fmt.Sprintf("Content of tab %d", i)))))
 	}
 	locations := makeTabLocationSelect(tabs.SetTabLocation)
 	return container.NewBorder(locations, nil, nil, nil, tabs)
@@ -41,7 +49,11 @@ func makeBorderLayout(_ fyne.Window) fyne.CanvasObject {
 	bottom := makeCell()
 	left := makeCell()
 	right := makeCell()
-	middle := widget.NewLabelWithStyle("BorderLayout", fyne.TextAlignCenter, fyne.TextStyle{})
+	middle := widget.NewLabel(
+		widget.LabelWithStaticText("BorderLayout"),
+		widget.LabelWithAlignment(fyne.TextAlignCenter),
+		widget.LabelWithStyle(fyne.TextStyle{}),
+	)
 
 	return container.NewBorder(top, bottom, left, right, middle)
 }
@@ -49,7 +61,7 @@ func makeBorderLayout(_ fyne.Window) fyne.CanvasObject {
 func makeBoxLayout(_ fyne.Window) fyne.CanvasObject {
 	top := makeCell()
 	bottom := makeCell()
-	middle := widget.NewLabel("BoxLayout")
+	middle := widget.NewLabel(widget.LabelWithStaticText("BoxLayout"))
 	center := makeCell()
 	right := makeCell()
 
@@ -84,14 +96,17 @@ func makeCenterLayout(_ fyne.Window) fyne.CanvasObject {
 
 func makeDocTabsTab(_ fyne.Window) fyne.CanvasObject {
 	tabs := container.NewDocTabs(
-		container.NewTabItem("Doc 1", widget.NewLabel("Content of document 1")),
-		container.NewTabItem("Doc 2 bigger", widget.NewLabel("Content of document 2")),
-		container.NewTabItem("Doc 3", widget.NewLabel("Content of document 3")),
+		container.NewTabItem("Doc 1", widget.NewLabel(widget.LabelWithStaticText("Content of document 1"))),
+		container.NewTabItem("Doc 2 bigger", widget.NewLabel(widget.LabelWithStaticText("Content of document 2"))),
+		container.NewTabItem("Doc 3", widget.NewLabel(widget.LabelWithStaticText("Content of document 3"))),
 	)
 	i := 3
 	tabs.CreateTab = func() *container.TabItem {
 		i++
-		return container.NewTabItem(fmt.Sprintf("Doc %d", i), widget.NewLabel(fmt.Sprintf("Content of document %d", i)))
+		return container.NewTabItem(fmt.Sprintf("Doc %d", i), widget.NewLabel(
+			widget.LabelWithStaticText(fmt.Sprintf("Content of document %d", i)),
+		),
+		)
 	}
 	locations := makeTabLocationSelect(tabs.SetTabLocation)
 	return container.NewBorder(locations, nil, nil, nil, tabs)
@@ -99,7 +114,7 @@ func makeDocTabsTab(_ fyne.Window) fyne.CanvasObject {
 
 func makeGridLayout(_ fyne.Window) fyne.CanvasObject {
 	box1 := makeCell()
-	box2 := widget.NewLabel("Grid")
+	box2 := widget.NewLabel(widget.LabelWithStaticText("Grid"))
 	box3 := makeCell()
 	box4 := makeCell()
 
@@ -108,7 +123,7 @@ func makeGridLayout(_ fyne.Window) fyne.CanvasObject {
 }
 
 func makeInnerWindowTab(_ fyne.Window) fyne.CanvasObject {
-	label := widget.NewLabel("Window content for inner demo")
+	label := widget.NewLabel(widget.LabelWithStaticText("Window content for inner demo"))
 	win1 := container.NewInnerWindow("Inner Demo", container.NewVBox(
 		label,
 		widget.NewButton("Tap Me", func() {
@@ -116,7 +131,7 @@ func makeInnerWindowTab(_ fyne.Window) fyne.CanvasObject {
 		})))
 	win1.Icon = data.FyneLogo
 
-	win2 := container.NewInnerWindow("Inner2", widget.NewLabel("Win 2"))
+	win2 := container.NewInnerWindow("Inner2", widget.NewLabel(widget.LabelWithStaticText("Win 2")))
 
 	multi := container.NewMultipleWindows()
 	multi.Windows = []*container.InnerWindow{win1, win2}
@@ -150,7 +165,7 @@ func makeSplitTab(_ fyne.Window) fyne.CanvasObject {
 	left.Wrapping = fyne.TextWrapWord
 	left.SetText("Long text is looooooooooooooong")
 	right := container.NewVSplit(
-		widget.NewLabel("Label"),
+		widget.NewLabel(widget.LabelWithStaticText("Label")),
 		widget.NewButton("Button", func() { fmt.Println("button tapped!") }),
 	)
 	return container.NewHSplit(container.NewVScroll(left), right)

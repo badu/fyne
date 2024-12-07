@@ -170,7 +170,7 @@ func (f *fileDialog) makeUI() fyne.CanvasObject {
 		}
 		f.fileName = saveName
 	} else {
-		f.fileName = widget.NewLabel("")
+		f.fileName = widget.NewLabel(widget.LabelWithStaticText(""))
 	}
 
 	label := lang.L("Open")
@@ -239,7 +239,7 @@ func (f *fileDialog) makeUI() fyne.CanvasObject {
 			return len(f.favorites)
 		},
 		func() fyne.CanvasObject {
-			return container.NewHBox(container.New(&iconPaddingLayout{}, widget.NewIcon(theme.DocumentIcon())), widget.NewLabel("Template Object"))
+			return container.NewHBox(container.New(&iconPaddingLayout{}, widget.NewIcon(theme.DocumentIcon())), widget.NewLabel(widget.LabelWithStaticText("Template Object")))
 		},
 		func(id widget.ListItemID, item fyne.CanvasObject) {
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Icon).SetResource(f.favorites[id].locIcon)
@@ -286,8 +286,13 @@ func (f *fileDialog) makeUI() fyne.CanvasObject {
 		optionsButton,
 	)
 
-	header := container.NewBorder(nil, nil, nil, optionsbuttons,
-		optionsbuttons, widget.NewLabelWithStyle(title, fyne.TextAlignLeading, fyne.TextStyle{Bold: true}),
+	header := container.NewBorder(
+		nil,
+		nil,
+		nil,
+		optionsbuttons,
+		optionsbuttons,
+		widget.NewLabel(widget.LabelWithStaticText(title), widget.LabelWithAlignment(fyne.TextAlignLeading), widget.LabelWithStyle(fyne.TextStyle{Bold: true})),
 	)
 
 	footer := container.NewBorder(nil, nil, nil, buttons,

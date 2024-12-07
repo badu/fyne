@@ -33,7 +33,7 @@ func (m *menuLabel) Tapped(*fyne.PointEvent) {
 }
 
 func (m *menuLabel) CreateRenderer() fyne.WidgetRenderer {
-	label := widget.NewLabel(m.menu.Label)
+	label := widget.NewLabel(widget.LabelWithStaticText(m.menu.Label))
 	box := container.NewHBox(layout.NewSpacer(), label, layout.NewSpacer(), widget.NewIcon(theme.MenuExpandIcon()))
 
 	return &menuLabelRenderer{menu: m, content: box}

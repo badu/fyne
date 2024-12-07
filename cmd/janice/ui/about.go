@@ -24,7 +24,7 @@ func (u *UI) showAboutDialog() {
 				"**Version:** %s\n\n"+
 				"(c) 2024 Erik Kalkoken", data.Name, current),
 		),
-		widget.NewLabel("A desktop app for viewing large JSON files."),
+		widget.NewLabel(widget.LabelWithStaticText("A desktop app for viewing large JSON files.")),
 		widget.NewHyperlink("Website", x),
 	)
 	d := dialog.NewCustom("About", "OK", c, u.window)

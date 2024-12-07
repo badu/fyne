@@ -28,7 +28,7 @@ func TestTable_Cache(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 3, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(id TableCellID, c fyne.CanvasObject) {
 			text := fmt.Sprintf("Cell %d, %d", id.Row, id.Col)
@@ -58,7 +58,7 @@ func TestTable_ChangeTheme(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 3, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(id TableCellID, c fyne.CanvasObject) {
 			text := fmt.Sprintf("Cell %d, %d", id.Row, id.Col)
@@ -74,13 +74,13 @@ func TestTable_ChangeTheme(t *testing.T) {
 	w.Resize(fyne.NewSize(180, 180))
 	test.AssertImageMatches(t, "table/theme_initial.png", w.Canvas().Capture())
 	assert.Equal(t, "Cell 0, 0", content.Objects()[0].(*Label).Text)
-	assert.Equal(t, NewLabel("placeholder").MinSize(), content.Objects()[0].(*Label).Size())
+	assert.Equal(t, NewLabel(LabelWithStaticText("placeholder")).MinSize(), content.Objects()[0].(*Label).Size())
 
 	test.WithTestTheme(t, func() {
 		test.TempWidgetRenderer(t, table).Refresh()
 		test.AssertImageMatches(t, "table/theme_changed.png", w.Canvas().Capture())
 	})
-	assert.Equal(t, NewLabel("placeholder").MinSize(), content.Objects()[0].(*Label).Size())
+	assert.Equal(t, NewLabel(LabelWithStaticText("placeholder")).MinSize(), content.Objects()[0].(*Label).Size())
 }
 
 func TestTable_Filled(t *testing.T) {
@@ -149,7 +149,7 @@ func TestTable_Headers(t *testing.T) {
 	table := NewTableWithHeaders(
 		func() (int, int) { return 5, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("text")
+			return NewLabel(LabelWithStaticText("text"))
 		},
 		func(_ TableCellID, _ fyne.CanvasObject) {
 		})
@@ -171,7 +171,7 @@ func TestTable_JustHeaders(t *testing.T) {
 	table := NewTableWithHeaders(
 		func() (int, int) { return 0, 9 },
 		func() fyne.CanvasObject {
-			return NewLabel("text")
+			return NewLabel(LabelWithStaticText("text"))
 		},
 		func(_ TableCellID, _ fyne.CanvasObject) {
 		})
@@ -187,7 +187,7 @@ func TestTable_Sticky(t *testing.T) {
 	table := NewTableWithHeaders(
 		func() (int, int) { return 25, 25 },
 		func() fyne.CanvasObject {
-			return NewLabel("text")
+			return NewLabel(LabelWithStaticText("text"))
 		},
 		func(i TableCellID, o fyne.CanvasObject) {
 			o.(*Label).SetText(fmt.Sprintf("text %d,%d", i.Row, i.Col))
@@ -308,7 +308,7 @@ func TestTable_Resize(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 2, 2 },
 		func() fyne.CanvasObject {
-			return NewLabel("abc")
+			return NewLabel(LabelWithStaticText("abc"))
 		},
 		func(TableCellID, fyne.CanvasObject) {})
 
@@ -323,7 +323,7 @@ func TestTable_Unselect(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 3, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(id TableCellID, c fyne.CanvasObject) {
 			text := fmt.Sprintf("Cell %d, %d", id.Row, id.Col)
@@ -361,7 +361,7 @@ func TestTable_Refresh(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 5, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("template")
+			return NewLabel(LabelWithStaticText("template"))
 		},
 		func(_ TableCellID, obj fyne.CanvasObject) {
 			obj.(*Label).SetText(displayText)
@@ -517,7 +517,7 @@ func TestTable_ScrollToLeading(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 3, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(id TableCellID, c fyne.CanvasObject) {
 			text := fmt.Sprintf("Cell %d, %d", id.Row, id.Col)
@@ -573,7 +573,7 @@ func TestTable_ScrollToTrailing(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 24, 24 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(id TableCellID, c fyne.CanvasObject) {
 			text := fmt.Sprintf("Cell %d, %d", id.Row, id.Col)
@@ -601,7 +601,7 @@ func TestTable_Selection(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 5, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(id TableCellID, c fyne.CanvasObject) {
 			text := fmt.Sprintf("Cell %d, %d", id.Row, id.Col)
@@ -644,7 +644,7 @@ func TestTable_Selection_OnHeader(t *testing.T) {
 	table := NewTableWithHeaders(
 		func() (int, int) { return 5, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(id TableCellID, c fyne.CanvasObject) {
 			text := fmt.Sprintf("Cell %d, %d", id.Row, id.Col)
@@ -673,7 +673,7 @@ func TestTable_Select(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 5, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(id TableCellID, c fyne.CanvasObject) {
 			text := fmt.Sprintf("Cell %d, %d", id.Row, id.Col)
@@ -711,7 +711,7 @@ func TestTable_SetColumnWidth(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 5, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(id TableCellID, obj fyne.CanvasObject) {
 			if id.Col == 0 {
@@ -748,7 +748,7 @@ func TestTable_SetColumnWidth_Dragged(t *testing.T) {
 	table := NewTableWithHeaders(
 		func() (int, int) { return 5, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("")
+			return NewLabel(LabelWithStaticText(""))
 		},
 		func(id TableCellID, obj fyne.CanvasObject) {
 		})
@@ -790,7 +790,7 @@ func TestTable_SetRowHeight(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 5, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("place\nholder")
+			return NewLabel(LabelWithStaticText("place\nholder"))
 		},
 		func(id TableCellID, obj fyne.CanvasObject) {
 			if id.Row == 0 {
@@ -827,7 +827,7 @@ func TestTable_SetRowHeight_Dragged(t *testing.T) {
 	table := NewTableWithHeaders(
 		func() (int, int) { return 5, 5 },
 		func() fyne.CanvasObject {
-			return NewLabel("")
+			return NewLabel(LabelWithStaticText(""))
 		},
 		func(id TableCellID, obj fyne.CanvasObject) {
 		})
@@ -866,7 +866,7 @@ func TestTable_ShowVisible(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 50, 50 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(TableCellID, fyne.CanvasObject) {})
 	table.Resize(fyne.NewSize(120, 120))
@@ -884,7 +884,7 @@ func TestTable_SeparatorThicknessZero_NotPanics(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 500, 150 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(TableCellID, fyne.CanvasObject) {})
 

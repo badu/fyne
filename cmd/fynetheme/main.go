@@ -106,7 +106,7 @@ func makeColors() fyne.CanvasObject {
 			check2 := widget.NewCheck("", nil)
 			check2.Disable()
 			return container.NewHBox(
-				widget.NewLabel("Template"),
+				widget.NewLabel(widget.LabelWithStaticText("Template")),
 				layout.NewSpacer(),
 				canvas.NewRectangle(color.Transparent),
 				check1,
@@ -214,10 +214,10 @@ func makeSizes() fyne.CanvasObject {
 			return len(sizesFiltered)
 		},
 		func() fyne.CanvasObject {
-			size := widget.NewLabel("999")
+			size := widget.NewLabel(widget.LabelWithStaticText("999"))
 			size.Alignment = fyne.TextAlignTrailing
 			return container.NewHBox(
-				widget.NewLabel("Template"),
+				widget.NewLabel(widget.LabelWithStaticText("Template")),
 				layout.NewSpacer(),
 				size,
 			)
@@ -376,7 +376,7 @@ func makeIcons() fyne.CanvasObject {
 			image := canvas.NewImageFromResource(theme.BrokenImageIcon())
 			image.FillMode = canvas.ImageFillContain
 			image.SetMinSize(fyne.NewSquareSize(iconSize))
-			label := widget.NewLabel("IconNameRadioButtonChecked")
+			label := widget.NewLabel(widget.LabelWithStaticText("IconNameRadioButtonChecked"))
 			label.Alignment = fyne.TextAlignCenter
 			return container.NewBorder(
 				nil,
@@ -432,13 +432,13 @@ func makeIcons() fyne.CanvasObject {
 		grid.Refresh()
 	}
 	slider.SetValue(float64(iconSize))
-	sliderBox := container.NewBorder(nil, nil, widget.NewLabel("Size"), nil, slider)
+	sliderBox := container.NewBorder(nil, nil, widget.NewLabel(widget.LabelWithStaticText("Size")), nil, slider)
 	themeSelect := widget.NewSelect(iconColors, func(s string) {
 		iconColor = s
 		grid.Refresh()
 	})
 	themeSelect.SetSelected("Default")
-	themeBox := container.NewHBox(widget.NewLabel("Color"), themeSelect)
+	themeBox := container.NewHBox(widget.NewLabel(widget.LabelWithStaticText("Color")), themeSelect)
 	return container.NewBorder(
 		container.NewGridWithColumns(3, search, sliderBox, themeBox),
 		nil,

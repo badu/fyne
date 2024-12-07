@@ -22,7 +22,7 @@ func TestNewList(t *testing.T) {
 
 	content := &fyne.Container{Layout: layout.NewHBoxLayout(), Objects: []fyne.CanvasObject{
 		NewIcon(theme.DocumentIcon()),
-		NewLabel("Template Object")},
+		NewLabel(LabelWithStaticText("Template Object"))},
 	}
 	template := newListItem(content, nil)
 
@@ -40,14 +40,14 @@ func TestNewListWithData(t *testing.T) {
 
 	list := NewListWithData(data,
 		func() fyne.CanvasObject {
-			return NewLabel("Template Object")
+			return NewLabel(LabelWithStaticText("Template Object"))
 		},
 		func(data binding.DataItem, item fyne.CanvasObject) {
 			item.(*Label).Bind(data.(binding.String))
 		},
 	)
 
-	template := NewLabel("Template Object")
+	template := NewLabel(LabelWithStaticText("Template Object"))
 
 	assert.Equal(t, 1000, list.Length())
 	assert.GreaterOrEqual(t, list.MinSize().Width, template.MinSize().Width)
@@ -382,7 +382,7 @@ func TestList_SmallList(t *testing.T) {
 		func() fyne.CanvasObject {
 			return &fyne.Container{Layout: layout.NewHBoxLayout(), Objects: []fyne.CanvasObject{
 				NewIcon(theme.DocumentIcon()),
-				NewLabel("Template Object")},
+				NewLabel(LabelWithStaticText("Template Object"))},
 			}
 		},
 		func(id ListItemID, item fyne.CanvasObject) {
@@ -432,7 +432,7 @@ func TestList_RemoveItem(t *testing.T) {
 		func() fyne.CanvasObject {
 			return &fyne.Container{Layout: layout.NewHBoxLayout(), Objects: []fyne.CanvasObject{
 				NewIcon(theme.DocumentIcon()),
-				NewLabel("Template Object")},
+				NewLabel(LabelWithStaticText("Template Object"))},
 			}
 		},
 		func(id ListItemID, item fyne.CanvasObject) {
@@ -466,7 +466,7 @@ func TestList_ScrollThenShrink(t *testing.T) {
 			return len(data)
 		},
 		func() fyne.CanvasObject {
-			return NewLabel("TEMPLATE")
+			return NewLabel(LabelWithStaticText("TEMPLATE"))
 		},
 		func(id ListItemID, item fyne.CanvasObject) {
 			item.(*Label).SetText(data[id])
@@ -505,7 +505,7 @@ func TestList_ScrollThenResizeWindow(t *testing.T) {
 			return len(data)
 		},
 		func() fyne.CanvasObject {
-			return NewLabel("TEMPLATE")
+			return NewLabel(LabelWithStaticText("TEMPLATE"))
 		},
 		func(id ListItemID, item fyne.CanvasObject) {
 			item.(*Label).SetText(data[id])
@@ -577,7 +577,7 @@ func createList(items int) *List {
 		},
 		func() fyne.CanvasObject {
 			icon := NewIcon(theme.DocumentIcon())
-			return &fyne.Container{Layout: layout.NewBorderLayout(nil, nil, icon, nil), Objects: []fyne.CanvasObject{icon, NewLabel("Template Object")}}
+			return &fyne.Container{Layout: layout.NewBorderLayout(nil, nil, icon, nil), Objects: []fyne.CanvasObject{icon, NewLabel(LabelWithStaticText("Template Object"))}}
 		},
 		func(id ListItemID, item fyne.CanvasObject) {
 			item.(*fyne.Container).Objects[1].(*Label).SetText(data[id])
@@ -616,7 +616,7 @@ func TestList_LimitUpdateItem(t *testing.T) {
 			return 5
 		},
 		func() fyne.CanvasObject {
-			return NewLabel("")
+			return NewLabel(LabelWithStaticText(""))
 		},
 		func(id ListItemID, item fyne.CanvasObject) {
 			printOut += fmt.Sprintf("%d.", id)
@@ -641,7 +641,7 @@ func TestList_RefreshUpdatesAllItems(t *testing.T) {
 			return 1
 		},
 		func() fyne.CanvasObject {
-			return NewLabel("Test")
+			return NewLabel(LabelWithStaticText("Test"))
 		},
 		func(id ListItemID, item fyne.CanvasObject) {
 			printOut += fmt.Sprintf("%d.", id)
@@ -663,7 +663,7 @@ func BenchmarkContentMinSize(b *testing.B) {
 	l := NewList(
 		func() int { return 1000000 },
 		func() fyne.CanvasObject {
-			return NewLabel("Test")
+			return NewLabel(LabelWithStaticText("Test"))
 		},
 		func(id ListItemID, item fyne.CanvasObject) {
 			item.(*Label).SetText(fmt.Sprintf("%d", id))

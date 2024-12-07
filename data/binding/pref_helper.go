@@ -10,6 +10,10 @@ type preferenceItem interface {
 	checkForChange()
 }
 
+type providerReplacer interface {
+	replaceProvider(fyne.Preferences)
+}
+
 type preferenceBindings struct {
 	items sync.Map // map[string]preferenceItem
 }
@@ -95,7 +99,7 @@ func (m *preferencesMap) migratePreferences(src, dst fyne.Preferences) {
 		return
 	}
 	for _, b := range binds.list() {
-		if backed, ok := b.(interface{ replaceProvider(fyne.Preferences) }); ok {
+		if backed, ok := b.(providerReplacer); ok {
 			backed.replaceProvider(dst)
 		}
 	}

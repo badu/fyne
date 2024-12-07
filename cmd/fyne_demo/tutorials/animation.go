@@ -84,7 +84,7 @@ func makeAnimationCurves() fyne.CanvasObject {
 
 func makeAnimationCurveItem(label string, curve fyne.AnimationCurve, yOff float32) (
 	text *widget.Label, box fyne.CanvasObject, anim *fyne.Animation) {
-	text = widget.NewLabel(label)
+	text = widget.NewLabel(widget.LabelWithStaticText(label))
 	text.Alignment = fyne.TextAlignCenter
 	text.Resize(fyne.NewSize(380, 30))
 	text.Move(fyne.NewPos(0, yOff))

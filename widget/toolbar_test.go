@@ -15,7 +15,7 @@ func TestToolbarSize(t *testing.T) {
 	assert.Equal(t, 2, len(toolbar.Items))
 	size := toolbar.MinSize()
 
-	toolbar.Items = append(toolbar.Items, &toolbarLabel{NewLabel("Hi")})
+	toolbar.Items = append(toolbar.Items, &toolbarLabel{NewLabel(LabelWithStaticText("Hi"))})
 	toolbar.Refresh()
 	assert.Equal(t, size.Height, toolbar.MinSize().Height)
 	assert.Greater(t, toolbar.MinSize().Width, size.Width)

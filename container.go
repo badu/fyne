@@ -2,6 +2,10 @@ package fyne
 
 import "sync"
 
+type IDirty interface {
+	SetDirty()
+}
+
 // Container is a [CanvasObject] that contains a collection of child objects.
 // The layout of the children is set by the specified Layout.
 type Container struct {
@@ -202,8 +206,7 @@ func repaint(obj *Container) {
 
 	c := app.Driver().CanvasForObject(obj)
 	if c != nil {
-		// TODO : @Badu - this
-		if paint, ok := c.(interface{ SetDirty() }); ok {
+		if paint, ok := c.(IDirty); ok {
 			paint.SetDirty()
 		}
 	}

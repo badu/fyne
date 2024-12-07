@@ -11,7 +11,7 @@ import (
 )
 
 func TestAccordion_Toggle(t *testing.T) {
-	ai := NewAccordionItem("foo", NewLabel("foobar"))
+	ai := NewAccordionItem("foo", NewLabel(LabelWithStaticText("foobar")))
 	ac := NewAccordion(ai)
 	ar := test.TempWidgetRenderer(t, ac).(*accordionRenderer)
 	aih := ar.headers[0]
@@ -24,9 +24,9 @@ func TestAccordion_Toggle(t *testing.T) {
 }
 
 func TestAccordionRenderer_Layout(t *testing.T) {
-	ai0 := NewAccordionItem("foo0", NewLabel("foobar0"))
-	ai1 := NewAccordionItem("foo1", NewLabel("foobar1"))
-	ai2 := NewAccordionItem("foo2", NewLabel("foobar2"))
+	ai0 := NewAccordionItem("foo0", NewLabel(LabelWithStaticText("foobar0")))
+	ai1 := NewAccordionItem("foo1", NewLabel(LabelWithStaticText("foobar1")))
+	ai2 := NewAccordionItem("foo2", NewLabel(LabelWithStaticText("foobar2")))
 	aid0 := ai0.Detail
 	aid1 := ai1.Detail
 	aid2 := ai2.Detail
@@ -149,7 +149,7 @@ func TestAccordionRenderer_MinSize(t *testing.T) {
 		assert.Equal(t, float32(0), min.Height)
 	})
 	t.Run("Single", func(t *testing.T) {
-		ai := NewAccordionItem("title", NewLabel("foobar"))
+		ai := NewAccordionItem("title", NewLabel(LabelWithStaticText("foobar")))
 		t.Run("Open", func(t *testing.T) {
 			ac := NewAccordion()
 			ac.Append(ai)
@@ -173,9 +173,9 @@ func TestAccordionRenderer_MinSize(t *testing.T) {
 		})
 	})
 	t.Run("Multiple", func(t *testing.T) {
-		ai0 := NewAccordionItem("title0", NewLabel("foobar0"))
-		ai1 := NewAccordionItem("title1", NewLabel("foobar1"))
-		ai2 := NewAccordionItem("title2", NewLabel("foobar2"))
+		ai0 := NewAccordionItem("title0", NewLabel(LabelWithStaticText("foobar0")))
+		ai1 := NewAccordionItem("title1", NewLabel(LabelWithStaticText("foobar1")))
+		ai2 := NewAccordionItem("title2", NewLabel(LabelWithStaticText("foobar2")))
 		t.Run("One_Open", func(t *testing.T) {
 			ac := NewAccordion()
 			ac.Append(ai0)
@@ -288,9 +288,9 @@ func TestAccordionRenderer_MinSize(t *testing.T) {
 func TestAccordionRenderer_AddRemove(t *testing.T) {
 	ac := NewAccordion()
 	ar := test.TempWidgetRenderer(t, ac).(*accordionRenderer)
-	ac.Append(NewAccordionItem("foo0", NewLabel("foobar0")))
-	ac.Append(NewAccordionItem("foo1", NewLabel("foobar1")))
-	ac.Append(NewAccordionItem("foo2", NewLabel("foobar2")))
+	ac.Append(NewAccordionItem("foo0", NewLabel(LabelWithStaticText("foobar0"))))
+	ac.Append(NewAccordionItem("foo1", NewLabel(LabelWithStaticText("foobar1"))))
+	ac.Append(NewAccordionItem("foo2", NewLabel(LabelWithStaticText("foobar2"))))
 
 	assert.Equal(t, 3, len(ac.Items))
 	assert.Equal(t, 3, len(ar.headers))
@@ -303,7 +303,7 @@ func TestAccordionRenderer_AddRemove(t *testing.T) {
 	assert.False(t, ar.headers[2].Visible())
 	assert.False(t, ar.dividers[1].Visible())
 
-	ac.Append(NewAccordionItem("foo3", NewLabel("foobar3")))
+	ac.Append(NewAccordionItem("foo3", NewLabel(LabelWithStaticText("foobar3"))))
 	assert.Equal(t, 3, len(ac.Items))
 	assert.True(t, ar.headers[2].Visible())
 	assert.True(t, ar.dividers[1].Visible())

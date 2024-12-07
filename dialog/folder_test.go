@@ -16,7 +16,7 @@ import (
 func TestShowFolderOpen(t *testing.T) {
 	var chosen fyne.ListableURI
 	var openErr error
-	win := test.NewTempWindow(t, widget.NewLabel("OpenDir"))
+	win := test.NewTempWindow(t, widget.NewLabel(widget.LabelWithStaticText("OpenDir")))
 	d := NewFolderOpen(func(file fyne.ListableURI, err error) {
 		chosen = file
 		openErr = err

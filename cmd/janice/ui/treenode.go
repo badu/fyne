@@ -19,8 +19,8 @@ type TreeNode struct {
 // NewTreeNode returns a new instance of the [TreeNode] widget.
 func NewTreeNode() *TreeNode {
 	n := &TreeNode{
-		key:   widget.NewLabel(""),
-		value: widget.NewLabel(""),
+		key:   widget.NewLabel(widget.LabelWithStaticText("")),
+		value: widget.NewLabel(widget.LabelWithStaticText("")),
 	}
 	n.ExtendBaseWidget(n)
 	return n

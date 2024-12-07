@@ -35,19 +35,19 @@ func welcomeScreen(_ fyne.Window) fyne.CanvasObject {
 	footer := container.NewHBox(
 		layout.NewSpacer(),
 		widget.NewHyperlink("fyne.io", parseURL("https://fyne.io/")),
-		widget.NewLabel("-"),
+		widget.NewLabel(widget.LabelWithStaticText("-")),
 		widget.NewHyperlink("documentation", parseURL("https://docs.fyne.io/")),
-		widget.NewLabel("-"),
+		widget.NewLabel(widget.LabelWithStaticText("-")),
 		widget.NewHyperlink("sponsor", parseURL("https://fyne.io/sponsor/")),
 		layout.NewSpacer(),
 	)
 
 	authors := widget.NewRichTextFromMarkdown(formatAuthors(string(data.Authors.Content())))
 	content := container.NewVBox(
-		widget.NewLabelWithStyle("\n\nWelcome to the Fyne toolkit demo app", fyne.TextAlignCenter, fyne.TextStyle{Bold: true}),
+		widget.NewLabel(widget.LabelWithStaticText("\n\nWelcome to the Fyne toolkit demo app"), widget.LabelWithAlignment(fyne.TextAlignCenter), widget.LabelWithStyle(fyne.TextStyle{Bold: true})),
 		logo,
 		container.NewCenter(authors),
-		widget.NewLabelWithStyle("\nWith great thanks to our many kind sponsors\n", fyne.TextAlignCenter, fyne.TextStyle{Italic: true}))
+		widget.NewLabel(widget.LabelWithStaticText("\nWith great thanks to our many kind sponsors\n"), widget.LabelWithAlignment(fyne.TextAlignCenter), widget.LabelWithStyle(fyne.TextStyle{Italic: true})))
 	scroll := container.NewScroll(content)
 
 	bgColor := withAlpha(theme.Color(theme.ColorNameBackground), 0xe0)

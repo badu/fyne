@@ -18,7 +18,7 @@ func TestTable_Hovered(t *testing.T) {
 	table := NewTable(
 		func() (int, int) { return 2, 2 },
 		func() fyne.CanvasObject {
-			return NewLabel("placeholder")
+			return NewLabel(LabelWithStaticText("placeholder"))
 		},
 		func(id TableCellID, c fyne.CanvasObject) {
 			c.(*Label).SetText(fmt.Sprintf("Cell %d, %d", id.Row, id.Col))

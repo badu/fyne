@@ -387,7 +387,7 @@ func TestGlCanvas_Resize(t *testing.T) {
 	w := createWindow("Test")
 	w.SetPadded(false)
 
-	content := widget.NewLabel("Content")
+	content := widget.NewLabel(widget.LabelWithStaticText("Content"))
 	w.SetContent(content)
 	ensureCanvasSize(t, w.(*window), fyne.NewSize(69, 36))
 
@@ -404,8 +404,8 @@ func TestGlCanvas_ResizeWithOtherOverlay(t *testing.T) {
 	w := createWindow("Test")
 	w.SetPadded(false)
 
-	content := widget.NewLabel("Content")
-	over := widget.NewLabel("Over")
+	content := widget.NewLabel(widget.LabelWithStaticText("Content"))
+	over := widget.NewLabel(widget.LabelWithStaticText("Over"))
 	w.SetContent(content)
 	w.Canvas().Overlays().Add(over)
 	ensureCanvasSize(t, w.(*window), fyne.NewSize(69, 36))
@@ -426,10 +426,10 @@ func TestGlCanvas_ResizeWithOverlays(t *testing.T) {
 	w := createWindow("Test")
 	w.SetPadded(false)
 
-	content := widget.NewLabel("Content")
-	o1 := widget.NewLabel("o1")
-	o2 := widget.NewLabel("o2")
-	o3 := widget.NewLabel("o3")
+	content := widget.NewLabel(widget.LabelWithStaticText("Content"))
+	o1 := widget.NewLabel(widget.LabelWithStaticText("o1"))
+	o2 := widget.NewLabel(widget.LabelWithStaticText("o2"))
+	o3 := widget.NewLabel(widget.LabelWithStaticText("o3"))
 	w.SetContent(content)
 	w.Canvas().Overlays().Add(o1)
 	w.Canvas().Overlays().Add(o2)
@@ -455,8 +455,8 @@ func TestGlCanvas_ResizeWithPopUpOverlay(t *testing.T) {
 	w := createWindow("Test")
 	w.SetPadded(false)
 
-	content := widget.NewLabel("Content")
-	over := widget.NewPopUp(widget.NewLabel("Over"), w.Canvas())
+	content := widget.NewLabel(widget.LabelWithStaticText("Content"))
+	over := widget.NewPopUp(widget.NewLabel(widget.LabelWithStaticText("Over")), w.Canvas())
 	w.SetContent(content)
 	over.Show()
 	ensureCanvasSize(t, w.(*window), fyne.NewSize(69, 36))
@@ -479,10 +479,10 @@ func TestGlCanvas_ResizeWithModalPopUpOverlay(t *testing.T) {
 	w := createWindow("Test")
 	w.SetPadded(false)
 
-	content := widget.NewLabel("Content")
+	content := widget.NewLabel(widget.LabelWithStaticText("Content"))
 	w.SetContent(content)
 
-	popup := widget.NewModalPopUp(widget.NewLabel("PopUp"), w.Canvas())
+	popup := widget.NewModalPopUp(widget.NewLabel(widget.LabelWithStaticText("PopUp")), w.Canvas())
 	popupBgSize := fyne.NewSize(975, 575)
 	popup.Show()
 	popup.Resize(popupBgSize)

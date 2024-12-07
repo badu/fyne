@@ -13,8 +13,8 @@ import (
 )
 
 func TestDocTabs_Selected(t *testing.T) {
-	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Test1")}
-	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Test2")}
+	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Test1"))}
+	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Test2"))}
 	tabs := container.NewDocTabs(tab1, tab2)
 
 	assert.Equal(t, 2, len(tabs.Items))
@@ -22,7 +22,7 @@ func TestDocTabs_Selected(t *testing.T) {
 }
 
 func TestDocTabs_SelectedIndex(t *testing.T) {
-	tabs := container.NewDocTabs(&container.TabItem{Text: "Test", Content: widget.NewLabel("Test")})
+	tabs := container.NewDocTabs(&container.TabItem{Text: "Test", Content: widget.NewLabel(widget.LabelWithStaticText("Test"))})
 
 	assert.Equal(t, 1, len(tabs.Items))
 	assert.Equal(t, 0, tabs.SelectedIndex())
@@ -44,8 +44,8 @@ func TestDocTabs_Empty(t *testing.T) {
 }
 
 func TestDocTabs_Hidden_AsChild(t *testing.T) {
-	c1 := widget.NewLabel("Tab 1 content")
-	c2 := widget.NewLabel("Tab 2 content\nTab 2 content\nTab 2 content")
+	c1 := widget.NewLabel(widget.LabelWithStaticText("Tab 1 content"))
+	c2 := widget.NewLabel(widget.LabelWithStaticText("Tab 2 content\nTab 2 content\nTab 2 content"))
 	ti1 := container.NewTabItem("Tab 1", c1)
 	ti2 := container.NewTabItem("Tab 2", c2)
 	tabs := container.NewDocTabs(ti1, ti2)
@@ -68,8 +68,8 @@ func TestDocTabs_Resize_Empty(t *testing.T) {
 }
 
 func TestDocTabs_Select(t *testing.T) {
-	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Test1")}
-	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Test2")}
+	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Test1"))}
+	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Test2"))}
 	tabs := container.NewDocTabs(tab1, tab2)
 
 	assert.Equal(t, 2, len(tabs.Items))
@@ -94,13 +94,13 @@ func TestDocTabs_Select(t *testing.T) {
 	tabs.OnUnselected = func(tab *container.TabItem) {
 		assert.Fail(t, "unexpected tab unselected")
 	}
-	tabs.Select(container.NewTabItem("Test3", widget.NewLabel("Test3")))
+	tabs.Select(container.NewTabItem("Test3", widget.NewLabel(widget.LabelWithStaticText("Test3"))))
 	assert.Equal(t, tab2, tabs.Selected())
 }
 
 func TestDocTabs_SelectIndex(t *testing.T) {
-	tabs := container.NewDocTabs(&container.TabItem{Text: "Test1", Content: widget.NewLabel("Test1")},
-		&container.TabItem{Text: "Test2", Content: widget.NewLabel("Test2")})
+	tabs := container.NewDocTabs(&container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Test1"))},
+		&container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Test2"))})
 
 	assert.Equal(t, 2, len(tabs.Items))
 	assert.Equal(t, 0, tabs.SelectedIndex())
@@ -120,8 +120,8 @@ func TestDocTabs_SelectIndex(t *testing.T) {
 }
 
 func TestDocTabs_RemoveIndex(t *testing.T) {
-	tabs := container.NewDocTabs(&container.TabItem{Text: "Test1", Content: widget.NewLabel("Test1")},
-		&container.TabItem{Text: "Test2", Content: widget.NewLabel("Test2")})
+	tabs := container.NewDocTabs(&container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Test1"))},
+		&container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Test2"))})
 
 	tabs.SelectIndex(1)
 	tabs.RemoveIndex(1)
@@ -133,8 +133,8 @@ func TestDocTabs_RemoveIndex(t *testing.T) {
 }
 
 func TestDocTabs_EnableItem(t *testing.T) {
-	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Test1")}
-	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Test2")}
+	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Test1"))}
+	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Test2"))}
 	tabs := container.NewDocTabs(tab1, tab2)
 	tabs.DisableItem(tab1)
 
@@ -145,8 +145,8 @@ func TestDocTabs_EnableItem(t *testing.T) {
 }
 
 func TestDocTabs_EnableIndex(t *testing.T) {
-	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Test1")}
-	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Test2")}
+	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Test1"))}
+	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Test2"))}
 	tabs := container.NewDocTabs(tab1, tab2)
 	tabs.DisableItem(tab1)
 
@@ -157,8 +157,8 @@ func TestDocTabs_EnableIndex(t *testing.T) {
 }
 
 func TestDocTabs_DisableItem(t *testing.T) {
-	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Test1")}
-	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Test2")}
+	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Test1"))}
+	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Test2"))}
 	tabs := container.NewDocTabs(tab1, tab2)
 
 	assert.False(t, tab1.Disabled())
@@ -170,8 +170,8 @@ func TestDocTabs_DisableItem(t *testing.T) {
 }
 
 func TestDocTabs_DisableIndex(t *testing.T) {
-	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel("Test1")}
-	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel("Test2")}
+	tab1 := &container.TabItem{Text: "Test1", Content: widget.NewLabel(widget.LabelWithStaticText("Test1"))}
+	tab2 := &container.TabItem{Text: "Test2", Content: widget.NewLabel(widget.LabelWithStaticText("Test2"))}
 	tabs := container.NewDocTabs(tab1, tab2)
 
 	assert.False(t, tab1.Disabled())

@@ -45,10 +45,10 @@ func makeAccordionTab(_ fyne.Window) fyne.CanvasObject {
 	}
 	ac := widget.NewAccordion(
 		widget.NewAccordionItem("A", widget.NewHyperlink("One", link)),
-		widget.NewAccordionItem("B", widget.NewLabel("Two")),
+		widget.NewAccordionItem("B", widget.NewLabel(widget.LabelWithStaticText("Two"))),
 		&widget.AccordionItem{
 			Title:  "C",
-			Detail: widget.NewLabel("Three"),
+			Detail: widget.NewLabel(widget.LabelWithStaticText("Three")),
 		},
 	)
 	ac.MultiOpen = true
@@ -86,7 +86,7 @@ func makeActivityTab(win fyne.Window) fyne.CanvasObject {
 
 	return container.NewCenter(container.NewGridWithColumns(1,
 		container.NewCenter(container.NewVBox(
-			container.NewHBox(widget.NewLabel("Working..."), a1),
+			container.NewHBox(widget.NewLabel(widget.LabelWithStaticText("Working...")), a1),
 			container.NewStack(button, a2))),
 		container.NewCenter(widget.NewButton("Show dialog", func() {
 			prop := canvas.NewRectangle(color.Transparent)
@@ -167,7 +167,7 @@ func makeCardTab(_ fyne.Window) fyne.CanvasObject {
 		widget.NewRadioGroup([]string{"6:30pm", "7:00pm", "7:45pm"}, func(string) {}))
 	card2 := widget.NewCard("With media", "No content, with image", nil)
 	card2.Image = canvas.NewImageFromResource(data.FyneLogo)
-	card3 := widget.NewCard("Title 3", "Another card", widget.NewLabel("Content"))
+	card3 := widget.NewCard("Title 3", "Another card", widget.NewLabel(widget.LabelWithStaticText("Content")))
 	return container.NewGridWithColumns(2, container.NewVBox(card1, card3),
 		container.NewVBox(card2))
 }
@@ -212,7 +212,7 @@ func makeTextGrid() *widget.TextGrid {
 }
 
 func makeTextTab(_ fyne.Window) fyne.CanvasObject {
-	label := widget.NewLabel("Label")
+	label := widget.NewLabel(widget.LabelWithStaticText("Label"))
 
 	link, err := url.Parse("https://fyne.io/")
 	if err != nil {
@@ -393,8 +393,8 @@ func makeInputTab(_ fyne.Window) fyne.CanvasObject {
 		checkGroup,
 		radio,
 		disabledRadio,
-		container.NewBorder(nil, nil, widget.NewLabel("Slider"), nil, widget.NewSlider(0, 1000)),
-		container.NewBorder(nil, nil, widget.NewLabel("Disabled slider"), nil, disabledSlider),
+		container.NewBorder(nil, nil, widget.NewLabel(widget.LabelWithStaticText("Slider")), nil, widget.NewSlider(0, 1000)),
+		container.NewBorder(nil, nil, widget.NewLabel(widget.LabelWithStaticText("Disabled slider")), nil, disabledSlider),
 	)
 }
 
@@ -413,9 +413,9 @@ func makeProgressTab(_ fyne.Window) fyne.CanvasObject {
 	startProgress()
 
 	return container.NewVBox(
-		widget.NewLabel("Percent"), progress,
-		widget.NewLabel("Formatted"), fprogress,
-		widget.NewLabel("Infinite"), infProgress)
+		widget.NewLabel(widget.LabelWithStaticText("Percent")), progress,
+		widget.NewLabel(widget.LabelWithStaticText("Formatted")), fprogress,
+		widget.NewLabel(widget.LabelWithStaticText("Infinite")), infProgress)
 }
 
 func makeFormTab(_ fyne.Window) fyne.CanvasObject {
@@ -517,7 +517,7 @@ func stopProgress() {
 // widgetScreen shows a panel containing widget demos
 func widgetScreen(_ fyne.Window) fyne.CanvasObject {
 	content := container.NewVBox(
-		widget.NewLabel("Labels"),
+		widget.NewLabel(widget.LabelWithStaticText("Labels")),
 		widget.NewButtonWithIcon("Icons", theme.HomeIcon(), func() {}),
 		widget.NewSlider(0, 1))
 	return container.NewCenter(content)
