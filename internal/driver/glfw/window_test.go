@@ -236,7 +236,7 @@ func TestWindow_Cursor(t *testing.T) {
 	e := widget.NewEntry()
 	u, _ := url.Parse("https://testing.fyne")
 	h := widget.NewHyperlink("Testing", u)
-	b := widget.NewButton("Test", nil)
+	b := widget.NewButton(widget.ButtonWithLabel("Test"))
 
 	w.SetContent(container.NewVBox(e, h, b))
 	repaintWindow(w)
@@ -1143,9 +1143,14 @@ func TestWindow_TappedSecondary(t *testing.T) {
 func TestWindow_TappedSecondary_OnPrimaryOnlyTarget(t *testing.T) {
 	w := createWindow("Test").(*window)
 	tapped := false
-	o := widget.NewButton("Test", func() {
-		tapped = true
-	})
+	o := widget.NewButton(
+		widget.ButtonWithLabel("Test"),
+		widget.ButtonWithCallback(
+			func() {
+				tapped = true
+			},
+		),
+	)
 	w.SetContent(o)
 	ensureCanvasSize(t, w, fyne.NewSize(53, 44))
 
@@ -1169,9 +1174,14 @@ func TestWindow_TappedIgnoresScrollerClip(t *testing.T) {
 	rect := canvas.NewRectangle(color.White)
 	rect.SetMinSize(fyne.NewSize(100, 100))
 	tapped := false
-	button := widget.NewButton("Tap", func() {
-		tapped = true
-	})
+	button := widget.NewButton(
+		widget.ButtonWithLabel("Tap"),
+		widget.ButtonWithCallback(
+			func() {
+				tapped = true
+			},
+		),
+	)
 	rect2 := canvas.NewRectangle(color.Black)
 	rect2.SetMinSize(fyne.NewSize(100, 100))
 	child := container.NewGridWithColumns(1, button, rect2)
@@ -1203,8 +1213,8 @@ func TestWindow_TappedIgnoresScrollerClip(t *testing.T) {
 func TestWindow_TappedIgnoredWhenMovedOffOfTappable(t *testing.T) {
 	w := createWindow("Test").(*window)
 	tapped := 0
-	b1 := widget.NewButton("Tap", func() { tapped = 1 })
-	b2 := widget.NewButton("Tap", func() { tapped = 2 })
+	b1 := widget.NewButton(widget.ButtonWithLabel("Tap"), widget.ButtonWithCallback(func() { tapped = 1 }))
+	b2 := widget.NewButton(widget.ButtonWithLabel("Tap"), widget.ButtonWithCallback(func() { tapped = 2 }))
 	w.SetContent(container.NewVBox(b1, b2))
 
 	w.mouseMoved(w.viewport, 17, 27)

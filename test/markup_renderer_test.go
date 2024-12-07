@@ -438,7 +438,7 @@ func Test_snapshot(t *testing.T) {
 				c.Hide()
 				l := fynecanvas.NewLine(color.NRGBA{R: 250, G: 250, B: 250, A: 250})
 				l.Hide()
-				w := widget.NewButton("tap me if you can", nil)
+				w := widget.NewButton(widget.ButtonWithLabel("tap me if you can"))
 				w.Hide()
 				return container.NewVBox(c, l, w)
 			}(),

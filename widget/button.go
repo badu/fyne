@@ -63,27 +63,34 @@ type Button struct {
 	tapAnim          *fyne.Animation
 }
 
-// NewButton creates a new button widget with the set label and tap handler
-func NewButton(label string, tapped func()) *Button {
-	button := &Button{
-		Text:     label,
-		OnTapped: tapped,
-	}
+type ButtonOption func(*Button)
 
-	button.ExtendBaseWidget(button)
-	return button
+func ButtonWithLabel(text string) ButtonOption {
+	return func(l *Button) {
+		l.Text = text
+	}
 }
 
-// NewButtonWithIcon creates a new button widget with the specified label, themed icon and tap handler
-func NewButtonWithIcon(label string, icon fyne.Resource, tapped func()) *Button {
-	button := &Button{
-		Text:     label,
-		Icon:     icon,
-		OnTapped: tapped,
+func ButtonWithCallback(tapped func()) ButtonOption {
+	return func(l *Button) {
+		l.OnTapped = tapped
 	}
+}
 
-	button.ExtendBaseWidget(button)
-	return button
+func ButtonWithIcon(icon fyne.Resource) ButtonOption {
+	return func(l *Button) {
+		l.Icon = icon
+	}
+}
+
+// NewButton creates a new button widget with the set label and tap handler
+func NewButton(options ...ButtonOption) *Button {
+	result := &Button{}
+	for _, opt := range options {
+		opt(result)
+	}
+	result.ExtendBaseWidget(result)
+	return result
 }
 
 // CreateRenderer is a private method to Fyne which links this widget to its renderer
@@ -189,8 +196,8 @@ func (b *Button) Tapped(*fyne.PointEvent) {
 	b.tapAnimation()
 	b.Refresh()
 
-	if onTapped := b.OnTapped; onTapped != nil {
-		onTapped()
+	if b.OnTapped != nil {
+		b.OnTapped()
 	}
 }
 

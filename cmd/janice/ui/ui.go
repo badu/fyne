@@ -279,9 +279,14 @@ func (u *UI) loadDocument(reader fyne.URIReadCloser) {
 		infoText.SetText(message)
 	}))
 	ctx, cancel := context.WithCancel(context.TODO())
-	b := widget.NewButtonWithIcon("", theme.CancelIcon(), func() {
-		cancel()
-	})
+	b := widget.NewButton(
+		widget.ButtonWithIcon(theme.CancelIcon()),
+		widget.ButtonWithCallback(
+			func() {
+				cancel()
+			},
+		),
+	)
 	c := container.NewVBox(
 		infoText,
 		container.NewBorder(nil, nil, nil, b, container.NewStack(pb1, pb2)),

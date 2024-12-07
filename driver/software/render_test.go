@@ -23,7 +23,7 @@ func TestRender(t *testing.T) {
 }
 
 func TestRender_State(t *testing.T) {
-	obj := widget.NewButtonWithIcon("Cancel", theme.CancelIcon(), func() {})
+	obj := widget.NewButton(widget.ButtonWithLabel("Cancel"), widget.ButtonWithIcon(theme.CancelIcon()))
 	test.AssertImageMatches(t, "button.png", Render(obj, test.Theme()))
 
 	obj.Importance = widget.HighImportance
@@ -43,7 +43,7 @@ func TestRenderCanvas(t *testing.T) {
 	obj := container.NewAppTabs(
 		container.NewTabItem("Tab 1", container.NewVBox(
 			widget.NewLabel(widget.LabelWithStaticText("Label")),
-			widget.NewButton("Button", func() {}),
+			widget.NewButton(widget.ButtonWithLabel("Button")),
 		)))
 
 	c := NewCanvas()

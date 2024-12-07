@@ -46,9 +46,14 @@ func (s *Settings) makeScaleButtons() []fyne.CanvasObject {
 	var buttons = make([]fyne.CanvasObject, len(scales))
 	for i, scale := range scales {
 		value := scale.scale
-		button := widget.NewButton(scale.name, func() {
-			s.chooseScale(value)
-		})
+		button := widget.NewButton(
+			widget.ButtonWithLabel(scale.name),
+			widget.ButtonWithCallback(
+				func() {
+					s.chooseScale(value)
+				},
+			),
+		)
 		if s.fyneSettings.Scale == scale.scale {
 			button.Importance = widget.HighImportance
 		}

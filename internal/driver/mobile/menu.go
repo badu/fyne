@@ -47,10 +47,16 @@ func newMenuLabel(item *fyne.Menu, parent *fyne.Container, c *canvas) *menuLabel
 
 func (c *canvas) showMenu(menu *fyne.MainMenu) {
 	var panel *fyne.Container
-	top := container.NewHBox(widget.NewButtonWithIcon("", theme.CancelIcon(), func() {
-		panel.Hide()
-		c.setMenu(nil)
-	}))
+	top := container.NewHBox(
+		widget.NewButton(
+			widget.ButtonWithIcon(theme.CancelIcon()),
+			widget.ButtonWithCallback(func() {
+				panel.Hide()
+				c.setMenu(nil)
+			},
+			),
+		),
+	)
 	panel = container.NewVBox(top)
 	for _, item := range menu.Items {
 		panel.Add(newMenuLabel(item, panel, c))

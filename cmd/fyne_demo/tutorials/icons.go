@@ -38,12 +38,23 @@ func iconScreen(_ fyne.Window) fyne.CanvasObject {
 	b := &browser{}
 	b.icons = loadIcons()
 
-	prev := widget.NewButtonWithIcon("", theme.NavigateBackIcon(), func() {
-		b.setIcon(b.current - 1)
-	})
-	next := widget.NewButtonWithIcon("", theme.NavigateNextIcon(), func() {
-		b.setIcon(b.current + 1)
-	})
+	prev := widget.NewButton(
+		widget.ButtonWithIcon(theme.NavigateBackIcon()),
+		widget.ButtonWithCallback(
+			func() {
+				b.setIcon(b.current - 1)
+			},
+		),
+	)
+	next := widget.NewButton(
+		widget.ButtonWithIcon(theme.NavigateNextIcon()),
+		widget.ButtonWithCallback(
+			func() {
+
+				b.setIcon(b.current + 1)
+			},
+		),
+	)
 	b.name = widget.NewSelect(iconList(b.icons), func(name string) {
 		for i, icon := range b.icons {
 			if icon.name == name {

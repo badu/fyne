@@ -116,7 +116,7 @@ func TestFileDialogResize(t *testing.T) {
 
 	//Mimic the fileopen dialog
 	d := &fileDialog{file: file}
-	open := widget.NewButton("open", func() {})
+	open := widget.NewButton(widget.ButtonWithLabel("open"))
 	ui := container.NewBorder(nil, nil, nil, open)
 	pad := theme.Padding()
 	itemMin := d.newFileItem(storage.NewFileURI("filename.txt"), false, false).MinSize()

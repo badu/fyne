@@ -14,7 +14,7 @@ import (
 )
 
 func TestButton_MinSize(t *testing.T) {
-	button := widget.NewButton("Hi", nil)
+	button := widget.NewButton(widget.ButtonWithLabel("Hi"))
 	min := button.MinSize()
 
 	assert.True(t, min.Width > theme.InnerPadding())
@@ -22,7 +22,7 @@ func TestButton_MinSize(t *testing.T) {
 }
 
 func TestButton_SetText(t *testing.T) {
-	button := widget.NewButton("Hi", nil)
+	button := widget.NewButton(widget.ButtonWithLabel("Hi"))
 	min1 := button.MinSize()
 
 	button.SetText("Longer")
@@ -33,7 +33,7 @@ func TestButton_SetText(t *testing.T) {
 }
 
 func TestButton_MinSize_Icon(t *testing.T) {
-	button := widget.NewButton("Hi", nil)
+	button := widget.NewButton(widget.ButtonWithLabel("Hi"))
 	min1 := button.MinSize()
 
 	button.SetIcon(theme.CancelIcon())
@@ -44,15 +44,20 @@ func TestButton_MinSize_Icon(t *testing.T) {
 }
 
 func TestButton_Cursor(t *testing.T) {
-	button := widget.NewButton("Test", nil)
+	button := widget.NewButton(widget.ButtonWithLabel("Test"))
 	assert.Equal(t, desktop.DefaultCursor, button.Cursor())
 }
 
 func TestButton_Tapped(t *testing.T) {
 	tapped := make(chan bool)
-	button := widget.NewButton("Hi", func() {
-		tapped <- true
-	})
+	button := widget.NewButton(
+		widget.ButtonWithLabel("Hi"),
+		widget.ButtonWithCallback(
+			func() {
+				tapped <- true
+			},
+		),
+	)
 
 	go test.Tap(button)
 	func() {
@@ -69,9 +74,14 @@ func TestButton_Disable(t *testing.T) {
 	test.ApplyTheme(t, test.Theme())
 
 	tapped := false
-	button := widget.NewButtonWithIcon("Test", theme.HomeIcon(), func() {
-		tapped = true
-	})
+	button := widget.NewButton(
+		widget.ButtonWithLabel("Test"),
+		widget.ButtonWithIcon(theme.HomeIcon()),
+		widget.ButtonWithCallback(func() {
+			tapped = true
+		},
+		),
+	)
 	button.Disable()
 	w := test.NewWindow(button)
 	defer w.Close()
@@ -86,9 +96,14 @@ func TestButton_Disable(t *testing.T) {
 
 func TestButton_Enable(t *testing.T) {
 	tapped := make(chan bool)
-	button := widget.NewButton("Test", func() {
-		tapped <- true
-	})
+	button := widget.NewButton(
+		widget.ButtonWithLabel("Test"),
+		widget.ButtonWithCallback(
+			func() {
+				tapped <- true
+			},
+		),
+	)
 
 	button.Disable()
 	go test.Tap(button)
@@ -112,7 +127,7 @@ func TestButton_Enable(t *testing.T) {
 }
 
 func TestButton_Disabled(t *testing.T) {
-	button := widget.NewButton("Test", func() {})
+	button := widget.NewButton(widget.ButtonWithLabel("Test"))
 	assert.False(t, button.Disabled())
 	button.Disable()
 	assert.True(t, button.Disabled())
@@ -137,7 +152,10 @@ func TestButton_Hover(t *testing.T) {
 	test.NewTempApp(t)
 	test.ApplyTheme(t, test.Theme())
 
-	b := widget.NewButtonWithIcon("Test", theme.HomeIcon(), func() {})
+	b := widget.NewButton(
+		widget.ButtonWithLabel("Test"),
+		widget.ButtonWithIcon(theme.HomeIcon()),
+	)
 	w := test.NewWindow(b)
 	defer w.Close()
 
@@ -291,7 +309,7 @@ func TestButton_Layout(t *testing.T) {
 func TestButton_ChangeTheme(t *testing.T) {
 	test.NewTempApp(t)
 
-	b := widget.NewButton("Test", func() {})
+	b := widget.NewButton(widget.ButtonWithLabel("Test"))
 	w := test.NewWindow(b)
 	defer w.Close()
 	w.Resize(fyne.NewSize(200, 200))
@@ -312,7 +330,7 @@ func TestButtonCompatImportance(t *testing.T) {
 	// Test backward compatibility of widget.Importance
 	var imp = widget.HighImportance
 
-	btn := widget.NewButton("test", func() {})
+	btn := widget.NewButton(widget.ButtonWithLabel("test"))
 	btn.Importance = imp
 }
 
@@ -320,7 +338,7 @@ func TestButtonSuccess(t *testing.T) {
 	test.NewTempApp(t)
 	test.ApplyTheme(t, test.Theme())
 
-	b := widget.NewButtonWithIcon("Test", theme.HomeIcon(), func() {})
+	b := widget.NewButton(widget.ButtonWithLabel("Test"), widget.ButtonWithIcon(theme.HomeIcon()))
 	w := test.NewWindow(b)
 	defer w.Close()
 

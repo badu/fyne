@@ -102,13 +102,17 @@ func (e *SelectEntry) popUpPos() fyne.Position {
 }
 
 func (e *SelectEntry) setupDropDown() *Button {
-	dropDownButton := NewButton("", func() {
-		c := fyne.CurrentApp().Driver().CanvasForObject(e.super())
+	dropDownButton := NewButton(
+		ButtonWithCallback(
+			func() {
+				c := fyne.CurrentApp().Driver().CanvasForObject(e.super())
 
-		e.popUp = NewPopUpMenu(e.dropDown, c)
-		e.popUp.ShowAtPosition(e.popUpPos())
-		e.popUp.Resize(fyne.NewSize(e.Size().Width, e.popUp.MinSize().Height))
-	})
+				e.popUp = NewPopUpMenu(e.dropDown, c)
+				e.popUp.ShowAtPosition(e.popUpPos())
+				e.popUp.Resize(fyne.NewSize(e.Size().Width, e.popUp.MinSize().Height))
+			},
+		),
+	)
 	dropDownButton.Importance = LowImportance
 	dropDownButton.SetIcon(e.Theme().Icon(theme.IconNameArrowDropDown))
 	return dropDownButton

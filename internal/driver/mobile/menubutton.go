@@ -20,9 +20,16 @@ func (w *window) newMenuButton(menu *fyne.MainMenu) *menuButton {
 }
 
 func (m *menuButton) CreateRenderer() fyne.WidgetRenderer {
-	return &menuButtonRenderer{btn: widget.NewButtonWithIcon("", theme.MenuIcon(), func() {
-		m.win.canvas.showMenu(m.menu)
-	}), bg: fynecanvas.NewRectangle(theme.Color(theme.ColorNameBackground))}
+	return &menuButtonRenderer{
+		btn: widget.NewButton(
+			widget.ButtonWithIcon(theme.MenuIcon()),
+			widget.ButtonWithCallback(
+				func() {
+					m.win.canvas.showMenu(m.menu)
+				},
+			),
+		),
+		bg: fynecanvas.NewRectangle(theme.Color(theme.ColorNameBackground))}
 }
 
 type menuButtonRenderer struct {

@@ -266,9 +266,14 @@ func Test_canvas_Tapped(t *testing.T) {
 	buttonTap := false
 	var pointEvent *fyne.PointEvent
 	var tappedObj fyne.Tappable
-	button := widget.NewButton("Test", func() {
-		buttonTap = true
-	})
+	button := widget.NewButton(
+		widget.ButtonWithLabel("Test"),
+		widget.ButtonWithCallback(
+			func() {
+				buttonTap = true
+			},
+		),
+	)
 	c := newCanvas(fyne.CurrentDevice()).(*canvas)
 	c.SetContent(button)
 	c.Resize(fyne.NewSize(36, 24))
@@ -325,9 +330,14 @@ func Test_canvas_TappedAndDoubleTapped(t *testing.T) {
 
 func Test_canvas_TappedMulti(t *testing.T) {
 	buttonTap := false
-	button := widget.NewButton("Test", func() {
-		buttonTap = true
-	})
+	button := widget.NewButton(
+		widget.ButtonWithLabel("Test"),
+		widget.ButtonWithCallback(
+			func() {
+				buttonTap = true
+			},
+		),
+	)
 	c := newCanvas(fyne.CurrentDevice()).(*canvas)
 	c.SetContent(button)
 	c.Resize(fyne.NewSize(36, 24))

@@ -12,12 +12,19 @@ func main() {
 	w := a.NewWindow("Hello")
 
 	hello := widget.NewLabel(widget.LabelWithStaticText("Hello Fyne!"))
-	w.SetContent(container.NewVBox(
-		hello,
-		widget.NewButton("Hi!", func() {
-			hello.SetText("Welcome 😀")
-		}),
-	))
+	w.SetContent(
+		container.NewVBox(
+			hello,
+			widget.NewButton(
+				widget.ButtonWithLabel("Hi!"),
+				widget.ButtonWithCallback(
+					func() {
+						hello.SetText("Welcome 😀")
+					},
+				),
+			),
+		),
+	)
 
 	w.ShowAndRun()
 }

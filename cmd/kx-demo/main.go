@@ -46,18 +46,28 @@ func main() {
 
 func makeDialogs(w fyne.Window) fyne.CanvasObject {
 	c := container.NewVBox(
-		widget.NewButton("Information Dialog with key handler", func() {
-			d := dialog.NewInformation("Info", "You can close this dialog with the Escape key.", w)
-			kxdialog.AddDialogKeyHandler(d, w)
-			d.Show()
-		}),
-		widget.NewButton("Confirm Dialog with key handler", func() {
-			d := dialog.NewConfirm("Confirm", "You can close this dialog with the Escape key.", func(b bool) {
-				fmt.Printf("Confirm dialog: %v\n", b)
-			}, w)
-			kxdialog.AddDialogKeyHandler(d, w)
-			d.Show()
-		}),
+		widget.NewButton(
+			widget.ButtonWithLabel("Information Dialog with key handler"),
+			widget.ButtonWithCallback(
+				func() {
+					d := dialog.NewInformation("Info", "You can close this dialog with the Escape key.", w)
+					kxdialog.AddDialogKeyHandler(d, w)
+					d.Show()
+				},
+			),
+		),
+		widget.NewButton(
+			widget.ButtonWithLabel("Confirm Dialog with key handler"),
+			widget.ButtonWithCallback(
+				func() {
+					d := dialog.NewConfirm("Confirm", "You can close this dialog with the Escape key.", func(b bool) {
+						fmt.Printf("Confirm dialog: %v\n", b)
+					}, w)
+					kxdialog.AddDialogKeyHandler(d, w)
+					d.Show()
+				},
+			),
+		),
 	)
 	return c
 }
@@ -162,55 +172,75 @@ func makeWidgets(w fyne.Window) fyne.CanvasObject {
 }
 
 func makeModals(w fyne.Window) *fyne.Container {
-	b1 := widget.NewButton("ProgressModal", func() {
-		m := kxmodal.NewProgress("ProgressModal", "Please wait...", func(progress binding.Float) error {
-			for i := 1; i < 50; i++ {
-				progress.Set(float64(i))
-				time.Sleep(100 * time.Millisecond)
-			}
-			return nil
-		}, 50, w)
-		m.Start()
-	})
-
-	b2 := widget.NewButton("ProgressCancelModal", func() {
-		m := kxmodal.NewProgressWithCancel("ProgressCancelModal", "Please wait...", func(progress binding.Float, canceled chan struct{}) error {
-			ticker := time.NewTicker(100 * time.Millisecond)
-			for i := 1; i < 50; i++ {
-				progress.Set(float64(i))
-				select {
-				case <-canceled:
+	b1 := widget.NewButton(
+		widget.ButtonWithLabel("ProgressModal"),
+		widget.ButtonWithCallback(
+			func() {
+				m := kxmodal.NewProgress("ProgressModal", "Please wait...", func(progress binding.Float) error {
+					for i := 1; i < 50; i++ {
+						progress.Set(float64(i))
+						time.Sleep(100 * time.Millisecond)
+					}
 					return nil
-				case <-ticker.C:
-				}
-			}
-			return nil
-		}, 50, w)
-		m.Start()
-	})
+				}, 50, w)
+				m.Start()
+			},
+		),
+	)
 
-	b3 := widget.NewButton("ProgressInfiniteModal", func() {
-		m := kxmodal.NewProgressInfinite("ProgressInfiniteModal", "Please wait...", func() error {
-			time.Sleep(3 * time.Second)
-			return nil
-		}, w)
-		m.Start()
-	})
-
-	b4 := widget.NewButton("ProgressInfiniteCancelModal", func() {
-		m := kxmodal.NewProgressInfiniteWithCancel("ProgressInfiniteCancelModal", "Please wait...", func(canceled chan struct{}) error {
-			ticker := time.NewTicker(100 * time.Millisecond)
-			for i := 1; i < 50; i++ {
-				select {
-				case <-canceled:
+	b2 := widget.NewButton(
+		widget.ButtonWithLabel("ProgressCancelModal"),
+		widget.ButtonWithCallback(
+			func() {
+				m := kxmodal.NewProgressWithCancel("ProgressCancelModal", "Please wait...", func(progress binding.Float, canceled chan struct{}) error {
+					ticker := time.NewTicker(100 * time.Millisecond)
+					for i := 1; i < 50; i++ {
+						progress.Set(float64(i))
+						select {
+						case <-canceled:
+							return nil
+						case <-ticker.C:
+						}
+					}
 					return nil
-				case <-ticker.C:
-				}
-			}
-			return nil
-		}, w)
-		m.Start()
-	})
+				}, 50, w)
+				m.Start()
+			},
+		),
+	)
+
+	b3 := widget.NewButton(
+		widget.ButtonWithLabel("ProgressInfiniteModal"),
+		widget.ButtonWithCallback(
+			func() {
+				m := kxmodal.NewProgressInfinite("ProgressInfiniteModal", "Please wait...", func() error {
+					time.Sleep(3 * time.Second)
+					return nil
+				}, w)
+				m.Start()
+			},
+		),
+	)
+
+	b4 := widget.NewButton(
+		widget.ButtonWithLabel("ProgressInfiniteCancelModal"),
+		widget.ButtonWithCallback(
+			func() {
+				m := kxmodal.NewProgressInfiniteWithCancel("ProgressInfiniteCancelModal", "Please wait...", func(canceled chan struct{}) error {
+					ticker := time.NewTicker(100 * time.Millisecond)
+					for i := 1; i < 50; i++ {
+						select {
+						case <-canceled:
+							return nil
+						case <-ticker.C:
+						}
+					}
+					return nil
+				}, w)
+				m.Start()
+			},
+		),
+	)
 
 	return container.NewVBox(b1, b2, b3, b4)
 }

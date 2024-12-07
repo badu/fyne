@@ -302,14 +302,18 @@ func (r *docTabsRenderer) buildAllTabsButton() (all *widget.Button) {
 }
 
 func (r *docTabsRenderer) buildCreateTabsButton() *widget.Button {
-	create := widget.NewButton("", func() {
-		if f := r.docTabs.CreateTab; f != nil {
-			if tab := f(); tab != nil {
-				r.docTabs.Append(tab)
-				r.docTabs.SelectIndex(len(r.docTabs.Items) - 1)
-			}
-		}
-	})
+	create := widget.NewButton(
+		widget.ButtonWithCallback(
+			func() {
+				if f := r.docTabs.CreateTab; f != nil {
+					if tab := f(); tab != nil {
+						r.docTabs.Append(tab)
+						r.docTabs.SelectIndex(len(r.docTabs.Items) - 1)
+					}
+				}
+			},
+		),
+	)
 	create.Importance = widget.LowImportance
 	return create
 }

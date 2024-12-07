@@ -109,9 +109,17 @@ func NewProgressWithCancel(title, message string, action func(progress binding.F
 		widget.NewLabel(widget.LabelWithStaticText(message)),
 		m.pb,
 		container.NewPadded(),
-		container.NewCenter(widget.NewButton("Cancel", func() {
-			closeChannelIfOpen(m.canceled)
-		})))
+		container.NewCenter(
+			widget.NewButton(
+				widget.ButtonWithLabel("Cancel"),
+				widget.ButtonWithCallback(
+					func() {
+						closeChannelIfOpen(m.canceled)
+					},
+				),
+			),
+		),
+	)
 	m.d = dialog.NewCustomWithoutButtons(title, content, parent)
 	return m
 }
@@ -215,9 +223,17 @@ func NewProgressInfiniteWithCancel(
 		widget.NewLabel(widget.LabelWithStaticText(message)),
 		m.pb,
 		container.NewPadded(),
-		container.NewCenter(widget.NewButton("Cancel", func() {
-			closeChannelIfOpen(m.canceled)
-		})))
+		container.NewCenter(
+			widget.NewButton(
+				widget.ButtonWithLabel("Cancel"),
+				widget.ButtonWithCallback(
+					func() {
+						closeChannelIfOpen(m.canceled)
+					},
+				),
+			),
+		),
+	)
 	m.d = dialog.NewCustomWithoutButtons(title, content, parent)
 	return m
 }

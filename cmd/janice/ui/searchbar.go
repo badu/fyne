@@ -129,9 +129,10 @@ func (f *searchBarFrame) doSearch() {
 	spinner.Start()
 	searchType := f.searchType.Selected
 	c := container.NewHBox(widget.NewLabel(widget.LabelWithStaticText(fmt.Sprintf("Searching for %s with pattern: %s", searchType, search))), spinner)
-	b := widget.NewButton("Cancel", func() {
-		cancel()
-	})
+	b := widget.NewButton(
+		widget.ButtonWithLabel("Cancel"),
+		widget.ButtonWithCallback(cancel),
+	)
 	d := dialog.NewCustomWithoutButtons("Search", container.NewVBox(c, b), f.u.window)
 	kxdialog.AddDialogKeyHandler(d, f.u.window)
 	d.Show()

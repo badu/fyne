@@ -223,13 +223,16 @@ func (f *fileDialog) makeUI() fyne.CanvasObject {
 	}
 
 	// icon of button is set in subsequent setView() call
-	f.toggleViewButton = widget.NewButtonWithIcon("", nil, func() {
-		if f.view == GridView {
-			f.setView(ListView)
-		} else {
-			f.setView(GridView)
-		}
-	})
+	f.toggleViewButton = widget.NewButton(
+		widget.ButtonWithCallback(
+			func() {
+				if f.view == GridView {
+					f.setView(ListView)
+				} else {
+					f.setView(GridView)
+				}
+			}),
+	)
 	f.setView(view)
 
 	f.loadFavorites()
@@ -251,34 +254,44 @@ func (f *fileDialog) makeUI() fyne.CanvasObject {
 	}
 
 	var optionsButton *widget.Button
-	optionsButton = widget.NewButtonWithIcon("", theme.SettingsIcon(), func() {
-		f.optionsMenu(fyne.CurrentApp().Driver().AbsolutePositionForObject(optionsButton), optionsButton.Size())
-	})
-
-	newFolderButton := widget.NewButtonWithIcon("", theme.FolderNewIcon(), func() {
-		newFolderEntry := widget.NewEntry()
-		ShowForm(lang.L("New Folder"), lang.L("Create Folder"), lang.L("Cancel"), []*widget.FormItem{
-			{
-				Text:   lang.X("file.name", "Name"),
-				Widget: newFolderEntry,
+	optionsButton = widget.NewButton(
+		widget.ButtonWithIcon(theme.SettingsIcon()),
+		widget.ButtonWithCallback(
+			func() {
+				f.optionsMenu(fyne.CurrentApp().Driver().AbsolutePositionForObject(optionsButton), optionsButton.Size())
 			},
-		}, func(s bool) {
-			if !s || newFolderEntry.Text == "" {
-				return
-			}
+		),
+	)
 
-			newFolderPath := filepath.Join(f.dir.Path(), newFolderEntry.Text)
-			createFolderErr := os.MkdirAll(newFolderPath, 0750)
-			if createFolderErr != nil {
-				fyne.LogError(
-					fmt.Sprintf("Failed to create folder with path %s", newFolderPath),
-					createFolderErr,
-				)
-				ShowError(errors.New("folder cannot be created"), f.file.parent)
-			}
-			f.refreshDir(f.dir)
-		}, f.file.parent)
-	})
+	newFolderButton := widget.NewButton(
+		widget.ButtonWithIcon(theme.FolderNewIcon()),
+		widget.ButtonWithCallback(
+			func() {
+				newFolderEntry := widget.NewEntry()
+				ShowForm(lang.L("New Folder"), lang.L("Create Folder"), lang.L("Cancel"), []*widget.FormItem{
+					{
+						Text:   lang.X("file.name", "Name"),
+						Widget: newFolderEntry,
+					},
+				}, func(s bool) {
+					if !s || newFolderEntry.Text == "" {
+						return
+					}
+
+					newFolderPath := filepath.Join(f.dir.Path(), newFolderEntry.Text)
+					createFolderErr := os.MkdirAll(newFolderPath, 0750)
+					if createFolderErr != nil {
+						fyne.LogError(
+							fmt.Sprintf("Failed to create folder with path %s", newFolderPath),
+							createFolderErr,
+						)
+						ShowError(errors.New("folder cannot be created"), f.file.parent)
+					}
+					f.refreshDir(f.dir)
+				}, f.file.parent)
+			},
+		),
+	)
 
 	optionsbuttons := container.NewHBox(
 		newFolderButton,
@@ -311,67 +324,72 @@ func (f *fileDialog) makeUI() fyne.CanvasObject {
 }
 
 func (f *fileDialog) makeOpenButton(label string) *widget.Button {
-	btn := widget.NewButton(label, func() {
-		if f.file.callback == nil {
-			f.win.Hide()
-			if f.file.onClosedCallback != nil {
-				f.file.onClosedCallback(false)
-			}
-			return
-		}
-
-		if f.file.save {
-			callback := f.file.callback.(func(fyne.URIWriteCloser, error))
-			name := f.fileName.(*widget.Entry).Text
-			location, _ := storage.Child(f.dir, name)
-
-			exists, _ := storage.Exists(location)
-
-			// check if a directory is selected
-			listable, err := storage.CanList(location)
-
-			if !exists {
-				f.win.Hide()
-				if f.file.onClosedCallback != nil {
-					f.file.onClosedCallback(true)
+	btn := widget.NewButton(
+		widget.ButtonWithLabel(label),
+		widget.ButtonWithCallback(
+			func() {
+				if f.file.callback == nil {
+					f.win.Hide()
+					if f.file.onClosedCallback != nil {
+						f.file.onClosedCallback(false)
+					}
+					return
 				}
-				callback(storage.Writer(location))
-				return
-			} else if err == nil && listable {
-				// a directory has been selected
-				ShowInformation("Cannot overwrite",
-					"Files cannot replace a directory,\ncheck the file name and try again", f.file.parent)
-				return
-			}
 
-			ShowConfirm("Overwrite?", "Are you sure you want to overwrite the file\n"+name+"?",
-				func(ok bool) {
-					if !ok {
+				if f.file.save {
+					callback := f.file.callback.(func(fyne.URIWriteCloser, error))
+					name := f.fileName.(*widget.Entry).Text
+					location, _ := storage.Child(f.dir, name)
+
+					exists, _ := storage.Exists(location)
+
+					// check if a directory is selected
+					listable, err := storage.CanList(location)
+
+					if !exists {
+						f.win.Hide()
+						if f.file.onClosedCallback != nil {
+							f.file.onClosedCallback(true)
+						}
+						callback(storage.Writer(location))
+						return
+					} else if err == nil && listable {
+						// a directory has been selected
+						ShowInformation("Cannot overwrite",
+							"Files cannot replace a directory,\ncheck the file name and try again", f.file.parent)
 						return
 					}
-					f.win.Hide()
 
-					callback(storage.Writer(location))
+					ShowConfirm("Overwrite?", "Are you sure you want to overwrite the file\n"+name+"?",
+						func(ok bool) {
+							if !ok {
+								return
+							}
+							f.win.Hide()
+
+							callback(storage.Writer(location))
+							if f.file.onClosedCallback != nil {
+								f.file.onClosedCallback(true)
+							}
+						}, f.file.parent)
+				} else if f.selected != nil {
+					callback := f.file.callback.(func(fyne.URIReadCloser, error))
+					f.win.Hide()
 					if f.file.onClosedCallback != nil {
 						f.file.onClosedCallback(true)
 					}
-				}, f.file.parent)
-		} else if f.selected != nil {
-			callback := f.file.callback.(func(fyne.URIReadCloser, error))
-			f.win.Hide()
-			if f.file.onClosedCallback != nil {
-				f.file.onClosedCallback(true)
-			}
-			callback(storage.Reader(f.selected))
-		} else if f.file.isDirectory() {
-			callback := f.file.callback.(func(fyne.ListableURI, error))
-			f.win.Hide()
-			if f.file.onClosedCallback != nil {
-				f.file.onClosedCallback(true)
-			}
-			callback(f.dir, nil)
-		}
-	})
+					callback(storage.Reader(f.selected))
+				} else if f.file.isDirectory() {
+					callback := f.file.callback.(func(fyne.ListableURI, error))
+					f.win.Hide()
+					if f.file.onClosedCallback != nil {
+						f.file.onClosedCallback(true)
+					}
+					callback(f.dir, nil)
+				}
+			},
+		),
+	)
 
 	btn.Importance = widget.HighImportance
 	btn.Disable()
@@ -380,21 +398,26 @@ func (f *fileDialog) makeOpenButton(label string) *widget.Button {
 }
 
 func (f *fileDialog) makeDismissButton(label string) *widget.Button {
-	btn := widget.NewButton(label, func() {
-		f.win.Hide()
-		if f.file.onClosedCallback != nil {
-			f.file.onClosedCallback(false)
-		}
-		if f.file.callback != nil {
-			if f.file.save {
-				f.file.callback.(func(fyne.URIWriteCloser, error))(nil, nil)
-			} else if f.file.isDirectory() {
-				f.file.callback.(func(fyne.ListableURI, error))(nil, nil)
-			} else {
-				f.file.callback.(func(fyne.URIReadCloser, error))(nil, nil)
-			}
-		}
-	})
+	btn := widget.NewButton(
+		widget.ButtonWithLabel(label),
+		widget.ButtonWithCallback(
+			func() {
+				f.win.Hide()
+				if f.file.onClosedCallback != nil {
+					f.file.onClosedCallback(false)
+				}
+				if f.file.callback != nil {
+					if f.file.save {
+						f.file.callback.(func(fyne.URIWriteCloser, error))(nil, nil)
+					} else if f.file.isDirectory() {
+						f.file.callback.(func(fyne.ListableURI, error))(nil, nil)
+					} else {
+						f.file.callback.(func(fyne.URIReadCloser, error))(nil, nil)
+					}
+				}
+			},
+		),
+	)
 
 	return btn
 }
@@ -545,12 +568,17 @@ func (f *fileDialog) setLocation(dir fyne.URI) error {
 			return errors.New("location was not a listable URI")
 		}
 		f.breadcrumb.Add(
-			widget.NewButton(d, func() {
-				err := f.setLocation(newDir)
-				if err != nil {
-					fyne.LogError("Failed to set directory", err)
-				}
-			}),
+			widget.NewButton(
+				widget.ButtonWithLabel(d),
+				widget.ButtonWithCallback(
+					func() {
+						err := f.setLocation(newDir)
+						if err != nil {
+							fyne.LogError("Failed to set directory", err)
+						}
+					},
+				),
+			),
 		)
 	}
 

@@ -17,7 +17,7 @@ import (
 )
 
 func TestButton_Style(t *testing.T) {
-	button := NewButton("Test", nil)
+	button := NewButton(ButtonWithLabel("Test"))
 	render := test.TempWidgetRenderer(t, button).(*buttonRenderer)
 	render.applyTheme()
 	bg := render.background.FillColor
@@ -28,7 +28,7 @@ func TestButton_Style(t *testing.T) {
 }
 
 func TestButton_DisabledColor(t *testing.T) {
-	button := NewButton("Test", nil)
+	button := NewButton(ButtonWithLabel("Test"))
 	render := test.TempWidgetRenderer(t, button).(*buttonRenderer)
 	render.applyTheme()
 	bg := render.background.FillColor
@@ -42,7 +42,7 @@ func TestButton_DisabledColor(t *testing.T) {
 }
 
 func TestButton_Hover_Math(t *testing.T) {
-	button := NewButtonWithIcon("Test", theme.HomeIcon(), func() {})
+	button := NewButton(ButtonWithLabel("Test"), ButtonWithIcon(theme.HomeIcon()))
 	render := test.TempWidgetRenderer(t, button).(*buttonRenderer)
 	button.hovered = true
 	// unpremultiplied over operator:
@@ -81,7 +81,7 @@ func TestButton_Hover_Math(t *testing.T) {
 }
 
 func TestButton_DisabledIcon(t *testing.T) {
-	button := NewButtonWithIcon("Test", theme.CancelIcon(), nil)
+	button := NewButton(ButtonWithLabel("Test"), ButtonWithIcon(theme.CancelIcon()))
 	render := test.TempWidgetRenderer(t, button).(*buttonRenderer)
 	assert.Equal(t, render.icon.Resource.Name(), theme.CancelIcon().Name())
 
@@ -93,7 +93,7 @@ func TestButton_DisabledIcon(t *testing.T) {
 }
 
 func TestButton_DisabledIconChangeUsingSetIcon(t *testing.T) {
-	button := NewButtonWithIcon("Test", theme.CancelIcon(), nil)
+	button := NewButton(ButtonWithLabel("Test"), ButtonWithIcon(theme.CancelIcon()))
 	render := test.TempWidgetRenderer(t, button).(*buttonRenderer)
 	assert.Equal(t, render.icon.Resource.Name(), theme.CancelIcon().Name())
 
@@ -115,7 +115,7 @@ func TestButton_DisabledIconChangeUsingSetIcon(t *testing.T) {
 }
 
 func TestButton_DisabledIconChangedDirectly(t *testing.T) {
-	button := NewButtonWithIcon("Test", theme.CancelIcon(), nil)
+	button := NewButton(ButtonWithLabel("Test"), ButtonWithIcon(theme.CancelIcon()))
 	render := test.TempWidgetRenderer(t, button).(*buttonRenderer)
 	assert.Equal(t, render.icon.Resource.Name(), theme.CancelIcon().Name())
 
@@ -139,9 +139,14 @@ func TestButton_DisabledIconChangedDirectly(t *testing.T) {
 
 func TestButton_Focus(t *testing.T) {
 	tapped := false
-	button := NewButton("Test", func() {
-		tapped = true
-	})
+	button := NewButton(
+		ButtonWithLabel("Test"),
+		ButtonWithCallback(
+			func() {
+				tapped = true
+			},
+		),
+	)
 	render := test.TempWidgetRenderer(t, button).(*buttonRenderer)
 	render.applyTheme()
 	assert.Equal(t, theme.Color(theme.ColorNameButton), render.background.FillColor)
@@ -160,7 +165,7 @@ func TestButton_Focus(t *testing.T) {
 }
 
 func TestButtonRenderer_Layout(t *testing.T) {
-	button := NewButtonWithIcon("Test", theme.CancelIcon(), nil)
+	button := NewButton(ButtonWithLabel("Test"), ButtonWithIcon(theme.CancelIcon()))
 	render := test.TempWidgetRenderer(t, button).(*buttonRenderer)
 	render.Layout(render.MinSize())
 
@@ -170,7 +175,7 @@ func TestButtonRenderer_Layout(t *testing.T) {
 }
 
 func TestButtonRenderer_Layout_Stretch(t *testing.T) {
-	button := NewButtonWithIcon("Test", theme.CancelIcon(), nil)
+	button := NewButton(ButtonWithLabel("Test"), ButtonWithIcon(theme.CancelIcon()))
 	button.Resize(button.MinSize().Add(fyne.NewSize(100, 100)))
 	render := test.TempWidgetRenderer(t, button).(*buttonRenderer)
 
@@ -185,7 +190,7 @@ func TestButtonRenderer_Layout_Stretch(t *testing.T) {
 }
 
 func TestButtonRenderer_Layout_NoText(t *testing.T) {
-	button := NewButtonWithIcon("", theme.CancelIcon(), nil)
+	button := NewButton(ButtonWithIcon(theme.CancelIcon()))
 	render := test.TempWidgetRenderer(t, button).(*buttonRenderer)
 
 	button.Resize(fyne.NewSize(100, 100))
@@ -213,7 +218,7 @@ func TestButtonRenderer_TapAnimation(t *testing.T) {
 	test.NewTempApp(t)
 	test.ApplyTheme(t, test.NewTheme())
 
-	button := NewButton("Hi", func() {})
+	button := NewButton(ButtonWithLabel("Hi"))
 	w := test.NewWindow(button)
 	defer w.Close()
 	w.Resize(fyne.NewSize(50, 50).Add(fyne.NewSize(20, 20)))

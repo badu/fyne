@@ -48,18 +48,23 @@ func makeAnimationCanvas() fyne.CanvasObject {
 
 	running := true
 	var toggle *widget.Button
-	toggle = widget.NewButton("Stop", func() {
-		if running {
-			a.Stop()
-			a2.Stop()
-			toggle.SetText("Start")
-		} else {
-			a.Start()
-			a2.Start()
-			toggle.SetText("Stop")
-		}
-		running = !running
-	})
+	toggle = widget.NewButton(
+		widget.ButtonWithLabel("Stop"),
+		widget.ButtonWithCallback(
+			func() {
+				if running {
+					a.Stop()
+					a2.Stop()
+					toggle.SetText("Start")
+				} else {
+					a.Start()
+					a2.Start()
+					toggle.SetText("Stop")
+				}
+				running = !running
+			},
+		),
+	)
 	toggle.Resize(toggle.MinSize())
 	toggle.Move(fyne.NewPos(152, 54))
 	return container.NewWithoutLayout(rect, i, toggle)
@@ -71,12 +76,16 @@ func makeAnimationCurves() fyne.CanvasObject {
 	label3, box3, a3 := makeAnimationCurveItem("EaseOut", fyne.AnimationEaseOut, 60+theme.Padding()*2)
 	label4, box4, a4 := makeAnimationCurveItem("Linear", fyne.AnimationLinear, 90+theme.Padding()*3)
 
-	start := widget.NewButton("Compare", func() {
-		a1.Start()
-		a2.Start()
-		a3.Start()
-		a4.Start()
-	})
+	start := widget.NewButton(
+		widget.ButtonWithLabel("Compare"),
+		widget.ButtonWithCallback(func() {
+			a1.Start()
+			a2.Start()
+			a3.Start()
+			a4.Start()
+		},
+		),
+	)
 	start.Resize(start.MinSize())
 	start.Move(fyne.NewPos(0, 120+theme.Padding()*4))
 	return container.NewWithoutLayout(label1, label2, label3, label4, box1, box2, box3, box4, start)

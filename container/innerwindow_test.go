@@ -39,7 +39,7 @@ func TestInnerWindow_Close(t *testing.T) {
 func TestInnerWindow_MinSize(t *testing.T) {
 	w := NewInnerWindow("Thing", widget.NewLabel(widget.LabelWithStaticText("Content")))
 
-	btnMin := widget.NewButtonWithIcon("", theme.WindowCloseIcon(), func() {}).MinSize()
+	btnMin := widget.NewButton(widget.ButtonWithIcon(theme.WindowCloseIcon())).MinSize()
 	labelMin := widget.NewLabel(widget.LabelWithStaticText("Inner")).MinSize()
 
 	winMin := w.MinSize()

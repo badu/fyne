@@ -96,7 +96,7 @@ func TestSlider_HorizontalLayout(t *testing.T) {
 
 func TestSlider_MinSize(t *testing.T) {
 	min := NewSlider(0, 10).MinSize()
-	buttonMin := NewButtonWithIcon("", theme.HomeIcon(), func() {}).MinSize()
+	buttonMin := NewButton(ButtonWithIcon(theme.HomeIcon())).MinSize()
 
 	assert.Equal(t, min.Height, buttonMin.Height)
 }

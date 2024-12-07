@@ -21,18 +21,37 @@ func bindingScreen(_ fyne.Window) fyne.CanvasObject {
 	bar := widget.NewProgressBarWithData(data)
 
 	buttons := container.NewGridWithColumns(4,
-		widget.NewButton("0%", func() {
-			data.Set(0)
-		}),
-		widget.NewButton("30%", func() {
-			data.Set(0.3)
-		}),
-		widget.NewButton("70%", func() {
-			data.Set(0.7)
-		}),
-		widget.NewButton("100%", func() {
-			data.Set(1)
-		}))
+		widget.NewButton(
+			widget.ButtonWithLabel("0%"),
+			widget.ButtonWithCallback(func() {
+				data.Set(0)
+			},
+			),
+		),
+		widget.NewButton(
+			widget.ButtonWithLabel("30%"),
+			widget.ButtonWithCallback(func() {
+				data.Set(0.3)
+			},
+			),
+		),
+		widget.NewButton(
+			widget.ButtonWithLabel("70%"),
+			widget.ButtonWithCallback(
+				func() {
+					data.Set(0.7)
+				},
+			),
+		),
+		widget.NewButton(
+			widget.ButtonWithLabel("100%"),
+			widget.ButtonWithCallback(
+				func() {
+					data.Set(1)
+				},
+			),
+		),
+	)
 
 	boolData := binding.NewBool()
 	check := widget.NewCheckWithData("Check me!", boolData)
@@ -43,13 +62,18 @@ func bindingScreen(_ fyne.Window) fyne.CanvasObject {
 
 	dataList := binding.BindFloatList(&[]float64{0.1, 0.2, 0.3})
 
-	button := widget.NewButton("Append", func() {
-		dataList.Append(float64(dataList.Length()+1) / 10)
-	})
+	button := widget.NewButton(
+		widget.ButtonWithLabel("Append"),
+		widget.ButtonWithCallback(
+			func() {
+				dataList.Append(float64(dataList.Length()+1) / 10)
+			},
+		),
+	)
 
 	list := widget.NewListWithData(dataList,
 		func() fyne.CanvasObject {
-			return container.NewBorder(nil, nil, nil, widget.NewButton("+", nil),
+			return container.NewBorder(nil, nil, nil, widget.NewButton(widget.ButtonWithLabel("+")),
 				widget.NewLabel(widget.LabelWithStaticText("item x.y")))
 		},
 		func(item binding.DataItem, obj fyne.CanvasObject) {

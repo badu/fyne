@@ -13,7 +13,7 @@ import (
 )
 
 func TestThemeOverride_AddChild(t *testing.T) {
-	b := widget.NewButton("Test", func() {})
+	b := widget.NewButton(widget.ButtonWithLabel("Test"))
 	group := NewHBox(b)
 	override := NewThemeOverride(group, test.Theme())
 
@@ -26,7 +26,7 @@ func TestThemeOverride_AddChild(t *testing.T) {
 }
 
 func TestThemeOverride_Icons(t *testing.T) {
-	b := widget.NewButtonWithIcon("", theme.HomeIcon(), func() {})
+	b := widget.NewButton(widget.ButtonWithIcon(theme.HomeIcon()))
 	o := NewThemeOverride(b, test.Theme())
 	w := test.NewWindow(o)
 	plain := w.Canvas().Capture().(*image.NRGBA)
@@ -39,7 +39,7 @@ func TestThemeOverride_Icons(t *testing.T) {
 }
 
 func TestThemeOverride_Refresh(t *testing.T) {
-	b := widget.NewButton("Test", func() {})
+	b := widget.NewButton(widget.ButtonWithLabel("Test"))
 	o := NewThemeOverride(b, test.Theme())
 	w := test.NewWindow(o)
 	plain := w.Canvas().Capture().(*image.NRGBA)

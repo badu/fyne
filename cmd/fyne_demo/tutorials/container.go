@@ -74,9 +74,15 @@ func makeButtonList(count int) []fyne.CanvasObject {
 	var items []fyne.CanvasObject
 	for i := 1; i <= count; i++ {
 		index := i // capture
-		items = append(items, widget.NewButton("Button "+strconv.Itoa(index), func() {
-			fmt.Println("Tapped", index)
-		}))
+		items = append(items, widget.NewButton(
+			widget.ButtonWithLabel("Button "+strconv.Itoa(index)),
+			widget.ButtonWithCallback(
+				func() {
+					fmt.Println("Tapped", index)
+				},
+			),
+		),
+		)
 	}
 
 	return items
@@ -89,7 +95,7 @@ func makeCell() fyne.CanvasObject {
 }
 
 func makeCenterLayout(_ fyne.Window) fyne.CanvasObject {
-	middle := widget.NewButton("CenterLayout", func() {})
+	middle := widget.NewButton(widget.ButtonWithLabel("CenterLayout"))
 
 	return container.NewCenter(middle)
 }
@@ -124,11 +130,20 @@ func makeGridLayout(_ fyne.Window) fyne.CanvasObject {
 
 func makeInnerWindowTab(_ fyne.Window) fyne.CanvasObject {
 	label := widget.NewLabel(widget.LabelWithStaticText("Window content for inner demo"))
-	win1 := container.NewInnerWindow("Inner Demo", container.NewVBox(
-		label,
-		widget.NewButton("Tap Me", func() {
-			label.SetText("Tapped")
-		})))
+	win1 := container.NewInnerWindow(
+		"Inner Demo",
+		container.NewVBox(
+			label,
+			widget.NewButton(
+				widget.ButtonWithLabel("Tap Me"),
+				widget.ButtonWithCallback(
+					func() {
+						label.SetText("Tapped")
+					},
+				),
+			),
+		),
+	)
 	win1.Icon = data.FyneLogo
 
 	win2 := container.NewInnerWindow("Inner2", widget.NewLabel(widget.LabelWithStaticText("Win 2")))
@@ -166,7 +181,12 @@ func makeSplitTab(_ fyne.Window) fyne.CanvasObject {
 	left.SetText("Long text is looooooooooooooong")
 	right := container.NewVSplit(
 		widget.NewLabel(widget.LabelWithStaticText("Label")),
-		widget.NewButton("Button", func() { fmt.Println("button tapped!") }),
+		widget.NewButton(
+			widget.ButtonWithLabel("Button"),
+			widget.ButtonWithCallback(
+				func() { fmt.Println("button tapped!") },
+			),
+		),
 	)
 	return container.NewHSplit(container.NewVScroll(left), right)
 }

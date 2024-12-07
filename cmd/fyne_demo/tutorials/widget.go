@@ -81,32 +81,49 @@ func makeActivityTab(win fyne.Window) fyne.CanvasObject {
 		}()
 	}
 
-	button = widget.NewButton("Animate", start)
+	button = widget.NewButton(widget.ButtonWithLabel("Animate"), widget.ButtonWithCallback(start))
 	start()
 
-	return container.NewCenter(container.NewGridWithColumns(1,
-		container.NewCenter(container.NewVBox(
-			container.NewHBox(widget.NewLabel(widget.LabelWithStaticText("Working...")), a1),
-			container.NewStack(button, a2))),
-		container.NewCenter(widget.NewButton("Show dialog", func() {
-			prop := canvas.NewRectangle(color.Transparent)
-			prop.SetMinSize(fyne.NewSize(50, 50))
+	return container.NewCenter(
+		container.NewGridWithColumns(
+			1,
+			container.NewCenter(
+				container.NewVBox(
+					container.NewHBox(
+						widget.NewLabel(
+							widget.LabelWithStaticText("Working..."),
+						), a1),
+					container.NewStack(button, a2),
+				),
+			),
+			container.NewCenter(
+				widget.NewButton(
+					widget.ButtonWithLabel("Show dialog"),
+					widget.ButtonWithCallback(
+						func() {
+							prop := canvas.NewRectangle(color.Transparent)
+							prop.SetMinSize(fyne.NewSize(50, 50))
 
-			a3 := widget.NewActivity()
-			d := dialog.NewCustomWithoutButtons("Please wait...", container.NewStack(prop, a3), win)
-			a3.Start()
-			d.Show()
+							a3 := widget.NewActivity()
+							d := dialog.NewCustomWithoutButtons("Please wait...", container.NewStack(prop, a3), win)
+							a3.Start()
+							d.Show()
 
-			go func() {
-				time.Sleep(time.Second * 5)
-				a3.Stop()
-				d.Hide()
-			}()
-		}))))
+							go func() {
+								time.Sleep(time.Second * 5)
+								a3.Stop()
+								d.Hide()
+							}()
+						},
+					),
+				),
+			),
+		),
+	)
 }
 
 func makeButtonTab(_ fyne.Window) fyne.CanvasObject {
-	disabled := widget.NewButton("Disabled", func() {})
+	disabled := widget.NewButton(widget.ButtonWithLabel("Disabled"))
 	disabled.Disable()
 
 	shareItem := fyne.NewMenuItem("Share via", nil)
@@ -120,8 +137,16 @@ func makeButtonTab(_ fyne.Window) fyne.CanvasObject {
 	))
 
 	return container.NewVScroll(container.NewVBox(
-		widget.NewButton("Button (text only)", func() { fmt.Println("tapped text button") }),
-		widget.NewButtonWithIcon("Button (text & leading icon)", theme.ConfirmIcon(), func() { fmt.Println("tapped text & leading icon button") }),
+		widget.NewButton(widget.ButtonWithLabel("Button (text only)"), widget.ButtonWithCallback(func() { fmt.Println("tapped text button") })),
+		widget.NewButton(
+			widget.ButtonWithLabel("Button (text & leading icon)"),
+			widget.ButtonWithIcon(theme.ConfirmIcon()),
+			widget.ButtonWithCallback(
+				func() {
+					fmt.Println("tapped text & leading icon button")
+				},
+			),
+		),
 		&widget.Button{
 			Alignment: widget.ButtonAlignLeading,
 			Text:      "Button (leading-aligned, text only)",
@@ -518,7 +543,10 @@ func stopProgress() {
 func widgetScreen(_ fyne.Window) fyne.CanvasObject {
 	content := container.NewVBox(
 		widget.NewLabel(widget.LabelWithStaticText("Labels")),
-		widget.NewButtonWithIcon("Icons", theme.HomeIcon(), func() {}),
+		widget.NewButton(
+			widget.ButtonWithLabel("Icons"),
+			widget.ButtonWithIcon(theme.HomeIcon()),
+		),
 		widget.NewSlider(0, 1))
 	return container.NewCenter(content)
 }

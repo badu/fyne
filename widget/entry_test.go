@@ -1819,7 +1819,7 @@ func TestNewEntryWithData(t *testing.T) {
 
 func TestPasswordEntry_ActionItemSizeAndPlacement(t *testing.T) {
 	e := widget.NewEntry()
-	b := widget.NewButton("", func() {})
+	b := widget.NewButton()
 	b.Icon = theme.CancelIcon()
 	e.ActionItem = b
 	test.TempWidgetRenderer(t, e).Layout(e.MinSize())

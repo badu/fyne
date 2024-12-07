@@ -100,7 +100,7 @@ func TestList_Resize(t *testing.T) {
 			return 0
 		},
 		func() fyne.CanvasObject {
-			return NewButton("", func() {})
+			return NewButton()
 		},
 		func(ListItemID, fyne.CanvasObject) {
 		})

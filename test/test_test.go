@@ -17,7 +17,7 @@ import (
 
 func TestAssertCanvasTappableAt(t *testing.T) {
 	c := test.NewCanvas()
-	b := widget.NewButton("foo", nil)
+	b := widget.NewButton(widget.ButtonWithLabel("foo"))
 	c.SetContent(b)
 	c.Resize(fyne.NewSize(300, 300))
 	b.Resize(fyne.NewSize(100, 100))
