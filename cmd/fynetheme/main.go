@@ -101,9 +101,9 @@ func makeColors() fyne.CanvasObject {
 			return len(colorsFiltered)
 		},
 		func() fyne.CanvasObject {
-			check1 := widget.NewCheck("", nil)
+			check1 := widget.NewCheck()
 			check1.Disable()
-			check2 := widget.NewCheck("", nil)
+			check2 := widget.NewCheck()
 			check2.Disable()
 			return container.NewHBox(
 				widget.NewLabel(widget.LabelWithStaticText("Template")),

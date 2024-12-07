@@ -42,12 +42,19 @@ func windowScreen(_ fyne.Window) fyne.CanvasObject {
 			widget.ButtonWithCallback(
 				func() {
 					w := fyne.CurrentApp().NewWindow("Toggle fixed size")
-					w.SetContent(container.NewCenter(widget.NewCheck("Fixed size", func(toggle bool) {
-						if toggle {
-							w.Resize(fyne.NewSize(240, 180))
-						}
-						w.SetFixedSize(toggle)
-					})))
+					w.SetContent(container.NewCenter(widget.NewCheck(
+						widget.CheckWithLabel("Fixed size"),
+						widget.CheckWithCallback(
+							func(toggle bool) {
+								if toggle {
+									w.Resize(fyne.NewSize(240, 180))
+								}
+								w.SetFixedSize(toggle)
+							},
+						),
+					),
+					),
+					)
 					w.Show()
 				},
 			),

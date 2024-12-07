@@ -13,7 +13,7 @@ import (
 )
 
 func TestCheck_Binding(t *testing.T) {
-	c := widget.NewCheck("", nil)
+	c := widget.NewCheck()
 	c.SetChecked(true)
 	assert.Equal(t, true, c.Checked)
 
@@ -84,7 +84,7 @@ func TestNewCheckWithData(t *testing.T) {
 	err := val.Set(true)
 	assert.Nil(t, err)
 
-	c := widget.NewCheckWithData("", val)
+	c := widget.NewCheck(widget.CheckWithBinded(val))
 	waitForBinding()
 	assert.Equal(t, true, c.Checked)
 

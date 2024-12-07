@@ -74,9 +74,14 @@ func (s *Settings) LoadAppearanceScreen(w fyne.Window) fyne.CanvasObject {
 	scale := s.makeScaleGroup(w.Canvas().Scale())
 	box := container.NewVBox(scale)
 
-	animations := widget.NewCheck("Animate widgets", func(on bool) {
-		s.fyneSettings.DisableAnimations = !on
-	})
+	animations := widget.NewCheck(
+		widget.CheckWithLabel("Animate widgets"),
+		widget.CheckWithCallback(
+			func(on bool) {
+				s.fyneSettings.DisableAnimations = !on
+			},
+		),
+	)
 	animations.Checked = !s.fyneSettings.DisableAnimations
 	for _, c := range theme.PrimaryColorNames() {
 		b := newPrimaryColorButton(c, s)

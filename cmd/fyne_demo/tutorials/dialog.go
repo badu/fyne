@@ -171,9 +171,14 @@ func dialogScreen(win fyne.Window) fyne.CanvasObject {
 						items := []*widget.FormItem{
 							widget.NewFormItem("Username", username),
 							widget.NewFormItem("Password", password),
-							widget.NewFormItem("Remember me", widget.NewCheck("", func(checked bool) {
-								remember = checked
-							})),
+							widget.NewFormItem("Remember me",
+								widget.NewCheck(
+									widget.CheckWithCallback(func(checked bool) {
+										remember = checked
+									},
+									),
+								),
+							),
 						}
 
 						dialog.ShowForm("Login...", "Log In", "Cancel", items, func(b bool) {

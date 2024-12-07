@@ -14,7 +14,7 @@ import (
 )
 
 func TestCheckSize(t *testing.T) {
-	check := NewCheck("Hi", nil)
+	check := NewCheck(CheckWithLabel("Hi"))
 	min := check.MinSize()
 
 	assert.True(t, min.Width > theme.InnerPadding())
@@ -23,9 +23,9 @@ func TestCheckSize(t *testing.T) {
 
 func TestCheckChecked(t *testing.T) {
 	checked := false
-	check := NewCheck("Hi", func(on bool) {
+	check := NewCheck(CheckWithLabel("Hi"), CheckWithCallback(func(on bool) {
 		checked = on
-	})
+	}))
 	test.Tap(check)
 
 	assert.True(t, checked)
@@ -33,9 +33,9 @@ func TestCheckChecked(t *testing.T) {
 
 func TestCheckUnChecked(t *testing.T) {
 	checked := true
-	check := NewCheck("Hi", func(on bool) {
+	check := NewCheck(CheckWithLabel("Hi"), CheckWithCallback(func(on bool) {
 		checked = on
-	})
+	}))
 	check.Checked = checked
 	test.Tap(check)
 
@@ -43,7 +43,7 @@ func TestCheckUnChecked(t *testing.T) {
 }
 
 func TestCheck_DisabledWhenChecked(t *testing.T) {
-	check := NewCheck("Hi", nil)
+	check := NewCheck(CheckWithLabel("Hi"))
 	check.SetChecked(true)
 	render := test.TempWidgetRenderer(t, check).(*checkRenderer)
 
@@ -54,7 +54,7 @@ func TestCheck_DisabledWhenChecked(t *testing.T) {
 }
 
 func TestCheck_DisabledWhenUnchecked(t *testing.T) {
-	check := NewCheck("Hi", nil)
+	check := NewCheck(CheckWithLabel("Hi"))
 	render := test.TempWidgetRenderer(t, check).(*checkRenderer)
 	assert.True(t, strings.HasPrefix(render.icon.Resource.Name(), "inputBorder_"))
 
@@ -64,18 +64,18 @@ func TestCheck_DisabledWhenUnchecked(t *testing.T) {
 
 func TestCheckIsDisabledByDefault(t *testing.T) {
 	checkedStateFromCallback := false
-	NewCheck("", func(on bool) {
+	NewCheck(CheckWithCallback(func(on bool) {
 		checkedStateFromCallback = on
-	})
+	}))
 
 	assert.False(t, checkedStateFromCallback)
 }
 
 func TestCheckIsEnabledAfterUpdating(t *testing.T) {
 	checkedStateFromCallback := false
-	check := NewCheck("", func(on bool) {
+	check := NewCheck(CheckWithCallback(func(on bool) {
 		checkedStateFromCallback = on
-	})
+	}))
 
 	check.SetChecked(true)
 
@@ -84,9 +84,9 @@ func TestCheckIsEnabledAfterUpdating(t *testing.T) {
 
 func TestCheckStateIsCorrectAfterMultipleUpdates(t *testing.T) {
 	checkedStateFromCallback := false
-	check := NewCheck("", func(on bool) {
+	check := NewCheck(CheckWithCallback(func(on bool) {
 		checkedStateFromCallback = on
-	})
+	}))
 
 	expectedCheckedState := false
 	for i := 0; i < 5; i++ {
@@ -99,9 +99,9 @@ func TestCheckStateIsCorrectAfterMultipleUpdates(t *testing.T) {
 
 func TestCheck_Disable(t *testing.T) {
 	checked := false
-	check := NewCheck("Test", func(on bool) {
+	check := NewCheck(CheckWithLabel("Test"), CheckWithCallback(func(on bool) {
 		checked = on
-	})
+	}))
 
 	check.Disable()
 	check.Checked = checked
@@ -111,9 +111,9 @@ func TestCheck_Disable(t *testing.T) {
 
 func TestCheck_Enable(t *testing.T) {
 	checked := false
-	check := NewCheck("Test", func(on bool) {
+	check := NewCheck(CheckWithLabel("Test"), CheckWithCallback(func(on bool) {
 		checked = on
-	})
+	}))
 
 	check.Disable()
 	check.Checked = checked
@@ -126,7 +126,7 @@ func TestCheck_Enable(t *testing.T) {
 }
 
 func TestCheck_Focused(t *testing.T) {
-	check := NewCheck("Test", func(on bool) {})
+	check := NewCheck(CheckWithLabel("Test"))
 	w := test.NewWindow(check)
 	defer w.Close()
 	render := test.TempWidgetRenderer(t, check).(*checkRenderer)
@@ -165,7 +165,7 @@ func TestCheck_Focused(t *testing.T) {
 }
 
 func TestCheck_Hovered(t *testing.T) {
-	check := NewCheck("Test", func(on bool) {})
+	check := NewCheck(CheckWithLabel("Test"))
 	w := test.NewWindow(check)
 	defer w.Close()
 	render := test.TempWidgetRenderer(t, check).(*checkRenderer)
@@ -211,7 +211,7 @@ func TestCheck_Hovered(t *testing.T) {
 }
 
 func TestCheck_HoveredOutsideActiveArea(t *testing.T) {
-	check := NewCheck("Test", func(on bool) {})
+	check := NewCheck(CheckWithLabel("Test"))
 	w := test.NewWindow(check)
 	defer w.Close()
 	render := test.TempWidgetRenderer(t, check).(*checkRenderer)
@@ -229,7 +229,7 @@ func TestCheck_HoveredOutsideActiveArea(t *testing.T) {
 }
 
 func TestCheck_TappedOutsideActiveArea(t *testing.T) {
-	check := NewCheck("Test", func(on bool) {})
+	check := NewCheck(CheckWithLabel("Test"))
 	w := test.NewWindow(check)
 	defer w.Close()
 
@@ -243,7 +243,7 @@ func TestCheck_TappedOutsideActiveArea(t *testing.T) {
 }
 
 func TestCheck_TypedRune(t *testing.T) {
-	check := NewCheck("Test", func(on bool) {})
+	check := NewCheck(CheckWithLabel("Test"))
 	w := test.NewWindow(check)
 	defer w.Close()
 	assert.False(t, check.Checked)
@@ -263,7 +263,7 @@ func TestCheck_TypedRune(t *testing.T) {
 }
 
 func TestCheck_Disabled(t *testing.T) {
-	check := NewCheck("Test", func(bool) {})
+	check := NewCheck(CheckWithLabel("Test"))
 	assert.False(t, check.Disabled())
 	check.Disable()
 	assert.True(t, check.Disabled())

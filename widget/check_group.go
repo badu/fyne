@@ -147,9 +147,14 @@ func (r *CheckGroup) update() {
 	if len(r.items) < len(r.Options) {
 		for i := len(r.items); i < len(r.Options); i++ {
 			var item *Check
-			item = NewCheck(r.Options[i], func(bool) {
-				r.itemTapped(item)
-			})
+			item = NewCheck(
+				CheckWithLabel(r.Options[i]),
+				CheckWithCallback(
+					func(bool) {
+						r.itemTapped(item)
+					},
+				),
+			)
 			r.items = append(r.items, item)
 		}
 	} else if len(r.items) > len(r.Options) {
@@ -237,9 +242,14 @@ func (r *checkGroupRenderer) updateItems() {
 	if len(r.items) < len(r.checks.Options) {
 		for i := len(r.items); i < len(r.checks.Options); i++ {
 			var item *Check
-			item = NewCheck(r.checks.Options[i], func(bool) {
-				r.checks.itemTapped(item)
-			})
+			item = NewCheck(
+				CheckWithLabel(r.checks.Options[i]),
+				CheckWithCallback(
+					func(bool) {
+						r.checks.itemTapped(item)
+					},
+				),
+			)
 			r.SetObjects(append(r.Objects(), item))
 			r.items = append(r.items, item)
 		}

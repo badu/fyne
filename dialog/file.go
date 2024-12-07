@@ -423,10 +423,17 @@ func (f *fileDialog) makeDismissButton(label string) *widget.Button {
 }
 
 func (f *fileDialog) optionsMenu(position fyne.Position, buttonSize fyne.Size) {
-	hiddenFiles := widget.NewCheck(lang.L("Show Hidden Files"), func(changed bool) {
-		f.showHidden = changed
-		f.refreshDir(f.dir)
-	})
+	hiddenFiles := widget.NewCheck(
+		widget.CheckWithLabel(
+			lang.L("Show Hidden Files"),
+		),
+		widget.CheckWithCallback(
+			func(changed bool) {
+				f.showHidden = changed
+				f.refreshDir(f.dir)
+			},
+		),
+	)
 	hiddenFiles.Checked = f.showHidden
 	hiddenFiles.Refresh()
 	content := container.NewVBox(hiddenFiles)

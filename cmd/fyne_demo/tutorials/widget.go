@@ -399,7 +399,7 @@ func makeInputTab(_ fyne.Window) fyne.CanvasObject {
 		"Option Z",
 	})
 	selectEntry.PlaceHolder = "Type or select"
-	disabledCheck := widget.NewCheck("Disabled check", func(bool) {})
+	disabledCheck := widget.NewCheck(widget.CheckWithLabel("Disabled check"))
 	disabledCheck.Disable()
 	checkGroup := widget.NewCheckGroup([]string{"CheckGroup Item 1", "CheckGroup Item 2"}, func(s []string) { fmt.Println("selected", s) })
 	checkGroup.Horizontal = true
@@ -413,7 +413,12 @@ func makeInputTab(_ fyne.Window) fyne.CanvasObject {
 	return container.NewVBox(
 		widget.NewSelect([]string{"Option 1", "Option 2", "Option 3"}, func(s string) { fmt.Println("selected", s) }),
 		selectEntry,
-		widget.NewCheck("Check", func(on bool) { fmt.Println("checked", on) }),
+		widget.NewCheck(
+			widget.CheckWithLabel("Check"),
+			widget.CheckWithCallback(
+				func(on bool) { fmt.Println("checked", on) },
+			),
+		),
 		disabledCheck,
 		checkGroup,
 		radio,

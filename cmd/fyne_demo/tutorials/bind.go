@@ -54,7 +54,7 @@ func bindingScreen(_ fyne.Window) fyne.CanvasObject {
 	)
 
 	boolData := binding.NewBool()
-	check := widget.NewCheckWithData("Check me!", boolData)
+	check := widget.NewCheck(widget.CheckWithLabel("Check me!"), widget.CheckWithBinded(boolData))
 	checkLabel := widget.NewLabel(widget.LabelWithBindedText(binding.BoolToString(boolData)))
 	checkEntry := widget.NewEntryWithData(binding.BoolToString(boolData))
 	checks := container.NewGridWithColumns(3, check, checkLabel, checkEntry)
@@ -120,7 +120,7 @@ func newFormWithData(data binding.DataMap) *widget.Form {
 func createBoundItem(v binding.DataItem) fyne.CanvasObject {
 	switch val := v.(type) {
 	case binding.Bool:
-		return widget.NewCheckWithData("", val)
+		return widget.NewCheck(widget.CheckWithBinded(val))
 	case binding.Float:
 		s := widget.NewSliderWithData(0, 1, val)
 		s.Step = 0.01

@@ -28,25 +28,34 @@ type Check struct {
 	minSize fyne.Size // cached for hover/tap position calculations
 }
 
-// NewCheck creates a new check widget with the set label and change handler
-func NewCheck(label string, changed func(bool)) *Check {
-	c := &Check{
-		Text:      label,
-		OnChanged: changed,
-	}
+type CheckOption func(*Check)
 
-	c.ExtendBaseWidget(c)
-	return c
+func CheckWithLabel(text string) CheckOption {
+	return func(l *Check) {
+		l.Text = text
+	}
 }
 
-// NewCheckWithData returns a check widget connected with the specified data source.
-//
-// Since: 2.0
-func NewCheckWithData(label string, data binding.Bool) *Check {
-	check := NewCheck(label, nil)
-	check.Bind(data)
+func CheckWithBinded(data binding.Bool) CheckOption {
+	return func(l *Check) {
+		l.Bind(data)
+	}
+}
 
-	return check
+func CheckWithCallback(changed func(bool)) CheckOption {
+	return func(l *Check) {
+		l.OnChanged = changed
+	}
+}
+
+// NewCheck creates a new check widget with the set label and change handler
+func NewCheck(options ...CheckOption) *Check {
+	result := &Check{}
+	for _, opt := range options {
+		opt(result)
+	}
+	result.ExtendBaseWidget(result)
+	return result
 }
 
 // Bind connects the specified data source to this Check.
