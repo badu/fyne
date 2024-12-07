@@ -19,7 +19,7 @@ import (
 )
 
 func TestNewSelect(t *testing.T) {
-	combo := widget.NewSelect([]string{"1", "2"}, func(string) {})
+	combo := widget.NewSelect(widget.SelectWithOptions("1", "2"))
 
 	assert.Equal(t, 2, len(combo.Options))
 	assert.Equal(t, "", combo.Selected)
@@ -28,7 +28,7 @@ func TestNewSelect(t *testing.T) {
 func TestSelect_Align(t *testing.T) {
 	test.NewTempApp(t)
 
-	sel := widget.NewSelect([]string{"Hi"}, func(string) {})
+	sel := widget.NewSelect(widget.SelectWithOptions("Hi"))
 	sel.Alignment = fyne.TextAlignCenter
 	w := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{sel}})
 	defer w.Close()
@@ -46,7 +46,7 @@ func TestSelect_Align(t *testing.T) {
 func TestSelect_ChangeTheme(t *testing.T) {
 	test.NewTempApp(t)
 
-	combo := widget.NewSelect([]string{"1", "2"}, func(s string) {})
+	combo := widget.NewSelect(widget.SelectWithOptions("1", "2"))
 	w := test.NewWindow(combo)
 	defer w.Close()
 	w.Resize(fyne.NewSize(220, 220))
@@ -70,7 +70,7 @@ func TestSelect_ClearSelected(t *testing.T) {
 		opt2     = "2"
 		optClear = ""
 	)
-	combo := widget.NewSelect([]string{opt1, opt2}, func(string) {})
+	combo := widget.NewSelect(widget.SelectWithOptions(opt1, opt2))
 	assert.NotEmpty(t, combo.PlaceHolder)
 
 	combo.SetSelected(opt1)
@@ -89,7 +89,7 @@ func TestSelect_ClearSelected(t *testing.T) {
 }
 
 func TestSelect_ClipValue(t *testing.T) {
-	combo := widget.NewSelect([]string{"some text", "more"}, func(string) {})
+	combo := widget.NewSelect(widget.SelectWithOptions("some text", "more"))
 	combo.SetSelected("some text")
 	combo.Resize(fyne.NewSize(90, 38))
 
@@ -106,7 +106,7 @@ func TestSelect_ClipValue(t *testing.T) {
 func TestSelect_Disable(t *testing.T) {
 	test.NewTempApp(t)
 
-	sel := widget.NewSelect([]string{"Hi"}, func(string) {})
+	sel := widget.NewSelect(widget.SelectWithOptions("Hi"))
 	w := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{sel}})
 	defer w.Close()
 	w.Resize(fyne.NewSize(200, 150))
@@ -120,7 +120,7 @@ func TestSelect_Disable(t *testing.T) {
 }
 
 func TestSelect_Disabled(t *testing.T) {
-	sel := widget.NewSelect([]string{"Hi"}, func(string) {})
+	sel := widget.NewSelect(widget.SelectWithOptions("Hi"))
 	assert.False(t, sel.Disabled())
 	sel.Disable()
 	assert.True(t, sel.Disabled())
@@ -130,9 +130,14 @@ func TestSelect_Disabled(t *testing.T) {
 
 func TestSelect_Enable(t *testing.T) {
 	selected := ""
-	sel := widget.NewSelect([]string{"Hi"}, func(sel string) {
-		selected = sel
-	})
+	sel := widget.NewSelect(
+		widget.SelectWithOptions("Hi"),
+		widget.SelectWithCallback(
+			func(sel string) {
+				selected = sel
+			},
+		),
+	)
 	sel.Disable()
 	require.True(t, sel.Disabled())
 
@@ -150,7 +155,7 @@ func TestSelect_FocusRendering(t *testing.T) {
 	test.NewTempApp(t)
 
 	t.Run("gain/lose focus", func(t *testing.T) {
-		sel := widget.NewSelect([]string{"Option A", "Option B", "Option C"}, nil)
+		sel := widget.NewSelect(widget.SelectWithOptions("Option A", "Option B", "Option C"))
 		w := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{sel}})
 		defer w.Close()
 		w.Resize(fyne.NewSize(200, 150))
@@ -171,7 +176,7 @@ func TestSelect_FocusRendering(t *testing.T) {
 		test.AssertRendersToMarkup(t, "select/focus_unfocused_b_selected.xml", c)
 	})
 	t.Run("disable/enable focused", func(t *testing.T) {
-		sel := widget.NewSelect([]string{"Option A", "Option B", "Option C"}, nil)
+		sel := widget.NewSelect(widget.SelectWithOptions("Option A", "Option B", "Option C"))
 		w := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{sel}})
 		defer w.Close()
 		w.Resize(fyne.NewSize(200, 150))
@@ -190,7 +195,7 @@ func TestSelect_KeyboardControl(t *testing.T) {
 	test.NewTempApp(t)
 
 	t.Run("activate pop-up", func(t *testing.T) {
-		sel := widget.NewSelect([]string{"Option A", "Option B"}, nil)
+		sel := widget.NewSelect(widget.SelectWithOptions("Option A", "Option B"))
 		w := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{sel}})
 		defer w.Close()
 		w.Resize(fyne.NewSize(150, 200))
@@ -219,7 +224,7 @@ func TestSelect_KeyboardControl(t *testing.T) {
 	})
 
 	t.Run("traverse options without pop-up", func(t *testing.T) {
-		sel := widget.NewSelect([]string{"Option A", "Option B", "Option C"}, nil)
+		sel := widget.NewSelect(widget.SelectWithOptions("Option A", "Option B", "Option C"))
 		w := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{sel}})
 		defer w.Close()
 		w.Resize(fyne.NewSize(150, 200))
@@ -255,7 +260,7 @@ func TestSelect_KeyboardControl(t *testing.T) {
 	})
 
 	t.Run("trying to traverse empty options without pop-up", func(t *testing.T) {
-		sel := widget.NewSelect([]string{}, nil)
+		sel := widget.NewSelect()
 		w := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{sel}})
 		defer w.Close()
 		w.Resize(fyne.NewSize(150, 200))
@@ -282,7 +287,7 @@ func TestSelect_KeyboardControl(t *testing.T) {
 func TestSelect_Move(t *testing.T) {
 	test.NewTempApp(t)
 
-	combo := widget.NewSelect([]string{"1", "2"}, nil)
+	combo := widget.NewSelect(widget.SelectWithOptions("1", "2"))
 	w := test.NewWindow(combo)
 	defer w.Close()
 	w.Resize(fyne.NewSize(200, 150))
@@ -299,7 +304,7 @@ func TestSelect_Move(t *testing.T) {
 }
 
 func TestSelect_PlaceHolder(t *testing.T) {
-	combo := widget.NewSelect([]string{"1", "2"}, func(string) {})
+	combo := widget.NewSelect(widget.SelectWithOptions("1", "2"))
 	assert.NotEmpty(t, combo.PlaceHolder)
 
 	combo.PlaceHolder = "changed!"
@@ -307,7 +312,7 @@ func TestSelect_PlaceHolder(t *testing.T) {
 }
 
 func TestSelect_SelectedIndex(t *testing.T) {
-	combo := widget.NewSelect([]string{"1", "2"}, func(string) {})
+	combo := widget.NewSelect(widget.SelectWithOptions("1", "2"))
 
 	assert.Equal(t, -1, combo.SelectedIndex())
 
@@ -323,10 +328,15 @@ func TestSelect_SetSelected(t *testing.T) {
 
 	var triggered bool
 	var triggeredValue string
-	combo := widget.NewSelect([]string{"1", "2"}, func(s string) {
-		triggered = true
-		triggeredValue = s
-	})
+	combo := widget.NewSelect(
+		widget.SelectWithOptions("1", "2"),
+		widget.SelectWithCallback(
+			func(s string) {
+				triggered = true
+				triggeredValue = s
+			},
+		),
+	)
 	w := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{combo}})
 	defer w.Close()
 	w.Resize(fyne.NewSize(200, 150))
@@ -342,16 +352,21 @@ func TestSelect_SetSelected(t *testing.T) {
 
 func TestSelect_SetSelected_Callback(t *testing.T) {
 	selected := ""
-	combo := widget.NewSelect([]string{"1", "2"}, func(s string) {
-		selected = s
-	})
+	combo := widget.NewSelect(
+		widget.SelectWithOptions("1", "2"),
+		widget.SelectWithCallback(
+			func(s string) {
+				selected = s
+			},
+		),
+	)
 	combo.SetSelected("2")
 
 	assert.Equal(t, "2", selected)
 }
 
 func TestSelect_SetSelected_Invalid(t *testing.T) {
-	combo := widget.NewSelect([]string{"1", "2"}, func(string) {})
+	combo := widget.NewSelect(widget.SelectWithOptions("1", "2"))
 	combo.SetSelected("3")
 
 	assert.Equal(t, "", combo.Selected)
@@ -359,16 +374,21 @@ func TestSelect_SetSelected_Invalid(t *testing.T) {
 
 func TestSelect_SetSelected_InvalidNoCallback(t *testing.T) {
 	var triggered bool
-	combo := widget.NewSelect([]string{"1", "2"}, func(string) {
-		triggered = true
-	})
+	combo := widget.NewSelect(
+		widget.SelectWithOptions("1", "2"),
+		widget.SelectWithCallback(
+			func(string) {
+				triggered = true
+			},
+		),
+	)
 	combo.SetSelected("")
 
 	assert.False(t, triggered)
 }
 
 func TestSelect_SetSelected_InvalidReplace(t *testing.T) {
-	combo := widget.NewSelect([]string{"1", "2"}, func(string) {})
+	combo := widget.NewSelect(widget.SelectWithOptions("1", "2"))
 	combo.SetSelected("2")
 	combo.SetSelected("3")
 
@@ -377,7 +397,7 @@ func TestSelect_SetSelected_InvalidReplace(t *testing.T) {
 
 func TestSelect_SetSelected_NoChangeOnEmpty(t *testing.T) {
 	var triggered bool
-	combo := widget.NewSelect([]string{"1", "2"}, func(string) { triggered = true })
+	combo := widget.NewSelect(widget.SelectWithOptions("1", "2"), widget.SelectWithCallback(func(string) { triggered = true }))
 	combo.SetSelected("")
 
 	assert.False(t, triggered)
@@ -386,10 +406,15 @@ func TestSelect_SetSelected_NoChangeOnEmpty(t *testing.T) {
 func TestSelect_SetSelectedIndex(t *testing.T) {
 	var triggered bool
 	var triggeredValue string
-	combo := widget.NewSelect([]string{"1", "2"}, func(s string) {
-		triggered = true
-		triggeredValue = s
-	})
+	combo := widget.NewSelect(
+		widget.SelectWithOptions("1", "2"),
+		widget.SelectWithCallback(
+			func(s string) {
+				triggered = true
+				triggeredValue = s
+			},
+		),
+	)
 	combo.SetSelectedIndex(1)
 
 	assert.Equal(t, "2", combo.Selected)
@@ -399,9 +424,14 @@ func TestSelect_SetSelectedIndex(t *testing.T) {
 
 func TestSelect_SetSelectedIndex_Invalid(t *testing.T) {
 	var triggered bool
-	combo := widget.NewSelect([]string{"1", "2"}, func(s string) {
-		triggered = true
-	})
+	combo := widget.NewSelect(
+		widget.SelectWithOptions("1", "2"),
+		widget.SelectWithCallback(
+			func(s string) {
+				triggered = true
+			},
+		),
+	)
 	combo.SetSelectedIndex(-1)
 	assert.Equal(t, -1, combo.SelectedIndex())
 	assert.False(t, triggered)
@@ -413,7 +443,7 @@ func TestSelect_SetSelectedIndex_Invalid(t *testing.T) {
 func TestSelect_Tapped(t *testing.T) {
 	test.NewTempApp(t)
 
-	combo := widget.NewSelect([]string{"1", "2"}, func(s string) {})
+	combo := widget.NewSelect(widget.SelectWithOptions("1", "2"))
 	w := test.NewWindow(combo)
 	defer w.Close()
 	w.Resize(fyne.NewSize(200, 150))
@@ -428,7 +458,7 @@ func TestSelect_Tapped(t *testing.T) {
 func TestSelect_Tapped_Constrained(t *testing.T) {
 	test.NewTempApp(t)
 
-	combo := widget.NewSelect([]string{"1", "2"}, func(s string) {})
+	combo := widget.NewSelect(widget.SelectWithOptions("1", "2"))
 	w := test.NewWindow(combo)
 	defer w.Close()
 	w.Resize(fyne.NewSize(200, 150))

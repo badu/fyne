@@ -10,7 +10,7 @@ import (
 )
 
 func TestSelect_SetOptions(t *testing.T) {
-	sel := NewSelect([]string{"10", "11", "12"}, func(s string) {})
+	sel := NewSelect(SelectWithOptions("10", "11", "12"))
 	test.Tap(sel)
 
 	assert.NotNil(t, sel.popUp)
@@ -39,7 +39,7 @@ func TestSelectRenderer_TapAnimation(t *testing.T) {
 	test.NewTempApp(t)
 
 	test.ApplyTheme(t, test.NewTheme())
-	sel := NewSelect([]string{"one"}, func(s string) {})
+	sel := NewSelect(SelectWithOptions("one"))
 	w := test.NewWindow(sel)
 	defer w.Close()
 	w.Resize(sel.MinSize().Add(fyne.NewSize(10, 10)))

@@ -16,13 +16,13 @@ import (
 )
 
 func TestRadioGroup_MinSize(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi"}, nil)
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi"))
 	min := radio.MinSize()
 
 	assert.True(t, min.Width > theme.InnerPadding())
 	assert.True(t, min.Height > theme.InnerPadding())
 
-	radio2 := NewRadioGroup([]string{"Hi", "H"}, nil)
+	radio2 := NewRadioGroup(RadiogroupWithOptions("Hi", "H"))
 	min2 := radio2.MinSize()
 
 	assert.Equal(t, min.Width, min2.Width)
@@ -30,10 +30,10 @@ func TestRadioGroup_MinSize(t *testing.T) {
 }
 
 func TestRadioGroup_MinSize_Horizontal(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi"}, nil)
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi"))
 	min := radio.MinSize()
 
-	radio2 := NewRadioGroup([]string{"Hi", "He"}, nil)
+	radio2 := NewRadioGroup(RadiogroupWithOptions("Hi", "He"))
 	radio2.Horizontal = true
 	min2 := radio2.MinSize()
 
@@ -43,9 +43,14 @@ func TestRadioGroup_MinSize_Horizontal(t *testing.T) {
 
 func TestRadioGroup_Selected(t *testing.T) {
 	selected := ""
-	radio := NewRadioGroup([]string{"Hi"}, func(sel string) {
-		selected = sel
-	})
+	radio := NewRadioGroup(
+		RadiogroupWithOptions("Hi"),
+		RadiogroupWithCallback(
+			func(sel string) {
+				selected = sel
+			},
+		),
+	)
 	radioGroupTestTapItem(t, radio, 0)
 
 	assert.Equal(t, "Hi", selected)
@@ -53,9 +58,14 @@ func TestRadioGroup_Selected(t *testing.T) {
 
 func TestRadioGroup_Unselected(t *testing.T) {
 	selected := "Hi"
-	radio := NewRadioGroup([]string{"Hi"}, func(sel string) {
-		selected = sel
-	})
+	radio := NewRadioGroup(
+		RadiogroupWithOptions("Hi"),
+		RadiogroupWithCallback(
+			func(sel string) {
+				selected = sel
+			},
+		),
+	)
 	radio.Selected = selected
 	radioGroupTestTapItem(t, radio, 0)
 
@@ -63,7 +73,7 @@ func TestRadioGroup_Unselected(t *testing.T) {
 }
 
 func TestRadioGroup_DisableWhenSelected(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi"}, nil)
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi"))
 	radio.SetSelected("Hi")
 	render := radioGroupTestItemRenderer(t, radio, 0)
 	assert.True(t, strings.HasPrefix(render.icon.Resource.Name(), "primary_"))
@@ -73,7 +83,7 @@ func TestRadioGroup_DisableWhenSelected(t *testing.T) {
 }
 
 func TestRadioGroup_DisableWhenNotSelected(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi"}, nil)
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi"))
 	render := radioGroupTestItemRenderer(t, radio, 0)
 
 	radio.Disable()
@@ -83,16 +93,21 @@ func TestRadioGroup_DisableWhenNotSelected(t *testing.T) {
 
 func TestRadioGroup_SelectedOther(t *testing.T) {
 	selected := "Hi"
-	radio := NewRadioGroup([]string{"Hi", "Hi2"}, func(sel string) {
-		selected = sel
-	})
+	radio := NewRadioGroup(
+		RadiogroupWithOptions("Hi", "Hi2"),
+		RadiogroupWithCallback(
+			func(sel string) {
+				selected = sel
+			},
+		),
+	)
 	radioGroupTestTapItem(t, radio, 1)
 
 	assert.Equal(t, "Hi2", selected)
 }
 
 func TestRadioGroup_Append(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi"}, nil)
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi"))
 
 	assert.Equal(t, 1, len(radio.Options))
 	assert.Equal(t, 1, len(test.TempWidgetRenderer(t, radio).(*radioGroupRenderer).items))
@@ -105,7 +120,7 @@ func TestRadioGroup_Append(t *testing.T) {
 }
 
 func TestRadioGroup_Remove(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi", "Another"}, nil)
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi", "Another"))
 
 	assert.Equal(t, 2, len(radio.Options))
 	assert.Equal(t, 2, len(test.TempWidgetRenderer(t, radio).(*radioGroupRenderer).items))
@@ -120,9 +135,14 @@ func TestRadioGroup_Remove(t *testing.T) {
 func TestRadioGroup_SetSelected(t *testing.T) {
 	changed := false
 
-	radio := NewRadioGroup([]string{"Hi", "Another"}, func(_ string) {
-		changed = true
-	})
+	radio := NewRadioGroup(
+		RadiogroupWithOptions("Hi", "Another"),
+		RadiogroupWithCallback(
+			func(_ string) {
+				changed = true
+			},
+		),
+	)
 
 	radio.SetSelected("Another")
 
@@ -131,7 +151,7 @@ func TestRadioGroup_SetSelected(t *testing.T) {
 }
 
 func TestRadioGroup_SetSelectedWithSameOption(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi", "Another"}, nil)
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi", "Another"))
 
 	radio.Selected = "Another"
 	radio.Refresh()
@@ -142,7 +162,7 @@ func TestRadioGroup_SetSelectedWithSameOption(t *testing.T) {
 }
 
 func TestRadioGroup_SetSelectedEmpty(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi", "Another"}, nil)
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi", "Another"))
 
 	radio.Selected = "Another"
 	radio.Refresh()
@@ -153,7 +173,7 @@ func TestRadioGroup_SetSelectedEmpty(t *testing.T) {
 }
 
 func TestRadioGroup_DuplicatedOptions(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi", "Hi", "Hi", "Another", "Another"}, nil)
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi", "Hi", "Hi", "Another", "Another"))
 
 	assert.Equal(t, 5, len(radio.Options))
 	assert.Equal(t, 5, len(test.TempWidgetRenderer(t, radio).(*radioGroupRenderer).items))
@@ -168,7 +188,7 @@ func TestRadioGroup_DuplicatedOptions(t *testing.T) {
 }
 
 func TestRadioGroup_AppendDuplicate(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi"}, nil)
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi"))
 
 	radio.Append("Hi")
 
@@ -178,9 +198,14 @@ func TestRadioGroup_AppendDuplicate(t *testing.T) {
 
 func TestRadioGroup_Disable(t *testing.T) {
 	selected := ""
-	radio := NewRadioGroup([]string{"Hi"}, func(sel string) {
-		selected = sel
-	})
+	radio := NewRadioGroup(
+		RadiogroupWithOptions("Hi"),
+		RadiogroupWithCallback(
+			func(sel string) {
+				selected = sel
+			},
+		),
+	)
 
 	radio.Disable()
 	radioGroupTestTapItem(t, radio, 0)
@@ -190,9 +215,14 @@ func TestRadioGroup_Disable(t *testing.T) {
 
 func TestRadioGroup_Enable(t *testing.T) {
 	selected := ""
-	radio := NewRadioGroup([]string{"Hi"}, func(sel string) {
-		selected = sel
-	})
+	radio := NewRadioGroup(
+		RadiogroupWithOptions("Hi"),
+		RadiogroupWithCallback(
+			func(sel string) {
+				selected = sel
+			},
+		),
+	)
 
 	radio.Disable()
 	radioGroupTestTapItem(t, radio, 0)
@@ -204,7 +234,7 @@ func TestRadioGroup_Enable(t *testing.T) {
 }
 
 func TestRadioGroup_Disabled(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi"}, func(string) {})
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi"))
 	assert.False(t, radio.Disabled())
 	radio.Disable()
 	assert.True(t, radio.Disabled())
@@ -233,7 +263,7 @@ func TestRadioGroup_Hovered(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			radio := NewRadioGroup(tt.options, nil)
+			radio := NewRadioGroup(RadiogroupWithOptions(tt.options...))
 			radio.Horizontal = tt.isHorizontal
 			item1 := test.TempWidgetRenderer(t, radio).Objects()[0].(*radioItem)
 			render1 := radioGroupTestItemRenderer(t, radio, 0)
@@ -269,12 +299,12 @@ func TestRadioGroup_Hovered(t *testing.T) {
 }
 
 func TestRadioGroup_Required(t *testing.T) {
-	radio := NewRadioGroup([]string{"Hi", "There"}, func(string) {})
+	radio := NewRadioGroup(RadiogroupWithOptions("Hi", "There"))
 	radio.Required = true
 	assert.True(t, radio.Required)
 	assert.Equal(t, "", radio.Selected, "the developer should select the default value if “none” is not wanted")
 
-	radio = NewRadioGroup([]string{"Hi", "There"}, func(string) {})
+	radio = NewRadioGroup(RadiogroupWithOptions("Hi", "There"))
 	radio.SetSelected("There")
 	radio.Required = true
 	assert.True(t, radio.Required)
@@ -284,7 +314,7 @@ func TestRadioGroup_Required(t *testing.T) {
 	assert.True(t, radio.Required)
 	assert.Equal(t, "", radio.Selected, "the developer should select the default value if “none” is not wanted")
 
-	radio = NewRadioGroup([]string{"Hi", "There"}, func(string) {})
+	radio = NewRadioGroup(RadiogroupWithOptions("Hi", "There"))
 	radio.Required = true
 	radio.Resize(radio.MinSize())
 	radio.SetSelected("Hi")
@@ -296,7 +326,7 @@ func TestRadioGroup_Required(t *testing.T) {
 }
 
 func TestRadioGroupRenderer_ApplyTheme(t *testing.T) {
-	radio := NewRadioGroup([]string{"Test"}, func(string) {})
+	radio := NewRadioGroup(RadiogroupWithOptions("Test"))
 	render := radioGroupTestItemRenderer(t, radio, 0)
 
 	textSize := render.label.TextSize

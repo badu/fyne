@@ -13,7 +13,7 @@ import (
 
 func TestRadioGroup_FocusRendering(t *testing.T) {
 	t.Run("gain/lose focus", func(t *testing.T) {
-		radio := widget.NewRadioGroup([]string{"Option A", "Option B", "Option C"}, nil)
+		radio := widget.NewRadioGroup(widget.RadiogroupWithOptions("Option A", "Option B", "Option C"))
 		window := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{radio}})
 		defer window.Close()
 		window.Resize(radio.MinSize().Max(fyne.NewSize(150, 200)))

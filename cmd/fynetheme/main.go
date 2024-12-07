@@ -175,10 +175,15 @@ func makeColors() fyne.CanvasObject {
 		currentSearch = s
 		updateColorsFiltered()
 	}
-	transparency := widget.NewSelect([]string{"All", "Transparent", "Opaque"}, func(s string) {
-		currentSelection = s
-		updateColorsFiltered()
-	})
+	transparency := widget.NewSelect(
+		widget.SelectWithOptions("All", "Transparent", "Opaque"),
+		widget.SelectWithCallback(
+			func(s string) {
+				currentSelection = s
+				updateColorsFiltered()
+			},
+		),
+	)
 	return container.NewBorder(
 		container.NewBorder(nil, nil, nil, transparency, search),
 		nil,
@@ -451,10 +456,15 @@ func makeIcons() fyne.CanvasObject {
 	}
 	slider.SetValue(float64(iconSize))
 	sliderBox := container.NewBorder(nil, nil, widget.NewLabel(widget.LabelWithStaticText("Size")), nil, slider)
-	themeSelect := widget.NewSelect(iconColors, func(s string) {
-		iconColor = s
-		grid.Refresh()
-	})
+	themeSelect := widget.NewSelect(
+		widget.SelectWithOptions(iconColors...),
+		widget.SelectWithCallback(
+			func(s string) {
+				iconColor = s
+				grid.Refresh()
+			},
+		),
+	)
 	themeSelect.SetSelected("Default")
 	themeBox := container.NewHBox(widget.NewLabel(widget.LabelWithStaticText("Color")), themeSelect)
 	return container.NewBorder(

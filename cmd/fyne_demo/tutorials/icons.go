@@ -55,16 +55,21 @@ func iconScreen(_ fyne.Window) fyne.CanvasObject {
 			},
 		),
 	)
-	b.name = widget.NewSelect(iconList(b.icons), func(name string) {
-		for i, icon := range b.icons {
-			if icon.name == name {
-				if b.current != i {
-					b.setIcon(i)
+	b.name = widget.NewSelect(
+		widget.SelectWithOptions(iconList(b.icons)...),
+		widget.SelectWithCallback(
+			func(name string) {
+				for i, icon := range b.icons {
+					if icon.name == name {
+						if b.current != i {
+							b.setIcon(i)
+						}
+						break
+					}
 				}
-				break
-			}
-		}
-	})
+			},
+		),
+	)
 	b.name.SetSelected(b.icons[b.current].name)
 	buttons := container.NewHBox(prev, next)
 	bar := container.NewBorder(nil, nil, buttons, nil, b.name)

@@ -192,7 +192,7 @@ func makeCardTab(_ fyne.Window) fyne.CanvasObject {
 		widget.CardWithTitle("Book a table"),
 		widget.CardWithSubtitle("Which time suits?"),
 		widget.CardWithContent(
-			widget.NewRadioGroup([]string{"6:30pm", "7:00pm", "7:45pm"}, func(string) {}),
+			widget.NewRadioGroup(widget.RadiogroupWithOptions("6:30pm", "7:00pm", "7:45pm")),
 		),
 	)
 	card2 := widget.NewCard(
@@ -289,83 +289,98 @@ This styled row should also wrap as expected, but only *when required*.
 	rich.Scroll = container.ScrollBoth
 	rich.Segments[2].(*widget.ImageSegment).Alignment = fyne.TextAlignTrailing
 
-	radioAlign := widget.NewRadioGroup([]string{"Leading", "Center", "Trailing"}, func(s string) {
-		var align fyne.TextAlign
-		switch s {
-		case "Leading":
-			align = fyne.TextAlignLeading
-		case "Center":
-			align = fyne.TextAlignCenter
-		case "Trailing":
-			align = fyne.TextAlignTrailing
-		}
+	radioAlign := widget.NewRadioGroup(
+		widget.RadiogroupWithOptions("Leading", "Center", "Trailing"),
+		widget.RadiogroupWithCallback(
+			func(s string) {
+				var align fyne.TextAlign
+				switch s {
+				case "Leading":
+					align = fyne.TextAlignLeading
+				case "Center":
+					align = fyne.TextAlignCenter
+				case "Trailing":
+					align = fyne.TextAlignTrailing
+				}
 
-		label.Alignment = align
-		hyperlink.Alignment = align
-		for i := range rich.Segments {
-			if seg, ok := rich.Segments[i].(*widget.TextSegment); ok {
-				seg.Style.Alignment = align
-			}
-			if seg, ok := rich.Segments[i].(*widget.HyperlinkSegment); ok {
-				seg.Alignment = align
-			}
-		}
+				label.Alignment = align
+				hyperlink.Alignment = align
+				for i := range rich.Segments {
+					if seg, ok := rich.Segments[i].(*widget.TextSegment); ok {
+						seg.Style.Alignment = align
+					}
+					if seg, ok := rich.Segments[i].(*widget.HyperlinkSegment); ok {
+						seg.Alignment = align
+					}
+				}
 
-		label.Refresh()
-		hyperlink.Refresh()
-		rich.Refresh()
-	})
+				label.Refresh()
+				hyperlink.Refresh()
+				rich.Refresh()
+			},
+		),
+	)
 	radioAlign.Horizontal = true
 	radioAlign.SetSelected("Leading")
 
-	radioWrap := widget.NewRadioGroup([]string{"Off", "Scroll", "Break", "Word"}, func(s string) {
-		var wrap fyne.TextWrap
-		scroll := container.ScrollBoth
-		switch s {
-		case "Off":
-			wrap = fyne.TextWrapOff
-			scroll = container.ScrollNone
-		case "Scroll":
-			wrap = fyne.TextWrapOff
-		case "Break":
-			wrap = fyne.TextWrapBreak
-		case "Word":
-			wrap = fyne.TextWrapWord
-		}
+	radioWrap := widget.NewRadioGroup(
+		widget.RadiogroupWithOptions("Off", "Scroll", "Break", "Word"),
+		widget.RadiogroupWithCallback(
+			func(s string) {
+				var wrap fyne.TextWrap
+				scroll := container.ScrollBoth
+				switch s {
+				case "Off":
+					wrap = fyne.TextWrapOff
+					scroll = container.ScrollNone
+				case "Scroll":
+					wrap = fyne.TextWrapOff
+				case "Break":
+					wrap = fyne.TextWrapBreak
+				case "Word":
+					wrap = fyne.TextWrapWord
+				}
 
-		label.Wrapping = wrap
-		hyperlink.Wrapping = wrap
-		entryLoremIpsum.Wrapping = wrap
-		entryLoremIpsum.Scroll = scroll
-		rich.Wrapping = wrap
+				label.Wrapping = wrap
+				hyperlink.Wrapping = wrap
+				entryLoremIpsum.Wrapping = wrap
+				entryLoremIpsum.Scroll = scroll
+				rich.Wrapping = wrap
 
-		label.Refresh()
-		hyperlink.Refresh()
-		entryLoremIpsum.Refresh()
-		rich.Refresh()
-	})
+				label.Refresh()
+				hyperlink.Refresh()
+				entryLoremIpsum.Refresh()
+				rich.Refresh()
+			},
+		),
+	)
 	radioWrap.Horizontal = true
 	radioWrap.SetSelected("Word")
 
-	radioTrunc := widget.NewRadioGroup([]string{"Off", "Clip", "Ellipsis"}, func(s string) {
-		var trunc fyne.TextTruncation
-		switch s {
-		case "Off":
-			trunc = fyne.TextTruncateOff
-		case "Clip":
-			trunc = fyne.TextTruncateClip
-		case "Ellipsis":
-			trunc = fyne.TextTruncateEllipsis
-		}
+	radioTrunc := widget.NewRadioGroup(
+		widget.RadiogroupWithOptions("Off", "Clip", "Ellipsis"),
+		widget.RadiogroupWithCallback(
+			func(s string) {
+				var trunc fyne.TextTruncation
+				switch s {
+				case "Off":
+					trunc = fyne.TextTruncateOff
+				case "Clip":
+					trunc = fyne.TextTruncateClip
+				case "Ellipsis":
+					trunc = fyne.TextTruncateEllipsis
+				}
 
-		label.Truncation = trunc
-		rich.Truncation = trunc
+				label.Truncation = trunc
+				rich.Truncation = trunc
 
-		label.Refresh()
-		hyperlink.Refresh()
-		entryLoremIpsum.Refresh()
-		rich.Refresh()
-	})
+				label.Refresh()
+				hyperlink.Refresh()
+				entryLoremIpsum.Refresh()
+				rich.Refresh()
+			},
+		),
+	)
 	radioTrunc.Horizontal = true
 	radioTrunc.SetSelected("Off")
 
@@ -417,15 +432,17 @@ func makeInputTab(_ fyne.Window) fyne.CanvasObject {
 	disabledCheck.Disable()
 	checkGroup := widget.NewCheckGroup([]string{"CheckGroup Item 1", "CheckGroup Item 2"}, func(s []string) { fmt.Println("selected", s) })
 	checkGroup.Horizontal = true
-	radio := widget.NewRadioGroup([]string{"Radio Item 1", "Radio Item 2"}, func(s string) { fmt.Println("selected", s) })
+	radio := widget.NewRadioGroup(widget.RadiogroupWithOptions("Radio Item 1", "Radio Item 2"), widget.RadiogroupWithCallback(func(s string) { fmt.Println("selected", s) }))
 	radio.Horizontal = true
-	disabledRadio := widget.NewRadioGroup([]string{"Disabled radio"}, func(string) {})
+	disabledRadio := widget.NewRadioGroup(widget.RadiogroupWithOptions("Disabled radio"))
 	disabledRadio.Disable()
 
 	disabledSlider := widget.NewSlider(0, 1000)
 	disabledSlider.Disable()
 	return container.NewVBox(
-		widget.NewSelect([]string{"Option 1", "Option 2", "Option 3"}, func(s string) { fmt.Println("selected", s) }),
+		widget.NewSelect(
+			widget.SelectWithOptions("Option 1", "Option 2", "Option 3"),
+			widget.SelectWithCallback(func(s string) { fmt.Println("selected", s) })),
 		selectEntry,
 		widget.NewCheck(
 			widget.CheckWithLabel("Check"),
@@ -473,7 +490,7 @@ func makeFormTab(_ fyne.Window) fyne.CanvasObject {
 	password := widget.NewEntry(widget.EntryWithPassword())
 	password.SetPlaceHolder("Password")
 
-	disabled := widget.NewRadioGroup([]string{"Option 1", "Option 2"}, func(string) {})
+	disabled := widget.NewRadioGroup(widget.RadiogroupWithOptions("Option 1", "Option 2"))
 	disabled.Horizontal = true
 	disabled.Disable()
 	largeText := widget.NewEntry(widget.EntryWithMultiline())

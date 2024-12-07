@@ -192,14 +192,19 @@ func makeSplitTab(_ fyne.Window) fyne.CanvasObject {
 }
 
 func makeTabLocationSelect(callback func(container.TabLocation)) *widget.Select {
-	locations := widget.NewSelect([]string{"Top", "Bottom", "Leading", "Trailing"}, func(s string) {
-		callback(map[string]container.TabLocation{
-			"Top":      container.TabLocationTop,
-			"Bottom":   container.TabLocationBottom,
-			"Leading":  container.TabLocationLeading,
-			"Trailing": container.TabLocationTrailing,
-		}[s])
-	})
+	locations := widget.NewSelect(
+		widget.SelectWithOptions("Top", "Bottom", "Leading", "Trailing"),
+		widget.SelectWithCallback(
+			func(s string) {
+				callback(map[string]container.TabLocation{
+					"Top":      container.TabLocationTop,
+					"Bottom":   container.TabLocationBottom,
+					"Leading":  container.TabLocationLeading,
+					"Trailing": container.TabLocationTrailing,
+				}[s])
+			},
+		),
+	)
 	locations.SetSelected("Top")
 	return locations
 }

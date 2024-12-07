@@ -24,16 +24,32 @@ type RadioGroup struct {
 	_selIdx int
 }
 
+type RadioGroupOption func(group *RadioGroup)
+
+func RadiogroupWithOptions(options ...string) RadioGroupOption {
+	return func(r *RadioGroup) {
+		for _, o := range options {
+			r.Options = append(r.Options, o)
+		}
+	}
+}
+
+func RadiogroupWithCallback(changed func(string)) RadioGroupOption {
+	return func(r *RadioGroup) {
+		r.OnChanged = changed
+	}
+}
+
 // NewRadioGroup creates a new radio group widget with the set options and change handler
 //
 // Since: 1.4
-func NewRadioGroup(options []string, changed func(string)) *RadioGroup {
-	r := &RadioGroup{
-		Options:   options,
-		OnChanged: changed,
+func NewRadioGroup(options ...RadioGroupOption) *RadioGroup {
+	result := &RadioGroup{}
+	for _, opt := range options {
+		opt(result)
 	}
-	r.ExtendBaseWidget(r)
-	return r
+	result.ExtendBaseWidget(result)
+	return result
 }
 
 // Append adds a new option to the end of a RadioGroup widget.

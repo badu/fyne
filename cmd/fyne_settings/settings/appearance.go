@@ -68,7 +68,7 @@ func (s *Settings) LoadAppearanceScreen(w fyne.Window) fyne.CanvasObject {
 			def = themeNameSystemLabel
 		}
 	}
-	themes := widget.NewSelect(themeNames, s.chooseTheme)
+	themes := widget.NewSelect(widget.SelectWithOptions(themeNames...), widget.SelectWithCallback(s.chooseTheme))
 	themes.SetSelected(def)
 
 	scale := s.makeScaleGroup(w.Canvas().Scale())

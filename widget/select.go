@@ -30,15 +30,36 @@ type Select struct {
 	tapAnim *fyne.Animation
 }
 
-// NewSelect creates a new select widget with the set list of options and changes handler
-func NewSelect(options []string, changed func(string)) *Select {
-	s := &Select{
-		OnChanged:   changed,
-		Options:     options,
-		PlaceHolder: defaultPlaceHolder,
+type SelectOption func(group *Select)
+
+func SelectWithOptions(options ...string) SelectOption {
+	return func(r *Select) {
+		for _, o := range options {
+			r.Options = append(r.Options, o)
+		}
 	}
-	s.ExtendBaseWidget(s)
-	return s
+}
+
+func SelectWithCallback(changed func(string)) SelectOption {
+	return func(r *Select) {
+		r.OnChanged = changed
+	}
+}
+
+func SelectWithPlaceholder(placeholder string) SelectOption {
+	return func(r *Select) {
+		r.PlaceHolder = placeholder
+	}
+}
+
+// NewSelect creates a new select widget with the set list of options and changes handler
+func NewSelect(options ...SelectOption) *Select {
+	result := &Select{PlaceHolder: defaultPlaceHolder}
+	for _, opt := range options {
+		opt(result)
+	}
+	result.ExtendBaseWidget(result)
+	return result
 }
 
 // ClearSelected clears the current option of the select widget.  After
