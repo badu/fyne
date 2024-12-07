@@ -79,17 +79,25 @@ func setupList(t *testing.T) (*widget.List, fyne.Window, []*resizeRefreshCountin
 	var rows []*resizeRefreshCountingLabel
 	test.NewTempApp(t)
 	list := widget.NewList(
-		func() int {
-			return 25
-		},
-		func() fyne.CanvasObject {
-			row := newResizeRefreshCountingLabel("Test Item 55")
-			rows = append(rows, row)
-			return row
-		},
-		func(id widget.ListItemID, o fyne.CanvasObject) {
-			o.(*resizeRefreshCountingLabel).SetText(fmt.Sprintf("Test Item %d", id))
-		})
+		widget.ListWithLengthFn(
+			func() int {
+				return 25
+			},
+		),
+		widget.ListWithCreateItemFn(
+			func() fyne.CanvasObject {
+				row := newResizeRefreshCountingLabel("Test Item 55")
+				rows = append(rows, row)
+				return row
+			},
+		),
+		widget.ListWithUpdateItemFn(
+			func(id widget.ListItemID, o fyne.CanvasObject) {
+				o.(*resizeRefreshCountingLabel).SetText(fmt.Sprintf("Test Item %d", id))
+			},
+		),
+	)
+
 	w := test.NewTempWindow(t, list)
 	w.SetPadded(false)
 	w.Resize(fyne.NewSize(200, 200))

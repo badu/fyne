@@ -235,7 +235,7 @@ func TestWindow_Cursor(t *testing.T) {
 	w := createWindow("Test").(*window)
 	e := widget.NewEntry()
 	u, _ := url.Parse("https://testing.fyne")
-	h := widget.NewHyperlink("Testing", u)
+	h := widget.NewHyperlink(widget.HyperlinkWithLabel("Testing"), widget.HyperlinkWithURL(u))
 	b := widget.NewButton(widget.ButtonWithLabel("Test"))
 
 	w.SetContent(container.NewVBox(e, h, b))
@@ -308,9 +308,12 @@ func TestWindow_HandleOutsideHoverableObject(t *testing.T) {
 	w := createWindow("Test").(*window)
 	test.ApplyTheme(t, internalTest.DarkTheme(theme.DefaultTheme()))
 	l := widget.NewList(
-		func() int { return 2 },
-		func() fyne.CanvasObject { return widget.NewEntry() },
-		func(lii widget.ListItemID, co fyne.CanvasObject) {},
+		widget.ListWithLengthFn(
+			func() int { return 2 },
+		),
+		widget.ListWithCreateItemFn(
+			func() fyne.CanvasObject { return widget.NewEntry() },
+		),
 	)
 	l.Resize(fyne.NewSize(200, 300))
 	w.SetContent(l)

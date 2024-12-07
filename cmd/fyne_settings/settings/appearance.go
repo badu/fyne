@@ -93,7 +93,7 @@ func (s *Settings) LoadAppearanceScreen(w fyne.Window) fyne.CanvasObject {
 		widget.NewFormItem("Main Color", swatch),
 		widget.NewFormItem("Theme", themes))
 
-	box.Add(widget.NewCard("Appearance", "", appearance))
+	box.Add(widget.NewCard(widget.CardWithTitle("Appearance"), widget.CardWithContent(appearance)))
 	bottom := container.NewHBox(layout.NewSpacer(),
 		&widget.Button{Text: "Apply", Importance: widget.HighImportance, OnTapped: func() {
 			if s.fyneSettings.Scale == 0.0 {

@@ -71,22 +71,28 @@ func bindingScreen(_ fyne.Window) fyne.CanvasObject {
 		),
 	)
 
-	list := widget.NewListWithData(dataList,
-		func() fyne.CanvasObject {
-			return container.NewBorder(nil, nil, nil, widget.NewButton(widget.ButtonWithLabel("+")),
-				widget.NewLabel(widget.LabelWithStaticText("item x.y")))
-		},
-		func(item binding.DataItem, obj fyne.CanvasObject) {
-			f := item.(binding.Float)
-			text := obj.(*fyne.Container).Objects[0].(*widget.Label)
-			text.Bind(binding.FloatToStringWithFormat(f, "item %0.1f"))
+	list := widget.NewList(
+		widget.ListWithCreateItemFn(
+			func() fyne.CanvasObject {
+				return container.NewBorder(nil, nil, nil, widget.NewButton(widget.ButtonWithLabel("+")),
+					widget.NewLabel(widget.LabelWithStaticText("item x.y")))
+			},
+		),
+		widget.ListWithBinded(
+			dataList,
+			func(item binding.DataItem, obj fyne.CanvasObject) {
+				f := item.(binding.Float)
+				text := obj.(*fyne.Container).Objects[0].(*widget.Label)
+				text.Bind(binding.FloatToStringWithFormat(f, "item %0.1f"))
 
-			btn := obj.(*fyne.Container).Objects[1].(*widget.Button)
-			btn.OnTapped = func() {
-				val, _ := f.Get()
-				_ = f.Set(val + 1)
-			}
-		})
+				btn := obj.(*fyne.Container).Objects[1].(*widget.Button)
+				btn.OnTapped = func() {
+					val, _ := f.Get()
+					_ = f.Set(val + 1)
+				}
+			},
+		),
+	)
 
 	formStruct := struct {
 		Name, Email string

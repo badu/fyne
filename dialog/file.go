@@ -238,16 +238,22 @@ func (f *fileDialog) makeUI() fyne.CanvasObject {
 	f.loadFavorites()
 
 	f.favoritesList = widget.NewList(
-		func() int {
-			return len(f.favorites)
-		},
-		func() fyne.CanvasObject {
-			return container.NewHBox(container.New(&iconPaddingLayout{}, widget.NewIcon(theme.DocumentIcon())), widget.NewLabel(widget.LabelWithStaticText("Template Object")))
-		},
-		func(id widget.ListItemID, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Icon).SetResource(f.favorites[id].locIcon)
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(f.favorites[id].locName)
-		},
+		widget.ListWithLengthFn(
+			func() int {
+				return len(f.favorites)
+			},
+		),
+		widget.ListWithCreateItemFn(
+			func() fyne.CanvasObject {
+				return container.NewHBox(container.New(&iconPaddingLayout{}, widget.NewIcon(theme.DocumentIcon())), widget.NewLabel(widget.LabelWithStaticText("Template Object")))
+			},
+		),
+		widget.ListWithUpdateItemFn(
+			func(id widget.ListItemID, item fyne.CanvasObject) {
+				item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Icon).SetResource(f.favorites[id].locIcon)
+				item.(*fyne.Container).Objects[1].(*widget.Label).SetText(f.favorites[id].locName)
+			},
+		),
 	)
 	f.favoritesList.OnSelected = func(id widget.ListItemID) {
 		f.setLocation(f.favorites[id].loc)
@@ -657,13 +663,17 @@ func (f *fileDialog) setView(view ViewLayout) {
 	// Actually, during the real interaction, the OnSelected won't be called.
 	// It will be called only when we directly calls container.select(i)
 	if f.view == GridView {
-		grid := widget.NewGridWrap(count, template, update)
+		grid := widget.NewGridWrap(
+			widget.GridWrapWithLengthFn(count),
+			widget.GridWrapWithCreateItemFn(template),
+			widget.GridWrapWithUpdateItemFn(update),
+		)
 		grid.OnSelected = choose
 		f.files = grid
 		f.toggleViewButton.SetIcon(theme.ListIcon())
 		selectF = grid.Select
 	} else {
-		list := widget.NewList(count, template, update)
+		list := widget.NewList(widget.ListWithLengthFn(count), widget.ListWithCreateItemFn(template), widget.ListWithUpdateItemFn(update))
 		list.OnSelected = choose
 		f.files = list
 		f.toggleViewButton.SetIcon(theme.GridIcon())

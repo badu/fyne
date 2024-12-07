@@ -25,7 +25,7 @@ func (u *UI) showAboutDialog() {
 				"(c) 2024 Erik Kalkoken", data.Name, current),
 		),
 		widget.NewLabel(widget.LabelWithStaticText("A desktop app for viewing large JSON files.")),
-		widget.NewHyperlink("Website", x),
+		widget.NewHyperlink(widget.HyperlinkWithLabel("Website"), widget.HyperlinkWithURL(x)),
 	)
 	d := dialog.NewCustom("About", "OK", c, u.window)
 	kxdialog.AddDialogKeyHandler(d, u.window)

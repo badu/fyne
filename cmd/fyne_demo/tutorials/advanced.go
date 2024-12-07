@@ -40,10 +40,15 @@ func advancedScreen(win fyne.Window) fyne.CanvasObject {
 	scale := widget.NewLabel(widget.LabelWithStaticText(""))
 	tex := widget.NewLabel(widget.LabelWithStaticText(""))
 
-	screen := widget.NewCard("Screen info", "", widget.NewForm(
-		&widget.FormItem{Text: "Scale", Widget: scale},
-		&widget.FormItem{Text: "Texture Scale", Widget: tex},
-	))
+	screen := widget.NewCard(
+		widget.CardWithTitle("Screen info"),
+		widget.CardWithContent(
+			widget.NewForm(
+				&widget.FormItem{Text: "Scale", Widget: scale},
+				&widget.FormItem{Text: "Texture Scale", Widget: tex},
+			),
+		),
+	)
 
 	go setScaleText(scale, tex, win)
 
@@ -51,8 +56,8 @@ func advancedScreen(win fyne.Window) fyne.CanvasObject {
 	generic := container.NewVBox()
 	desk := container.NewVBox()
 
-	genericCard := widget.NewCard("", "Generic", container.NewVScroll(generic))
-	deskCard := widget.NewCard("", "Desktop", container.NewVScroll(desk))
+	genericCard := widget.NewCard(widget.CardWithSubtitle("Generic"), widget.CardWithContent(container.NewVScroll(generic)))
+	deskCard := widget.NewCard(widget.CardWithSubtitle("Desktop"), widget.CardWithContent(container.NewVScroll(desk)))
 
 	win.Canvas().SetOnTypedRune(func(r rune) {
 		prependTo(generic, "Rune: "+string(r))

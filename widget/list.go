@@ -48,34 +48,52 @@ type List struct {
 	offsetUpdated func(fyne.Position)
 }
 
-// NewList creates and returns a list widget for displaying items in
-// a vertical layout with scrolling and caching for performance.
-//
-// Since: 1.4
-func NewList(length func() int, createItem func() fyne.CanvasObject, updateItem func(ListItemID, fyne.CanvasObject)) *List {
-	list := &List{Length: length, CreateItem: createItem, UpdateItem: updateItem}
-	list.ExtendBaseWidget(list)
-	return list
+type ListOption func(*List)
+
+func ListWithLengthFn(lenFn func() int) ListOption {
+	return func(l *List) {
+		l.Length = lenFn
+	}
 }
 
-// NewListWithData creates a new list widget that will display the contents of the provided data.
-//
-// Since: 2.0
-func NewListWithData(data binding.DataList, createItem func() fyne.CanvasObject, updateItem func(binding.DataItem, fyne.CanvasObject)) *List {
-	l := NewList(
-		data.Length,
-		createItem,
-		func(i ListItemID, o fyne.CanvasObject) {
+func ListWithCreateItemFn(createFn func() fyne.CanvasObject) ListOption {
+	return func(l *List) {
+		l.CreateItem = createFn
+	}
+}
+
+func ListWithUpdateItemFn(updateFn func(GridWrapItemID, fyne.CanvasObject)) ListOption {
+	return func(l *List) {
+		l.UpdateItem = updateFn
+	}
+}
+
+func ListWithBinded(data binding.DataList, updateItem func(binding.DataItem, fyne.CanvasObject)) ListOption {
+	return func(l *List) {
+		l.Length = data.Length
+		l.UpdateItem = func(i GridWrapItemID, o fyne.CanvasObject) {
 			item, err := data.GetItem(i)
 			if err != nil {
 				fyne.LogError(fmt.Sprintf("Error getting data item %d", i), err)
 				return
 			}
 			updateItem(item, o)
-		})
+		}
+		data.AddListener(binding.NewDataListener(l.Refresh))
+	}
+}
 
-	data.AddListener(binding.NewDataListener(l.Refresh))
-	return l
+// NewList creates and returns a list widget for displaying items in
+// a vertical layout with scrolling and caching for performance.
+//
+// Since: 1.4
+func NewList(options ...ListOption) *List {
+	result := &List{}
+	for _, opt := range options {
+		opt(result)
+	}
+	result.ExtendBaseWidget(result)
+	return result
 }
 
 // CreateRenderer is a private method to Fyne which links this widget to its renderer.

@@ -22,7 +22,7 @@ func TestHyperlink_MinSize(t *testing.T) {
 	u, err := url.Parse("https://fyne.io/")
 	assert.Nil(t, err)
 
-	hyperlink := NewHyperlink("Test", u)
+	hyperlink := NewHyperlink(HyperlinkWithLabel("Test"), HyperlinkWithURL(u))
 	hyperlink.CreateRenderer()
 	hyperlink.provider.CreateRenderer()
 	minA := hyperlink.MinSize()
@@ -41,7 +41,7 @@ func TestHyperlink_MinSize(t *testing.T) {
 
 func TestHyperlink_Cursor(t *testing.T) {
 	u, err := url.Parse("https://fyne.io/")
-	hyperlink := NewHyperlink("Test", u)
+	hyperlink := NewHyperlink(HyperlinkWithLabel("Test"), HyperlinkWithURL(u))
 
 	assert.Nil(t, err)
 	assert.Equal(t, desktop.DefaultCursor, hyperlink.Cursor())
@@ -154,7 +154,7 @@ func TestHyperlink_SetUrl(t *testing.T) {
 	assert.Nil(t, err)
 
 	// test constructor
-	hyperlink := NewHyperlink("Test", sURL)
+	hyperlink := NewHyperlink(HyperlinkWithLabel("Test"), HyperlinkWithURL(sURL))
 	assert.Equal(t, sURL, hyperlink.URL)
 
 	// test setting functions
@@ -210,7 +210,7 @@ func TestHyperlink_Truncate(t *testing.T) {
 func TestHyperlink_CreateRendererDoesNotAffectSize(t *testing.T) {
 	u, err := url.Parse("https://github.com/fyne-io/fyne")
 	require.NoError(t, err)
-	link := NewHyperlink("Test", u)
+	link := NewHyperlink(HyperlinkWithLabel("Test"), HyperlinkWithURL(u))
 	link.Resize(link.MinSize())
 	size := link.Size()
 	assert.NotEqual(t, fyne.NewSize(0, 0), size)

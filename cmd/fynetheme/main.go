@@ -97,53 +97,59 @@ func makeColors() fyne.CanvasObject {
 	})
 	colorsFiltered := slices.Clone(colors)
 	list := widget.NewList(
-		func() int {
-			return len(colorsFiltered)
-		},
-		func() fyne.CanvasObject {
-			check1 := widget.NewCheck()
-			check1.Disable()
-			check2 := widget.NewCheck()
-			check2.Disable()
-			return container.NewHBox(
-				widget.NewLabel(widget.LabelWithStaticText("Template")),
-				layout.NewSpacer(),
-				canvas.NewRectangle(color.Transparent),
-				check1,
-				canvas.NewRectangle(color.Transparent),
-				check2,
-			)
-		},
-		func(id widget.ListItemID, co fyne.CanvasObject) {
-			if id >= len(colorsFiltered) {
-				return
-			}
-			myColor := colorsFiltered[id]
-			row := co.(*fyne.Container).Objects
+		widget.ListWithLengthFn(
+			func() int {
+				return len(colorsFiltered)
+			},
+		),
+		widget.ListWithCreateItemFn(
+			func() fyne.CanvasObject {
+				check1 := widget.NewCheck()
+				check1.Disable()
+				check2 := widget.NewCheck()
+				check2.Disable()
+				return container.NewHBox(
+					widget.NewLabel(widget.LabelWithStaticText("Template")),
+					layout.NewSpacer(),
+					canvas.NewRectangle(color.Transparent),
+					check1,
+					canvas.NewRectangle(color.Transparent),
+					check2,
+				)
+			},
+		),
+		widget.ListWithUpdateItemFn(
+			func(id widget.ListItemID, co fyne.CanvasObject) {
+				if id >= len(colorsFiltered) {
+					return
+				}
+				myColor := colorsFiltered[id]
+				row := co.(*fyne.Container).Objects
 
-			label := row[0].(*widget.Label)
-			label.SetText(myColor.label)
+				label := row[0].(*widget.Label)
+				label.SetText(myColor.label)
 
-			boxSize := fyne.NewSize(100, 30)
-			const borderSize = 7.5
-			colorRect1 := row[2].(*canvas.Rectangle)
-			colorRect1.FillColor = th.Color(fyne.ThemeColorName(myColor.name), theme.VariantLight)
-			colorRect1.SetMinSize(boxSize)
-			colorRect1.StrokeColor = th.Color(fyne.ThemeColorName(theme.ColorNameBackground), theme.VariantLight)
-			colorRect1.StrokeWidth = borderSize
+				boxSize := fyne.NewSize(100, 30)
+				const borderSize = 7.5
+				colorRect1 := row[2].(*canvas.Rectangle)
+				colorRect1.FillColor = th.Color(fyne.ThemeColorName(myColor.name), theme.VariantLight)
+				colorRect1.SetMinSize(boxSize)
+				colorRect1.StrokeColor = th.Color(fyne.ThemeColorName(theme.ColorNameBackground), theme.VariantLight)
+				colorRect1.StrokeWidth = borderSize
 
-			check1 := row[3].(*widget.Check)
-			check1.SetChecked(hasTransparencyLight[myColor.name])
+				check1 := row[3].(*widget.Check)
+				check1.SetChecked(hasTransparencyLight[myColor.name])
 
-			colorRect2 := row[4].(*canvas.Rectangle)
-			colorRect2.FillColor = th.Color(fyne.ThemeColorName(myColor.name), theme.VariantDark)
-			colorRect2.SetMinSize(boxSize)
-			colorRect2.StrokeColor = th.Color(fyne.ThemeColorName(theme.ColorNameBackground), theme.VariantDark)
-			colorRect2.StrokeWidth = borderSize
+				colorRect2 := row[4].(*canvas.Rectangle)
+				colorRect2.FillColor = th.Color(fyne.ThemeColorName(myColor.name), theme.VariantDark)
+				colorRect2.SetMinSize(boxSize)
+				colorRect2.StrokeColor = th.Color(fyne.ThemeColorName(theme.ColorNameBackground), theme.VariantDark)
+				colorRect2.StrokeWidth = borderSize
 
-			check2 := row[5].(*widget.Check)
-			check2.SetChecked(hasTransparencyDark[myColor.name])
-		},
+				check2 := row[5].(*widget.Check)
+				check2.SetChecked(hasTransparencyDark[myColor.name])
+			},
+		),
 	)
 	var currentSearch string
 	var currentSelection string
@@ -210,30 +216,36 @@ func makeSizes() fyne.CanvasObject {
 	})
 	sizesFiltered := slices.Clone(sizes)
 	list := widget.NewList(
-		func() int {
-			return len(sizesFiltered)
-		},
-		func() fyne.CanvasObject {
-			size := widget.NewLabel(widget.LabelWithStaticText("999"))
-			size.Alignment = fyne.TextAlignTrailing
-			return container.NewHBox(
-				widget.NewLabel(widget.LabelWithStaticText("Template")),
-				layout.NewSpacer(),
-				size,
-			)
-		},
-		func(id widget.ListItemID, co fyne.CanvasObject) {
-			if id >= len(sizesFiltered) {
-				return
-			}
-			s := sizesFiltered[id]
-			row := co.(*fyne.Container).Objects
-			label := row[0].(*widget.Label)
-			label.SetText(s.label)
-			size := row[2].(*widget.Label)
-			v := theme.Size(s.name)
-			size.SetText(fmt.Sprint(v))
-		},
+		widget.ListWithLengthFn(
+			func() int {
+				return len(sizesFiltered)
+			},
+		),
+		widget.ListWithCreateItemFn(
+			func() fyne.CanvasObject {
+				size := widget.NewLabel(widget.LabelWithStaticText("999"))
+				size.Alignment = fyne.TextAlignTrailing
+				return container.NewHBox(
+					widget.NewLabel(widget.LabelWithStaticText("Template")),
+					layout.NewSpacer(),
+					size,
+				)
+			},
+		),
+		widget.ListWithUpdateItemFn(
+			func(id widget.ListItemID, co fyne.CanvasObject) {
+				if id >= len(sizesFiltered) {
+					return
+				}
+				s := sizesFiltered[id]
+				row := co.(*fyne.Container).Objects
+				label := row[0].(*widget.Label)
+				label.SetText(s.label)
+				size := row[2].(*widget.Label)
+				v := theme.Size(s.name)
+				size.SetText(fmt.Sprint(v))
+			},
+		),
 	)
 	entry := widget.NewEntry()
 	entry.SetPlaceHolder("Search...")
@@ -369,49 +381,55 @@ func makeIcons() fyne.CanvasObject {
 	iconColors := []string{"Default", "Disabled", "Error", "Primary", "Success", "Warning"}
 	var iconColor = "Default"
 	grid := widget.NewGridWrap(
-		func() int {
-			return len(iconsFiltered)
-		},
-		func() fyne.CanvasObject {
-			image := canvas.NewImageFromResource(theme.BrokenImageIcon())
-			image.FillMode = canvas.ImageFillContain
-			image.SetMinSize(fyne.NewSquareSize(iconSize))
-			label := widget.NewLabel(widget.LabelWithStaticText("IconNameRadioButtonChecked"))
-			label.Alignment = fyne.TextAlignCenter
-			return container.NewBorder(
-				nil,
-				container.NewVBox(label, container.NewPadded()),
-				nil,
-				nil,
-				image,
-			)
-		},
-		func(id widget.ListItemID, co fyne.CanvasObject) {
-			if id >= len(iconsFiltered) {
-				return
-			}
-			s := iconsFiltered[id]
-			c := co.(*fyne.Container).Objects
-			image := c[0].(*canvas.Image)
-			r := theme.Icon(s.name)
-			switch iconColor {
-			case "Disabled":
-				image.Resource = theme.NewDisabledResource(r)
-			case "Error":
-				image.Resource = theme.NewErrorThemedResource(r)
-			case "Primary":
-				image.Resource = theme.NewPrimaryThemedResource(r)
-			case "Success":
-				image.Resource = theme.NewSuccessThemedResource(r)
-			case "Warning":
-				image.Resource = theme.NewWarningThemedResource(r)
-			default:
-				image.Resource = theme.NewThemedResource(r)
-			}
-			image.Refresh()
-			label := c[1].(*fyne.Container).Objects[0].(*widget.Label)
-			label.SetText(s.label)
-		},
+		widget.GridWrapWithLengthFn(
+			func() int {
+				return len(iconsFiltered)
+			},
+		),
+		widget.GridWrapWithCreateItemFn(
+			func() fyne.CanvasObject {
+				image := canvas.NewImageFromResource(theme.BrokenImageIcon())
+				image.FillMode = canvas.ImageFillContain
+				image.SetMinSize(fyne.NewSquareSize(iconSize))
+				label := widget.NewLabel(widget.LabelWithStaticText("IconNameRadioButtonChecked"))
+				label.Alignment = fyne.TextAlignCenter
+				return container.NewBorder(
+					nil,
+					container.NewVBox(label, container.NewPadded()),
+					nil,
+					nil,
+					image,
+				)
+			},
+		),
+		widget.GridWrapWithUpdateItemFn(
+			func(id widget.ListItemID, co fyne.CanvasObject) {
+				if id >= len(iconsFiltered) {
+					return
+				}
+				s := iconsFiltered[id]
+				c := co.(*fyne.Container).Objects
+				image := c[0].(*canvas.Image)
+				r := theme.Icon(s.name)
+				switch iconColor {
+				case "Disabled":
+					image.Resource = theme.NewDisabledResource(r)
+				case "Error":
+					image.Resource = theme.NewErrorThemedResource(r)
+				case "Primary":
+					image.Resource = theme.NewPrimaryThemedResource(r)
+				case "Success":
+					image.Resource = theme.NewSuccessThemedResource(r)
+				case "Warning":
+					image.Resource = theme.NewWarningThemedResource(r)
+				default:
+					image.Resource = theme.NewThemedResource(r)
+				}
+				image.Refresh()
+				label := c[1].(*fyne.Container).Objects[0].(*widget.Label)
+				label.SetText(s.label)
+			},
+		),
 	)
 	search := widget.NewEntry()
 	search.SetPlaceHolder("Search...")

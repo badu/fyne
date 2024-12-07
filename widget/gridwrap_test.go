@@ -154,16 +154,22 @@ func createGridWrap(items int) *GridWrap {
 	}
 
 	list := NewGridWrap(
-		func() int {
-			return len(data)
-		},
-		func() fyne.CanvasObject {
-			icon := NewIcon(theme.DocumentIcon())
-			return icon
-		},
-		func(id GridWrapItemID, item fyne.CanvasObject) {
-			item.(*Icon).SetResource(data[id])
-		},
+		GridWrapWithLengthFn(
+			func() int {
+				return len(data)
+			},
+		),
+		GridWrapWithCreateItemFn(
+			func() fyne.CanvasObject {
+				icon := NewIcon(theme.DocumentIcon())
+				return icon
+			},
+		),
+		GridWrapWithUpdateItemFn(
+			func(id GridWrapItemID, item fyne.CanvasObject) {
+				item.(*Icon).SetResource(data[id])
+			},
+		),
 	)
 	list.Resize(fyne.NewSize(200, 400))
 	return list
@@ -185,16 +191,22 @@ func TestGridWrap_RefreshItem(t *testing.T) {
 	}
 
 	list := NewGridWrap(
-		func() int {
-			return len(data)
-		},
-		func() fyne.CanvasObject {
-			icon := NewLabel(LabelWithStaticText("dummy"))
-			return icon
-		},
-		func(id GridWrapItemID, item fyne.CanvasObject) {
-			item.(*Label).SetText(data[id])
-		},
+		GridWrapWithLengthFn(
+			func() int {
+				return len(data)
+			},
+		),
+		GridWrapWithCreateItemFn(
+			func() fyne.CanvasObject {
+				icon := NewLabel(LabelWithStaticText("dummy"))
+				return icon
+			},
+		),
+		GridWrapWithUpdateItemFn(
+			func(id GridWrapItemID, item fyne.CanvasObject) {
+				item.(*Label).SetText(data[id])
+			},
+		),
 	)
 	list.Resize(fyne.NewSize(50, 100))
 

@@ -53,17 +53,23 @@ func makeGridWrapTab(_ fyne.Window) fyne.CanvasObject {
 	vbox := container.NewVBox(icon, label)
 
 	grid := widget.NewGridWrap(
-		func() int {
-			return len(data)
-		},
-		func() fyne.CanvasObject {
-			text := widget.NewLabel(widget.LabelWithStaticText("Template Object"))
-			text.Alignment = fyne.TextAlignCenter
-			return container.NewVBox(container.NewPadded(widget.NewIcon(theme.DocumentIcon())), text)
-		},
-		func(id widget.ListItemID, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(data[id])
-		},
+		widget.GridWrapWithLengthFn(
+			func() int {
+				return len(data)
+			},
+		),
+		widget.GridWrapWithCreateItemFn(
+			func() fyne.CanvasObject {
+				text := widget.NewLabel(widget.LabelWithStaticText("Template Object"))
+				text.Alignment = fyne.TextAlignCenter
+				return container.NewVBox(container.NewPadded(widget.NewIcon(theme.DocumentIcon())), text)
+			},
+		),
+		widget.GridWrapWithUpdateItemFn(
+			func(id widget.ListItemID, item fyne.CanvasObject) {
+				item.(*fyne.Container).Objects[1].(*widget.Label).SetText(data[id])
+			},
+		),
 	)
 	grid.OnSelected = func(id widget.ListItemID) {
 		label.SetText(data[id])
@@ -91,19 +97,25 @@ func makeListTab(_ fyne.Window) fyne.CanvasObject {
 	hbox := container.NewHBox(icon, label)
 
 	list := widget.NewList(
-		func() int {
-			return len(data)
-		},
-		func() fyne.CanvasObject {
-			return container.NewHBox(widget.NewIcon(theme.DocumentIcon()), widget.NewLabel(widget.LabelWithStaticText("Template Object")))
-		},
-		func(id widget.ListItemID, item fyne.CanvasObject) {
-			if id == 5 || id == 6 {
-				item.(*fyne.Container).Objects[1].(*widget.Label).SetText(data[id] + "\ntaller")
-			} else {
-				item.(*fyne.Container).Objects[1].(*widget.Label).SetText(data[id])
-			}
-		},
+		widget.ListWithLengthFn(
+			func() int {
+				return len(data)
+			},
+		),
+		widget.ListWithCreateItemFn(
+			func() fyne.CanvasObject {
+				return container.NewHBox(widget.NewIcon(theme.DocumentIcon()), widget.NewLabel(widget.LabelWithStaticText("Template Object")))
+			},
+		),
+		widget.ListWithUpdateItemFn(
+			func(id widget.ListItemID, item fyne.CanvasObject) {
+				if id == 5 || id == 6 {
+					item.(*fyne.Container).Objects[1].(*widget.Label).SetText(data[id] + "\ntaller")
+				} else {
+					item.(*fyne.Container).Objects[1].(*widget.Label).SetText(data[id])
+				}
+			},
+		),
 	)
 	list.OnSelected = func(id widget.ListItemID) {
 		label.SetText(data[id])

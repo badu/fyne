@@ -44,7 +44,7 @@ func makeAccordionTab(_ fyne.Window) fyne.CanvasObject {
 		fyne.LogError("Could not parse URL", err)
 	}
 	ac := widget.NewAccordion(
-		widget.NewAccordionItem("A", widget.NewHyperlink("One", link)),
+		widget.NewAccordionItem("A", widget.NewHyperlink(widget.HyperlinkWithLabel("One"), widget.HyperlinkWithURL(link))),
 		widget.NewAccordionItem("B", widget.NewLabel(widget.LabelWithStaticText("Two"))),
 		&widget.AccordionItem{
 			Title:  "C",
@@ -188,11 +188,25 @@ func makeButtonTab(_ fyne.Window) fyne.CanvasObject {
 }
 
 func makeCardTab(_ fyne.Window) fyne.CanvasObject {
-	card1 := widget.NewCard("Book a table", "Which time suits?",
-		widget.NewRadioGroup([]string{"6:30pm", "7:00pm", "7:45pm"}, func(string) {}))
-	card2 := widget.NewCard("With media", "No content, with image", nil)
+	card1 := widget.NewCard(
+		widget.CardWithTitle("Book a table"),
+		widget.CardWithSubtitle("Which time suits?"),
+		widget.CardWithContent(
+			widget.NewRadioGroup([]string{"6:30pm", "7:00pm", "7:45pm"}, func(string) {}),
+		),
+	)
+	card2 := widget.NewCard(
+		widget.CardWithTitle("With media"),
+		widget.CardWithSubtitle("No content, with image"),
+	)
 	card2.Image = canvas.NewImageFromResource(data.FyneLogo)
-	card3 := widget.NewCard("Title 3", "Another card", widget.NewLabel(widget.LabelWithStaticText("Content")))
+	card3 := widget.NewCard(
+		widget.CardWithTitle("Title 3"),
+		widget.CardWithSubtitle("Another card"),
+		widget.CardWithContent(
+			widget.NewLabel(widget.LabelWithStaticText("Content")),
+		),
+	)
 	return container.NewGridWithColumns(2, container.NewVBox(card1, card3),
 		container.NewVBox(card2))
 }
@@ -243,7 +257,7 @@ func makeTextTab(_ fyne.Window) fyne.CanvasObject {
 	if err != nil {
 		fyne.LogError("Could not parse URL", err)
 	}
-	hyperlink := widget.NewHyperlink("Hyperlink", link)
+	hyperlink := widget.NewHyperlink(widget.HyperlinkWithLabel("Hyperlink"), widget.HyperlinkWithURL(link))
 
 	entryLoremIpsum := widget.NewEntry(widget.EntryWithMultiline())
 	entryLoremIpsum.SetText(loremIpsum)

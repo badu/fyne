@@ -14,7 +14,7 @@ import (
 )
 
 func TestCard_SetImage(t *testing.T) {
-	c := widget.NewCard("Title", "sub", widget.NewLabel(widget.LabelWithStaticText("Content")))
+	c := widget.NewCard(widget.CardWithTitle("Title"), widget.CardWithSubtitle("sub"), widget.CardWithContent(widget.NewLabel(widget.LabelWithStaticText("Content"))))
 	r := test.TempWidgetRenderer(t, c)
 	assert.Equal(t, 4, len(r.Objects())) // the 3 above plus shadow
 
@@ -23,7 +23,7 @@ func TestCard_SetImage(t *testing.T) {
 }
 
 func TestCard_SetContent(t *testing.T) {
-	c := widget.NewCard("Title", "sub", widget.NewLabel(widget.LabelWithStaticText("Content")))
+	c := widget.NewCard(widget.CardWithTitle("Title"), widget.CardWithSubtitle("sub"), widget.CardWithContent(widget.NewLabel(widget.LabelWithStaticText("Content"))))
 	r := test.TempWidgetRenderer(t, c)
 	assert.Equal(t, 4, len(r.Objects())) // the 3 above plus shadow
 
@@ -125,7 +125,7 @@ func TestCard_MinSize(t *testing.T) {
 
 func TestCard_Refresh(t *testing.T) {
 	text := widget.NewLabel(widget.LabelWithStaticText("Test"))
-	card := widget.NewCard("", "", text)
+	card := widget.NewCard(widget.CardWithContent(text))
 	w := test.NewTempWindow(t, card)
 	test.AssertRendersToMarkup(t, "card/content_label.xml", w.Canvas())
 

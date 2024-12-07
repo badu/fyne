@@ -43,34 +43,52 @@ type GridWrap struct {
 	colCountCache int
 }
 
-// NewGridWrap creates and returns a GridWrap widget for displaying items in
-// a wrapping grid layout with scrolling and caching for performance.
-//
-// Since: 2.4
-func NewGridWrap(length func() int, createItem func() fyne.CanvasObject, updateItem func(GridWrapItemID, fyne.CanvasObject)) *GridWrap {
-	gwList := &GridWrap{Length: length, CreateItem: createItem, UpdateItem: updateItem}
-	gwList.ExtendBaseWidget(gwList)
-	return gwList
+type GridWrapOption func(*GridWrap)
+
+func GridWrapWithLengthFn(lenFn func() int) GridWrapOption {
+	return func(g *GridWrap) {
+		g.Length = lenFn
+	}
 }
 
-// NewGridWrapWithData creates a new GridWrap widget that will display the contents of the provided data.
-//
-// Since: 2.4
-func NewGridWrapWithData(data binding.DataList, createItem func() fyne.CanvasObject, updateItem func(binding.DataItem, fyne.CanvasObject)) *GridWrap {
-	gwList := NewGridWrap(
-		data.Length,
-		createItem,
-		func(i GridWrapItemID, o fyne.CanvasObject) {
-			item, err := data.GetItem(int(i))
+func GridWrapWithCreateItemFn(createFn func() fyne.CanvasObject) GridWrapOption {
+	return func(g *GridWrap) {
+		g.CreateItem = createFn
+	}
+}
+
+func GridWrapWithUpdateItemFn(updateFn func(GridWrapItemID, fyne.CanvasObject)) GridWrapOption {
+	return func(g *GridWrap) {
+		g.UpdateItem = updateFn
+	}
+}
+
+func GridWrapWithBinded(data binding.DataList, updateItem func(binding.DataItem, fyne.CanvasObject)) GridWrapOption {
+	return func(g *GridWrap) {
+		g.Length = data.Length
+		g.UpdateItem = func(i GridWrapItemID, o fyne.CanvasObject) {
+			item, err := data.GetItem(i)
 			if err != nil {
 				fyne.LogError(fmt.Sprintf("Error getting data item %d", i), err)
 				return
 			}
 			updateItem(item, o)
-		})
+		}
+		data.AddListener(binding.NewDataListener(g.Refresh))
+	}
+}
 
-	data.AddListener(binding.NewDataListener(gwList.Refresh))
-	return gwList
+// NewGridWrap creates and returns a GridWrap widget for displaying items in
+// a wrapping grid layout with scrolling and caching for performance.
+//
+// Since: 2.4 - length func() int, createItem func() fyne.CanvasObject, updateItem func(GridWrapItemID, fyne.CanvasObject)
+func NewGridWrap(options ...GridWrapOption) *GridWrap {
+	result := &GridWrap{}
+	for _, opt := range options {
+		opt(result)
+	}
+	result.ExtendBaseWidget(result)
+	return result
 }
 
 // CreateRenderer is a private method to Fyne which links this widget to its renderer.

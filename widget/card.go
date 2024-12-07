@@ -17,18 +17,36 @@ type Card struct {
 	Content         fyne.CanvasObject
 }
 
+type CardOption func(*Card)
+
+func CardWithTitle(title string) CardOption {
+	return func(c *Card) {
+		c.Title = title
+	}
+}
+
+func CardWithSubtitle(subtitle string) CardOption {
+	return func(c *Card) {
+		c.Subtitle = subtitle
+	}
+}
+
+func CardWithContent(content fyne.CanvasObject) CardOption {
+	return func(c *Card) {
+		c.Content = content
+	}
+}
+
 // NewCard creates a new card widget with the specified title, subtitle and content (all optional).
 //
 // Since: 1.4
-func NewCard(title, subtitle string, content fyne.CanvasObject) *Card {
-	card := &Card{
-		Title:    title,
-		Subtitle: subtitle,
-		Content:  content,
+func NewCard(options ...CardOption) *Card {
+	result := &Card{}
+	for _, opt := range options {
+		opt(result)
 	}
-
-	card.ExtendBaseWidget(card)
-	return card
+	result.ExtendBaseWidget(result)
+	return result
 }
 
 // CreateRenderer is a private method to Fyne which links this widget to its renderer

@@ -41,21 +41,39 @@ type Hyperlink struct {
 	provider         RichText
 }
 
-// NewHyperlink creates a new hyperlink widget with the set text content
-func NewHyperlink(text string, url *url.URL) *Hyperlink {
-	return NewHyperlinkWithStyle(text, url, fyne.TextAlignLeading, fyne.TextStyle{})
+type HyperlinkOption func(*Hyperlink)
+
+func HyperlinkWithLabel(text string) HyperlinkOption {
+	return func(h *Hyperlink) {
+		h.Text = text
+	}
 }
 
-// NewHyperlinkWithStyle creates a new hyperlink widget with the set text content
-func NewHyperlinkWithStyle(text string, url *url.URL, alignment fyne.TextAlign, style fyne.TextStyle) *Hyperlink {
-	hl := &Hyperlink{
-		Text:      text,
-		URL:       url,
-		Alignment: alignment,
-		TextStyle: style,
+func HyperlinkWithURL(url *url.URL) HyperlinkOption {
+	return func(h *Hyperlink) {
+		h.URL = url
 	}
+}
 
-	return hl
+func HyperlinkWithAlignment(align fyne.TextAlign) HyperlinkOption {
+	return func(h *Hyperlink) {
+		h.Alignment = align
+	}
+}
+
+func HyperlinkWithStyle(style fyne.TextStyle) HyperlinkOption {
+	return func(h *Hyperlink) {
+		h.TextStyle = style
+	}
+}
+
+// NewHyperlink creates a new hyperlink widget with the set text content
+func NewHyperlink(options ...HyperlinkOption) *Hyperlink {
+	result := &Hyperlink{Alignment: fyne.TextAlignLeading}
+	for _, opt := range options {
+		opt(result)
+	}
+	return result
 }
 
 // CreateRenderer is a private method to Fyne which links this widget to its renderer

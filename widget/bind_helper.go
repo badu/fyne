@@ -17,9 +17,9 @@ type basicBinder struct {
 }
 
 // Bind replaces the data item whose changes are tracked by the callback function.
-func (binder *basicBinder) Bind(data binding.DataItem) {
+func (b *basicBinder) Bind(data binding.DataItem) {
 	listener := binding.NewDataListener(func() { // NB: listener captures `data` but always calls the up-to-date callback
-		f := binder.callback.Load()
+		f := b.callback.Load()
 		if f == nil || *f == nil {
 			return
 		}
@@ -32,38 +32,38 @@ func (binder *basicBinder) Bind(data binding.DataItem) {
 		listener: listener,
 	}
 
-	binder.dataListenerPairLock.Lock()
-	binder.unbindLocked()
-	binder.dataListenerPair = listenerInfo
-	binder.dataListenerPairLock.Unlock()
+	b.dataListenerPairLock.Lock()
+	b.unbindLocked()
+	b.dataListenerPair = listenerInfo
+	b.dataListenerPairLock.Unlock()
 }
 
 // CallWithData passes the currently bound data item as an argument to the
 // provided function.
-func (binder *basicBinder) CallWithData(f func(data binding.DataItem)) {
-	binder.dataListenerPairLock.RLock()
-	data := binder.dataListenerPair.data
-	binder.dataListenerPairLock.RUnlock()
+func (b *basicBinder) CallWithData(f func(data binding.DataItem)) {
+	b.dataListenerPairLock.RLock()
+	data := b.dataListenerPair.data
+	b.dataListenerPairLock.RUnlock()
 	f(data)
 }
 
 // SetCallback replaces the function to be called when the data changes.
-func (binder *basicBinder) SetCallback(f func(data binding.DataItem)) {
-	binder.callback.Store(&f)
+func (b *basicBinder) SetCallback(f func(data binding.DataItem)) {
+	b.callback.Store(&f)
 }
 
 // Unbind requests the callback to be no longer called when the previously bound
 // data item changes.
-func (binder *basicBinder) Unbind() {
-	binder.dataListenerPairLock.Lock()
-	binder.unbindLocked()
-	binder.dataListenerPairLock.Unlock()
+func (b *basicBinder) Unbind() {
+	b.dataListenerPairLock.Lock()
+	b.unbindLocked()
+	b.dataListenerPairLock.Unlock()
 }
 
 // unbindLocked expects the caller to hold dataListenerPairLock.
-func (binder *basicBinder) unbindLocked() {
-	previousListener := binder.dataListenerPair
-	binder.dataListenerPair = annotatedListener{nil, nil}
+func (b *basicBinder) unbindLocked() {
+	previousListener := b.dataListenerPair
+	b.dataListenerPair = annotatedListener{nil, nil}
 
 	if previousListener.listener == nil || previousListener.data == nil {
 		return

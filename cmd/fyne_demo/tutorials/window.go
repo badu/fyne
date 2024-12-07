@@ -122,19 +122,21 @@ func windowScreen(_ fyne.Window) fyne.CanvasObject {
 		)
 	}
 
-	otherGroup := widget.NewCard("Other", "",
-		widget.NewButton(
-			widget.ButtonWithLabel("Notification"),
-			widget.ButtonWithCallback(
-				func() {
-					fyne.CurrentApp().SendNotification(&fyne.Notification{
-						Title:   "Fyne Demo",
-						Content: "Testing notifications...",
-					})
-				},
+	otherGroup := widget.NewCard(widget.CardWithTitle("Other"),
+		widget.CardWithContent(
+			widget.NewButton(
+				widget.ButtonWithLabel("Notification"),
+				widget.ButtonWithCallback(
+					func() {
+						fyne.CurrentApp().SendNotification(&fyne.Notification{
+							Title:   "Fyne Demo",
+							Content: "Testing notifications...",
+						})
+					},
+				),
 			),
 		),
 	)
 
-	return container.NewVBox(widget.NewCard("Windows", "", windowGroup), otherGroup)
+	return container.NewVBox(widget.NewCard(widget.CardWithTitle("Windows"), widget.CardWithContent(windowGroup)), otherGroup)
 }

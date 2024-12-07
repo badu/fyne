@@ -69,7 +69,7 @@ func (s *Settings) makeScaleGroup(scale float32) *widget.Card {
 	scalePreviewBox := container.NewGridWithColumns(5, s.makeScalePreviews(scale)...)
 	scaleBox := container.NewGridWithColumns(5, s.makeScaleButtons()...)
 
-	return widget.NewCard("Scale", "", container.NewVBox(scalePreviewBox, scaleBox, newRefreshMonitor(s)))
+	return widget.NewCard(widget.CardWithTitle("Scale"), widget.CardWithContent(container.NewVBox(scalePreviewBox, scaleBox, newRefreshMonitor(s))))
 }
 
 func (s *Settings) makeScalePreviews(value float32) []fyne.CanvasObject {

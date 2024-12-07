@@ -128,7 +128,7 @@ func (h *HyperlinkSegment) Textual() string {
 
 // Visual returns the hyperlink widget required to render this segment.
 func (h *HyperlinkSegment) Visual() fyne.CanvasObject {
-	link := NewHyperlink(h.Text, h.URL)
+	link := NewHyperlink(HyperlinkWithLabel(h.Text), HyperlinkWithURL(h.URL))
 	link.Alignment = h.Alignment
 	link.OnTapped = h.OnTapped
 	return &fyne.Container{Layout: &unpadTextWidgetLayout{parent: link}, Objects: []fyne.CanvasObject{link}}

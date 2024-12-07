@@ -34,11 +34,11 @@ func welcomeScreen(_ fyne.Window) fyne.CanvasObject {
 
 	footer := container.NewHBox(
 		layout.NewSpacer(),
-		widget.NewHyperlink("fyne.io", parseURL("https://fyne.io/")),
+		widget.NewHyperlink(widget.HyperlinkWithLabel("fyne.io"), widget.HyperlinkWithURL(parseURL("https://fyne.io/"))),
 		widget.NewLabel(widget.LabelWithStaticText("-")),
-		widget.NewHyperlink("documentation", parseURL("https://docs.fyne.io/")),
+		widget.NewHyperlink(widget.HyperlinkWithLabel("documentation"), widget.HyperlinkWithURL(parseURL("https://docs.fyne.io/"))),
 		widget.NewLabel(widget.LabelWithStaticText("-")),
-		widget.NewHyperlink("sponsor", parseURL("https://fyne.io/sponsor/")),
+		widget.NewHyperlink(widget.HyperlinkWithLabel("sponsor"), widget.HyperlinkWithURL(parseURL("https://fyne.io/sponsor/"))),
 		layout.NewSpacer(),
 	)
 
