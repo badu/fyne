@@ -45,7 +45,7 @@ func TestShowCustom_Resize(t *testing.T) {
 	size := fyne.NewSize(200, 200)
 	d.Resize(size)
 	d.Show()
-	assert.Equal(t, size, d.dialog.win.Content.Size().Add(fyne.NewSize(theme.Padding()*2, theme.Padding()*2)))
+	assert.Equal(t, size, d.Dialog.win.Content.Size().Add(fyne.NewSize(theme.Padding()*2, theme.Padding()*2)))
 }
 
 func TestCustom_ApplyThemeOnShow(t *testing.T) {
@@ -81,7 +81,7 @@ func TestCustom_ResizeOnShow(t *testing.T) {
 
 	label := widget.NewLabel(widget.LabelWithStaticText("Content"))
 	label.Alignment = fyne.TextAlignCenter
-	d := NewCustom("Title", "OK", label, w).dialog
+	d := NewCustom("Title", "OK", label, w).Dialog
 
 	d.Show()
 	assert.Equal(t, size, d.win.Size())
@@ -107,7 +107,7 @@ func TestConfirm_SetButtons(t *testing.T) {
 	d.SetButtons([]fyne.CanvasObject{&widget.Button{Text: "1"}, &widget.Button{Text: "2"}, &widget.Button{Text: "3"}})
 	d.Show()
 	test.AssertRendersToMarkup(t, "dialog-custom-custom-buttons.xml", w.Canvas())
-	assert.Nil(t, d.dialog.dismiss)
+	assert.Nil(t, d.Dialog.dismiss)
 	d.Hide()
 
 	d.SetButtons(nil)

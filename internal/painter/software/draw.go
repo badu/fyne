@@ -20,7 +20,10 @@ type gradient interface {
 }
 
 func drawCircle(c fyne.Canvas, circle *canvas.Circle, pos fyne.Position, base *image.NRGBA, clip image.Rectangle) {
-	pad := painter.VectorPad(circle)
+	pad := float32(1)
+	if circle.StrokeWidth > 0 && circle.StrokeColor != nil {
+		pad = circle.StrokeWidth + 2
+	}
 	scaledWidth := scale.ToScreenCoordinate(c, circle.Size().Width+pad*2)
 	scaledHeight := scale.ToScreenCoordinate(c, circle.Size().Height+pad*2)
 	scaledX, scaledY := scale.ToScreenCoordinate(c, pos.X-pad), scale.ToScreenCoordinate(c, pos.Y-pad)
@@ -103,7 +106,11 @@ func drawPixels(x, y, width, height int, mode canvas.ImageScale, base *image.NRG
 }
 
 func drawLine(c fyne.Canvas, line *canvas.Line, pos fyne.Position, base *image.NRGBA, clip image.Rectangle) {
-	pad := painter.VectorPad(line)
+	pad := float32(0)
+	if line.StrokeWidth > 0 {
+		pad = line.StrokeWidth + 2
+	}
+
 	scaledWidth := scale.ToScreenCoordinate(c, line.Size().Width+pad*2)
 	scaledHeight := scale.ToScreenCoordinate(c, line.Size().Height+pad*2)
 	scaledX, scaledY := scale.ToScreenCoordinate(c, pos.X-pad), scale.ToScreenCoordinate(c, pos.Y-pad)
@@ -133,7 +140,11 @@ func drawTex(x, y, width, height int, base *image.NRGBA, tex image.Image, clip i
 
 func drawText(c fyne.Canvas, text *canvas.Text, pos fyne.Position, base *image.NRGBA, clip image.Rectangle) {
 	bounds := text.MinSize()
-	width := scale.ToScreenCoordinate(c, bounds.Width+painter.VectorPad(text))
+	pad := float32(0.0)
+	if text.TextStyle.Italic {
+		pad = text.TextSize / 5 // make sure that even a 20% lean does not overflow
+	}
+	width := scale.ToScreenCoordinate(c, bounds.Width+pad)
 	height := scale.ToScreenCoordinate(c, bounds.Height)
 	txtImg := image.NewRGBA(image.Rect(0, 0, width, height))
 
@@ -183,7 +194,11 @@ func drawRaster(c fyne.Canvas, rast *canvas.Raster, pos fyne.Position, base *ima
 }
 
 func drawRectangleStroke(c fyne.Canvas, rect *canvas.Rectangle, pos fyne.Position, base *image.NRGBA, clip image.Rectangle) {
-	pad := painter.VectorPad(rect)
+	pad := float32(0)
+	if rect.StrokeWidth > 0 && rect.StrokeColor != nil {
+		pad = rect.StrokeWidth + 2
+	}
+
 	scaledWidth := scale.ToScreenCoordinate(c, rect.Size().Width+pad*2)
 	scaledHeight := scale.ToScreenCoordinate(c, rect.Size().Height+pad*2)
 	scaledX, scaledY := scale.ToScreenCoordinate(c, pos.X-pad), scale.ToScreenCoordinate(c, pos.Y-pad)

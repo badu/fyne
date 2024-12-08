@@ -144,7 +144,13 @@ func (p *painter) newGlTextTexture(obj fyne.CanvasObject) Texture {
 	}
 
 	bounds := text.MinSize()
-	width := int(math.Ceil(float64(p.textureScale(bounds.Width) + paint.VectorPad(text)))) // potentially italic overspill
+
+	pad := float32(0.0)
+	if text.TextStyle.Italic {
+		pad = text.TextSize / 5 // make sure that even a 20% lean does not overflow
+	}
+
+	width := int(math.Ceil(float64(p.textureScale(bounds.Width) + pad))) // potentially italic overspill
 	height := int(math.Ceil(float64(p.textureScale(bounds.Height))))
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 

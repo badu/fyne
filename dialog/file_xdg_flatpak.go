@@ -12,6 +12,16 @@ import (
 	"github.com/rymdport/portal/filechooser"
 )
 
+// NativeWindow is an extension interface for `fyne.Window` that gives access
+// to platform-native features of application windows.
+//
+// Since: 2.5
+type NativeWindow interface {
+	// RunNative  provides a way to execute code within the platform-specific runtime context for a window.
+	// The context types are defined in the `driver` package and the specific context passed will differ by platform.
+	RunNative(func(context any))
+}
+
 func openFolder(parentWindowHandle string, callback func(fyne.ListableURI, error), options *filechooser.OpenFileOptions) {
 	uris, err := filechooser.OpenFile(parentWindowHandle, "Open Folder", options)
 	if err != nil {
@@ -119,10 +129,15 @@ func x11WindowHandleToString(handle uintptr) string {
 func windowHandleForPortal(window fyne.Window) string {
 	parentWindowHandle := ""
 	if !build.IsWayland {
-		window.(driver.NativeWindow).RunNative(func(context any) {
-			handle := context.(driver.X11WindowContext).WindowHandle
-			parentWindowHandle = x11WindowHandleToString(handle)
-		})
+		nativeWindow, ok := window.(NativeWindow)
+		if ok {
+			nativeWindow.RunNative(func(context any) {
+				handle := context.(driver.X11WindowContext).WindowHandle
+				parentWindowHandle = x11WindowHandleToString(handle)
+			})
+		} else {
+			panic("expecting interface implementation with RunNative(func(context any))")
+		}
 	}
 
 	// TODO: We need to get the Wayland handle from the xdg_foreign protocol and convert to string on the form "wayland:{id}".

@@ -28,7 +28,7 @@ const (
 //
 // Since: 1.4
 type ColorPickerDialog struct {
-	*dialog
+	*Dialog
 	Advanced bool
 	color    color.Color
 	callback func(c color.Color)
@@ -43,7 +43,7 @@ type ColorPickerDialog struct {
 // Since: 1.4
 func NewColorPicker(title, message string, callback func(c color.Color), parent fyne.Window) *ColorPickerDialog {
 	return &ColorPickerDialog{
-		dialog:   newDialog(title, message, theme.ColorPaletteIcon(), nil /*cancel?*/, parent),
+		Dialog:   newDialog(title, message, theme.ColorPaletteIcon(), nil /*cancel?*/, parent),
 		color:    theme.Color(theme.ColorNamePrimary),
 		callback: callback,
 	}
@@ -78,7 +78,7 @@ func (p *ColorPickerDialog) Show() {
 	if p.win == nil || p.Advanced != (p.advanced != nil) {
 		p.updateUI()
 	}
-	p.dialog.Show()
+	p.Dialog.Show()
 }
 
 func (p *ColorPickerDialog) createSimplePickers() (contents []fyne.CanvasObject) {
@@ -91,7 +91,7 @@ func (p *ColorPickerDialog) createSimplePickers() (contents []fyne.CanvasObject)
 }
 
 func (p *ColorPickerDialog) selectColor(c color.Color) {
-	p.dialog.Hide()
+	p.Dialog.Hide()
 	writeRecentColor(colorToString(c))
 	if p.picker != nil {
 		p.picker.SetColor(c)
@@ -106,8 +106,8 @@ func (p *ColorPickerDialog) updateUI() {
 	if w := p.win; w != nil {
 		w.Hide()
 	}
-	p.dialog.dismiss = &widget.Button{Text: lang.L("Cancel"), Icon: theme.CancelIcon(),
-		OnTapped: p.dialog.Hide,
+	p.Dialog.dismiss = &widget.Button{Text: lang.L("Cancel"), Icon: theme.CancelIcon(),
+		OnTapped: p.Dialog.Hide,
 	}
 	if p.Advanced {
 		p.picker = newColorAdvancedPicker(p.color, func(c color.Color) {
@@ -120,7 +120,7 @@ func (p *ColorPickerDialog) updateUI() {
 		}
 		p.advanced = widget.NewAccordion(advancedItem)
 
-		p.dialog.content = container.NewVBox(
+		p.Dialog.content = container.NewVBox(
 			container.NewCenter(
 				container.NewVBox(
 					p.createSimplePickers()...,
@@ -135,10 +135,10 @@ func (p *ColorPickerDialog) updateUI() {
 				p.selectColor(p.color)
 			},
 		}
-		p.dialog.create(container.NewGridWithColumns(2, p.dialog.dismiss, confirm))
+		p.Dialog.create(container.NewGridWithColumns(2, p.Dialog.dismiss, confirm))
 	} else {
-		p.dialog.content = container.NewVBox(p.createSimplePickers()...)
-		p.dialog.create(container.NewGridWithColumns(1, p.dialog.dismiss))
+		p.Dialog.content = container.NewVBox(p.createSimplePickers()...)
+		p.Dialog.create(container.NewGridWithColumns(1, p.Dialog.dismiss))
 	}
 }
 

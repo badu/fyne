@@ -1,9 +1,11 @@
 package canvas
 
 import (
+	"fyne.io/fyne/v2/internal/async"
 	"image"
 	"image/color"
 	"math"
+	"sync"
 
 	"fyne.io/fyne/v2"
 )
@@ -11,11 +13,58 @@ import (
 // LinearGradient defines a Gradient travelling straight at a given angle.
 // The only supported values for the angle are `0.0` (vertical) and `90.0` (horizontal), currently.
 type LinearGradient struct {
-	baseObject
+	size     async.Size     // The current size of the canvas object
+	position async.Position // The current position of the object
+	Hidden   bool           // Is this object currently hidden
+
+	min async.Size // The minimum size this object can be
+
+	propertyLock sync.RWMutex
 
 	StartColor color.Color // The beginning color of the gradient
 	EndColor   color.Color // The end color of the gradient
 	Angle      float64     // The angle of the gradient (0/180 for vertical; 90/270 for horizontal)
+}
+
+// MinSize returns the specified minimum size, if set, or {1, 1} otherwise.
+func (o *LinearGradient) MinSize() fyne.Size {
+	min := o.min.Load()
+	if min.IsZero() {
+		return fyne.Size{Width: 1, Height: 1}
+	}
+
+	return min
+}
+
+// Position gets the current position of this canvas object, relative to its parent.
+func (o *LinearGradient) Position() fyne.Position {
+	return o.position.Load()
+}
+
+// SetMinSize specifies the smallest size this object should be.
+func (o *LinearGradient) SetMinSize(size fyne.Size) {
+	o.min.Store(size)
+}
+
+// Show will set this object to be visible.
+func (o *LinearGradient) Show() {
+	o.propertyLock.Lock()
+	defer o.propertyLock.Unlock()
+
+	o.Hidden = false
+}
+
+// Size returns the current size of this canvas object.
+func (o *LinearGradient) Size() fyne.Size {
+	return o.size.Load()
+}
+
+// Visible returns true if this object is visible, false otherwise.
+func (o *LinearGradient) Visible() bool {
+	o.propertyLock.RLock()
+	defer o.propertyLock.RUnlock()
+
+	return !o.Hidden
 }
 
 // Generate calculates an image of the gradient with the specified width and height.
@@ -61,15 +110,16 @@ func (g *LinearGradient) Generate(iw, ih int) image.Image {
 
 // Hide will set this gradient to not be visible
 func (g *LinearGradient) Hide() {
-	g.baseObject.Hide()
+	g.propertyLock.Lock()
+	g.Hidden = true
+	g.propertyLock.Unlock()
 
 	repaint(g)
 }
 
 // Move the gradient to a new position, relative to its parent / canvas
 func (g *LinearGradient) Move(pos fyne.Position) {
-	g.baseObject.Move(pos)
-
+	g.position.Store(pos)
 	repaint(g)
 }
 
@@ -78,7 +128,7 @@ func (g *LinearGradient) Resize(size fyne.Size) {
 	if size == g.Size() {
 		return
 	}
-	g.baseObject.Resize(size)
+	g.size.Store(size)
 
 	// refresh needed to invalidate cached textures
 	g.Refresh()
@@ -91,7 +141,13 @@ func (g *LinearGradient) Refresh() {
 
 // RadialGradient defines a Gradient travelling radially from a center point outward.
 type RadialGradient struct {
-	baseObject
+	size     async.Size     // The current size of the canvas object
+	position async.Position // The current position of the object
+	Hidden   bool           // Is this object currently hidden
+
+	min async.Size // The minimum size this object can be
+
+	propertyLock sync.RWMutex
 
 	StartColor color.Color // The beginning color of the gradient
 	EndColor   color.Color // The end color of the gradient
@@ -101,21 +157,89 @@ type RadialGradient struct {
 	CenterOffsetX, CenterOffsetY float64
 }
 
+// Hide will set this gradient to not be visible
+func (r *RadialGradient) Hide() {
+	r.propertyLock.Lock()
+	r.Hidden = true
+	r.propertyLock.Unlock()
+
+	repaint(r)
+}
+
+// MinSize returns the specified minimum size, if set, or {1, 1} otherwise.
+func (r *RadialGradient) MinSize() fyne.Size {
+	min := r.min.Load()
+	if min.IsZero() {
+		return fyne.Size{Width: 1, Height: 1}
+	}
+
+	return min
+}
+
+// Move the gradient to a new position, relative to its parent / canvas
+func (r *RadialGradient) Move(pos fyne.Position) {
+	r.position.Store(pos)
+
+	repaint(r)
+}
+
+// Position gets the current position of this canvas object, relative to its parent.
+func (r *RadialGradient) Position() fyne.Position {
+	return r.position.Load()
+}
+
+// Resize resizes the gradient to a new size.
+func (r *RadialGradient) Resize(size fyne.Size) {
+	if size == r.Size() {
+		return
+	}
+	r.size.Store(size)
+
+	// refresh needed to invalidate cached textures
+	r.Refresh()
+}
+
+// SetMinSize specifies the smallest size this object should be.
+func (r *RadialGradient) SetMinSize(size fyne.Size) {
+	r.min.Store(size)
+}
+
+// Show will set this object to be visible.
+func (r *RadialGradient) Show() {
+	r.propertyLock.Lock()
+	defer r.propertyLock.Unlock()
+
+	r.Hidden = false
+}
+
+// Size returns the current size of this canvas object.
+func (r *RadialGradient) Size() fyne.Size {
+	return r.size.Load()
+}
+
+// Visible returns true if this object is visible, false otherwise.
+func (r *RadialGradient) Visible() bool {
+	r.propertyLock.RLock()
+	defer r.propertyLock.RUnlock()
+
+	return !r.Hidden
+}
+
 // Generate calculates an image of the gradient with the specified width and height.
-func (g *RadialGradient) Generate(iw, ih int) image.Image {
+func (r *RadialGradient) Generate(iw, ih int) image.Image {
 	w, h := float64(iw), float64(ih)
 	// define center plus offset
-	centerX := w/2 + w*g.CenterOffsetX
-	centerY := h/2 + h*g.CenterOffsetY
+	centerX := w/2 + w*r.CenterOffsetX
+	centerY := h/2 + h*r.CenterOffsetY
 
 	// handle negative offsets
 	var a, b float64
-	if g.CenterOffsetX < 0 {
+	if r.CenterOffsetX < 0 {
 		a = w - centerX
 	} else {
 		a = centerX
 	}
-	if g.CenterOffsetY < 0 {
+	if r.CenterOffsetY < 0 {
 		b = h - centerY
 	} else {
 		b = centerY
@@ -130,37 +254,12 @@ func (g *RadialGradient) Generate(iw, ih int) image.Image {
 		}
 		return da / a
 	}
-	return computeGradient(generator, iw, ih, g.StartColor, g.EndColor)
-}
-
-// Hide will set this gradient to not be visible
-func (g *RadialGradient) Hide() {
-	g.baseObject.Hide()
-
-	repaint(g)
-}
-
-// Move the gradient to a new position, relative to its parent / canvas
-func (g *RadialGradient) Move(pos fyne.Position) {
-	g.baseObject.Move(pos)
-
-	repaint(g)
-}
-
-// Resize resizes the gradient to a new size.
-func (g *RadialGradient) Resize(size fyne.Size) {
-	if size == g.Size() {
-		return
-	}
-	g.baseObject.Resize(size)
-
-	// refresh needed to invalidate cached textures
-	g.Refresh()
+	return computeGradient(generator, iw, ih, r.StartColor, r.EndColor)
 }
 
 // Refresh causes this gradient to be redrawn with its configured state.
-func (g *RadialGradient) Refresh() {
-	Refresh(g)
+func (r *RadialGradient) Refresh() {
+	Refresh(r)
 }
 
 func calculatePixel(d float64, startColor, endColor color.Color) color.Color {

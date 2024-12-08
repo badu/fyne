@@ -361,6 +361,7 @@ func (w *window) processMouseMoved(xpos float64, ypos float64) {
 	cursor := desktop.Cursor(desktop.DefaultCursor)
 
 	obj, pos, _ := w.findObjectAtPositionMatching(w.canvas, mousePos, func(object fyne.CanvasObject) bool {
+		// TODO : @Badu - how expensive this must be!!!
 		if cursorable, ok := object.(desktop.Cursorable); ok {
 			cursor = cursorable.Cursor()
 		}

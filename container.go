@@ -18,41 +18,6 @@ type Container struct {
 	Objects []CanvasObject // The set of [CanvasObject]s this container holds
 }
 
-// NewContainer returns a new [Container] instance holding the specified [CanvasObject]s.
-//
-// Deprecated: Use [fyne.io/fyne/v2/container.NewWithoutLayout] to create a container that uses manual layout.
-func NewContainer(objects ...CanvasObject) *Container {
-	return NewContainerWithoutLayout(objects...)
-}
-
-// NewContainerWithoutLayout returns a new [Container] instance holding the specified
-// [CanvasObject]s that are manually arranged.
-//
-// Deprecated: Use [fyne.io/fyne/v2/container.NewWithoutLayout] instead.
-func NewContainerWithoutLayout(objects ...CanvasObject) *Container {
-	ret := &Container{
-		Objects: objects,
-	}
-
-	ret.size = ret.MinSize()
-	return ret
-}
-
-// NewContainerWithLayout returns a new [Container] instance holding the specified
-// [CanvasObject]s which will be laid out according to the specified Layout.
-//
-// Deprecated: Use [fyne.io/fyne/v2/container.New] instead.
-func NewContainerWithLayout(layout Layout, objects ...CanvasObject) *Container {
-	ret := &Container{
-		Objects: objects,
-		Layout:  layout,
-	}
-
-	ret.size = layout.MinSize(objects)
-	ret.layout()
-	return ret
-}
-
 // Add appends the specified object to the items this container manages.
 //
 // Since: 1.4

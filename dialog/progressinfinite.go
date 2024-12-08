@@ -14,7 +14,7 @@ import (
 //
 // Deprecated: Use NewCustomWithoutButtons() and add a widget.ProgressBarInfinite() inside.
 type ProgressInfiniteDialog struct {
-	*dialog
+	*Dialog
 
 	bar *widget.ProgressBarInfinite
 }
@@ -36,5 +36,5 @@ func NewProgressInfinite(title, message string, parent fyne.Window) *ProgressInf
 // Hide this dialog and stop the infinite progress goroutine
 func (d *ProgressInfiniteDialog) Hide() {
 	d.bar.Hide()
-	d.dialog.Hide()
+	d.Dialog.Hide()
 }

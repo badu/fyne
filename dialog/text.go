@@ -15,8 +15,8 @@ const (
 	maxTextDialogWinPcntWidth float32 = .9
 )
 
-func newTextDialog(title, message string, icon fyne.Resource, parent fyne.Window) *dialog {
-	d := &dialog{
+func newTextDialog(title, message string, icon fyne.Resource, parent fyne.Window) *Dialog {
+	d := &Dialog{
 		title:   title,
 		icon:    icon,
 		parent:  parent,
@@ -31,7 +31,7 @@ func newTextDialog(title, message string, icon fyne.Resource, parent fyne.Window
 // - width needed to show message without wrapping
 // - maxTextDialogAbsoluteWidth
 // - current window width * maxTextDialogWinPcntWidth
-func createBeforeShowHook(d *dialog, message string) func() {
+func createBeforeShowHook(d *Dialog, message string) func() {
 	// Until issue #4648 is resolved, we need to create a label here
 	// rather than just using fyne.MeasureText, because the label's minsize
 	// also depends on the internal padding that label adds, which is unknown here

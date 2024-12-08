@@ -1,7 +1,9 @@
 package canvas
 
 import (
+	"fyne.io/fyne/v2/internal/async"
 	"image/color"
+	"sync"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/theme"
@@ -11,7 +13,14 @@ import (
 // A text object can have a style set which will apply to the whole string.
 // No formatting or text parsing will be performed
 type Text struct {
-	baseObject
+	size     async.Size     // The current size of the canvas object
+	position async.Position // The current position of the object
+	Hidden   bool           // Is this object currently hidden
+
+	min async.Size // The minimum size this object can be
+
+	propertyLock sync.RWMutex
+
 	Alignment fyne.TextAlign // The alignment of the text content
 
 	Color     color.Color    // The main text draw color
@@ -27,9 +36,36 @@ type Text struct {
 	FontSource fyne.Resource
 }
 
+// Position gets the current position of this canvas object, relative to its parent.
+func (t *Text) Position() fyne.Position {
+	return t.position.Load()
+}
+
+// Show will set this object to be visible.
+func (t *Text) Show() {
+	t.propertyLock.Lock()
+	t.Hidden = false
+	t.propertyLock.Unlock()
+}
+
+// Size returns the current size of this canvas object.
+func (t *Text) Size() fyne.Size {
+	return t.size.Load()
+}
+
+// Visible returns true if this object is visible, false otherwise.
+func (t *Text) Visible() bool {
+	t.propertyLock.RLock()
+	defer t.propertyLock.RUnlock()
+
+	return !t.Hidden
+}
+
 // Hide will set this text to not be visible
 func (t *Text) Hide() {
-	t.baseObject.Hide()
+	t.propertyLock.Lock()
+	t.Hidden = true
+	t.propertyLock.Unlock()
 
 	repaint(t)
 }
@@ -37,24 +73,23 @@ func (t *Text) Hide() {
 // MinSize returns the minimum size of this text object based on its font size and content.
 // This is normally determined by the render implementation.
 func (t *Text) MinSize() fyne.Size {
+	// TODO : @Badu - this might be expensive too
 	s, _ := fyne.CurrentApp().Driver().RenderedTextSize(t.Text, t.TextSize, t.TextStyle, t.FontSource)
 	return s
 }
 
 // Move the text to a new position, relative to its parent / canvas
 func (t *Text) Move(pos fyne.Position) {
-	t.baseObject.Move(pos)
-
+	t.position.Store(pos)
 	repaint(t)
 }
 
 // Resize on a text updates the new size of this object, which may not result in a visual change, depending on alignment.
-func (t *Text) Resize(s fyne.Size) {
-	if s == t.Size() {
+func (t *Text) Resize(size fyne.Size) {
+	if size == t.Size() {
 		return
 	}
-
-	t.baseObject.Resize(s)
+	t.size.Store(size)
 	Refresh(t)
 }
 

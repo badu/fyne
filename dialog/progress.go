@@ -14,7 +14,7 @@ import (
 //
 // Deprecated: Use NewCustomWithoutButtons() and add a widget.ProgressBar() inside.
 type ProgressDialog struct {
-	*dialog
+	*Dialog
 
 	bar *widget.ProgressBar
 }

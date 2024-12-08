@@ -1,16 +1,24 @@
 package canvas
 
 import (
+	"fyne.io/fyne/v2/internal/async"
 	"image"
 	"image/color"
 	"image/draw"
+	"sync"
 
 	"fyne.io/fyne/v2"
 )
 
 // Raster describes a raster image area that can render in a Fyne canvas
 type Raster struct {
-	baseObject
+	size     async.Size     // The current size of the canvas object
+	position async.Position // The current position of the object
+	Hidden   bool           // Is this object currently hidden
+
+	min async.Size // The minimum size this object can be
+
+	propertyLock sync.RWMutex
 
 	// Render the raster image from code
 	Generator func(w, h int) image.Image
@@ -30,26 +38,67 @@ func (r *Raster) Alpha() float64 {
 
 // Hide will set this raster to not be visible
 func (r *Raster) Hide() {
-	r.baseObject.Hide()
+	r.propertyLock.Lock()
+	r.Hidden = true
+	r.propertyLock.Unlock()
 
 	repaint(r)
+}
+
+// MinSize returns the specified minimum size, if set, or {1, 1} otherwise.
+func (r *Raster) MinSize() fyne.Size {
+	min := r.min.Load()
+	if min.IsZero() {
+		return fyne.Size{Width: 1, Height: 1}
+	}
+
+	return min
 }
 
 // Move the raster to a new position, relative to its parent / canvas
 func (r *Raster) Move(pos fyne.Position) {
-	r.baseObject.Move(pos)
+	r.position.Store(pos)
 
 	repaint(r)
 }
 
+// Position gets the current position of this canvas object, relative to its parent.
+func (o *Raster) Position() fyne.Position {
+	return o.position.Load()
+}
+
+// SetMinSize specifies the smallest size this object should be.
+func (o *Raster) SetMinSize(size fyne.Size) {
+	o.min.Store(size)
+}
+
+// Show will set this object to be visible.
+func (o *Raster) Show() {
+	o.propertyLock.Lock()
+	o.Hidden = false
+	o.propertyLock.Unlock()
+}
+
+// Size returns the current size of this canvas object.
+func (o *Raster) Size() fyne.Size {
+	return o.size.Load()
+}
+
+// Visible returns true if this object is visible, false otherwise.
+func (o *Raster) Visible() bool {
+	o.propertyLock.RLock()
+	defer o.propertyLock.RUnlock()
+
+	return !o.Hidden
+}
+
 // Resize on a raster image causes the new size to be set and then calls Refresh.
 // This causes the underlying data to be recalculated and a new output to be drawn.
-func (r *Raster) Resize(s fyne.Size) {
-	if s == r.Size() {
+func (r *Raster) Resize(size fyne.Size) {
+	if size == r.Size() {
 		return
 	}
-
-	r.baseObject.Resize(s)
+	r.size.Store(size)
 	Refresh(r)
 }
 

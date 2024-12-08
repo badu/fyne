@@ -6,7 +6,6 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
-	paint "fyne.io/fyne/v2/internal/painter"
 )
 
 func (p *painter) createBuffer(points []float32) Buffer {
@@ -239,7 +238,13 @@ func (p *painter) drawText(text *canvas.Text, pos fyne.Position, frame fyne.Size
 
 	// text size is sensitive to position on screen
 	size, _ = roundToPixelCoords(size, text.Position(), p.pixScale)
-	size.Width += roundToPixel(paint.VectorPad(text), p.pixScale)
+
+	pad := float32(0.0)
+	if text.TextStyle.Italic {
+		pad = text.TextSize / 5 // make sure that even a 20% lean does not overflow
+	}
+
+	size.Width += roundToPixel(pad, p.pixScale)
 	p.drawTextureWithDetails(text, p.newGlTextTexture, pos, size, frame, canvas.ImageFillStretch, 1.0, 0)
 }
 

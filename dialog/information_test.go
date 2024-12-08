@@ -14,8 +14,7 @@ import (
 func TestDialog_MinSize(t *testing.T) {
 	window := test.NewWindow(nil)
 	defer window.Close()
-	d := NewInformation("Looooooooooooooong title", "message...", window)
-	information := d.(*dialog)
+	information := NewInformation("Looooooooooooooong title", "message...", window)
 
 	dialogContent := information.win.Content.MinSize()
 	label := information.win.Content.(*fyne.Container).Objects[4].MinSize()
@@ -27,9 +26,8 @@ func TestDialog_Resize(t *testing.T) {
 	window := test.NewWindow(nil)
 	window.Resize(fyne.NewSize(600, 400))
 	defer window.Close()
-	d := NewInformation("Looooooooooooooong title", "message...", window)
-	theDialog := d.(*dialog)
-	d.Show() // we cannot check window size if not shown
+	theDialog := NewInformation("Looooooooooooooong title", "message...", window)
+	theDialog.Show() // we cannot check window size if not shown
 
 	//Test resize - normal size scenario
 	size := fyne.NewSize(300, 180) //normal size to fit (600,400)
@@ -69,28 +67,26 @@ func TestDialog_TextWrapping(t *testing.T) {
 	window := test.NewTempWindow(t, nil)
 	window.Resize(fyne.NewSize(600, 400))
 
-	d := NewInformation("Title", "This is a really really long message that will be used to test the dialog text wrapping capabilities", window)
-	theDialog := d.(*dialog)
-	d.Show() // we cannot check window size if not shown
+	theDialog := NewInformation("Title", "This is a really really long message that will be used to test the dialog text wrapping capabilities", window)
+	theDialog.Show() // we cannot check window size if not shown
 
 	// limits width to 90% of window size
 	assert.Equal(t, float32(600.0*maxTextDialogWinPcntWidth), theDialog.desiredSize.Width)
 
 	theDialog.desiredSize = fyne.NewSquareSize(0)
 	window.Resize(fyne.NewSize(900, 400))
-	d.Show()
+	theDialog.Show()
 
 	// limits width to absolute maximum
 	assert.Equal(t, maxTextDialogAbsoluteWidth, theDialog.desiredSize.Width)
 }
 
 func TestDialog_InformationCallback(t *testing.T) {
-	d := NewInformation("Information", "Hello World", test.NewTempWindow(t, nil))
+	information := NewInformation("Information", "Hello World", test.NewTempWindow(t, nil))
 	tapped := false
-	d.SetOnClosed(func() { tapped = true })
-	d.Show()
+	information.SetOnClosed(func() { tapped = true })
+	information.Show()
 
-	information := d.(*dialog)
 	assert.False(t, information.win.Hidden)
 	test.Tap(information.dismiss)
 	assert.True(t, tapped)
@@ -99,12 +95,11 @@ func TestDialog_InformationCallback(t *testing.T) {
 
 func TestDialog_ErrorCallback(t *testing.T) {
 	err := errors.New("error message")
-	d := NewError(err, test.NewTempWindow(t, nil))
+	information := NewError(err, test.NewTempWindow(t, nil))
 	tapped := false
-	d.SetOnClosed(func() { tapped = true })
-	d.Show()
+	information.SetOnClosed(func() { tapped = true })
+	information.Show()
 
-	information := d.(*dialog)
 	assert.False(t, information.win.Hidden)
 	test.Tap(information.dismiss)
 	assert.True(t, tapped)
@@ -114,16 +109,16 @@ func TestDialog_ErrorCallback(t *testing.T) {
 func TestDialog_ErrorCapitalize(t *testing.T) {
 	err := errors.New("here is an error msg")
 	d := NewError(err, test.NewTempWindow(t, nil))
-	assert.Equal(t, d.(*dialog).content.(*widget.Label).Text,
+	assert.Equal(t, d.content.(*widget.Label).Text,
 		"Here is an error msg")
 
 	err = errors.New("這是一條錯誤訊息")
 	d = NewError(err, test.NewTempWindow(t, nil))
-	assert.Equal(t, d.(*dialog).content.(*widget.Label).Text,
+	assert.Equal(t, d.content.(*widget.Label).Text,
 		"這是一條錯誤訊息")
 
 	err = errors.New("")
 	d = NewError(err, test.NewTempWindow(t, nil))
-	assert.Equal(t, d.(*dialog).content.(*widget.Label).Text,
+	assert.Equal(t, d.content.(*widget.Label).Text,
 		"")
 }

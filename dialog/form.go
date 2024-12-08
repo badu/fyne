@@ -11,7 +11,7 @@ import (
 //
 // Since: 2.4
 type FormDialog struct {
-	*dialog
+	*Dialog
 	items   []*widget.FormItem
 	confirm *widget.Button
 	cancel  *widget.Button
@@ -50,7 +50,7 @@ func (d *FormDialog) setSubmitState(err error) {
 func NewForm(title, confirm, dismiss string, items []*widget.FormItem, callback func(bool), parent fyne.Window) *FormDialog {
 	form := widget.NewForm(items...)
 
-	d := &dialog{content: form, callback: callback, title: title, parent: parent}
+	d := &Dialog{content: form, callback: callback, title: title, parent: parent}
 	d.dismiss = &widget.Button{Text: dismiss, Icon: theme.CancelIcon(),
 		OnTapped: d.Hide,
 	}
@@ -58,7 +58,7 @@ func NewForm(title, confirm, dismiss string, items []*widget.FormItem, callback 
 		OnTapped: func() { d.hideWithResponse(true) },
 	}
 	formDialog := &FormDialog{
-		dialog:  d,
+		Dialog:  d,
 		items:   items,
 		confirm: confirmBtn,
 		cancel:  d.dismiss,

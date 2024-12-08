@@ -11,19 +11,19 @@ import (
 //
 // Since: 2.4
 type CustomDialog struct {
-	*dialog
+	*Dialog
 }
 
 // NewCustom creates and returns a dialog over the specified application using custom
 // content. The button will have the dismiss text set.
 // The MinSize() of the CanvasObject passed will be used to set the size of the window.
 func NewCustom(title, dismiss string, content fyne.CanvasObject, parent fyne.Window) *CustomDialog {
-	d := &dialog{content: content, title: title, parent: parent}
+	d := &Dialog{content: content, title: title, parent: parent}
 
 	d.dismiss = &widget.Button{Text: dismiss, OnTapped: d.Hide}
 	d.create(container.NewGridWithColumns(1, d.dismiss))
 
-	return &CustomDialog{dialog: d}
+	return &CustomDialog{Dialog: d}
 }
 
 // ShowCustom shows a dialog over the specified application using custom
@@ -38,10 +38,10 @@ func ShowCustom(title, dismiss string, content fyne.CanvasObject, parent fyne.Wi
 //
 // Since: 2.4
 func NewCustomWithoutButtons(title string, content fyne.CanvasObject, parent fyne.Window) *CustomDialog {
-	d := &dialog{content: content, title: title, parent: parent}
+	d := &Dialog{content: content, title: title, parent: parent}
 	d.create(container.NewGridWithColumns(1))
 
-	return &CustomDialog{dialog: d}
+	return &CustomDialog{Dialog: d}
 }
 
 // SetButtons sets the row of buttons at the bottom of the dialog.
@@ -68,7 +68,7 @@ func ShowCustomWithoutButtons(title string, content fyne.CanvasObject, parent fy
 // The MinSize() of the CanvasObject passed will be used to set the size of the window.
 func NewCustomConfirm(title, confirm, dismiss string, content fyne.CanvasObject,
 	callback func(bool), parent fyne.Window) *ConfirmDialog {
-	d := &dialog{content: content, title: title, parent: parent, callback: callback}
+	d := &Dialog{content: content, title: title, parent: parent, callback: callback}
 
 	d.dismiss = &widget.Button{Text: dismiss, Icon: theme.CancelIcon(),
 		OnTapped: d.Hide,
@@ -80,7 +80,7 @@ func NewCustomConfirm(title, confirm, dismiss string, content fyne.CanvasObject,
 	}
 	d.create(container.NewGridWithColumns(2, d.dismiss, ok))
 
-	return &ConfirmDialog{dialog: d, confirm: ok}
+	return &ConfirmDialog{Dialog: d, confirm: ok}
 }
 
 // ShowCustomConfirm shows a dialog over the specified application using custom

@@ -3,6 +3,7 @@ package canvas
 import (
 	"bytes"
 	"errors"
+	"fyne.io/fyne/v2/internal/async"
 	"image"
 	_ "image/jpeg" // avoid users having to import when using image widget
 	_ "image/png"  // avoid the same for PNG images
@@ -54,7 +55,13 @@ const (
 // The image may be a vector or a bitmap representation, it will fill the area.
 // The fill mode can be changed by setting FillMode to a different ImageFill.
 type Image struct {
-	baseObject
+	size     async.Size     // The current size of the canvas object
+	position async.Position // The current position of the object
+	Hidden   bool           // Is this object currently hidden
+
+	min async.Size // The minimum size this object can be
+
+	propertyLock sync.RWMutex
 
 	aspect float32
 	icon   *svg.Decoder
@@ -69,6 +76,23 @@ type Image struct {
 	Translucency float64    // Set a translucency value > 0.0 to fade the image
 	FillMode     ImageFill  // Specify how the image should expand to fill or fit the available space
 	ScaleMode    ImageScale // Specify the type of scaling interpolation applied to the image
+}
+
+// Position gets the current position of this canvas object, relative to its parent.
+func (o *Image) Position() fyne.Position {
+	return o.position.Load()
+}
+
+// SetMinSize specifies the smallest size this object should be.
+func (o *Image) SetMinSize(size fyne.Size) {
+	o.min.Store(size)
+}
+
+// Show will set this object to be visible.
+func (o *Image) Show() {
+	o.propertyLock.Lock()
+	o.Hidden = false
+	o.propertyLock.Unlock()
 }
 
 // Alpha is a convenience function that returns the alpha value for an image
@@ -89,7 +113,9 @@ func (i *Image) Aspect() float32 {
 
 // Hide will set this image to not be visible
 func (i *Image) Hide() {
-	i.baseObject.Hide()
+	i.propertyLock.Lock()
+	i.Hidden = true
+	i.propertyLock.Unlock()
 
 	repaint(i)
 }
@@ -99,14 +125,31 @@ func (i *Image) MinSize() fyne.Size {
 	if i.Image == nil || i.aspect == 0 {
 		i.Refresh()
 	}
-	return i.baseObject.MinSize()
+	min := i.min.Load()
+	if min.IsZero() {
+		return fyne.Size{Width: 1, Height: 1}
+	}
+	return min
 }
 
 // Move the image object to a new position, relative to its parent top, left corner.
 func (i *Image) Move(pos fyne.Position) {
-	i.baseObject.Move(pos)
+	i.position.Store(pos)
 
 	repaint(i)
+}
+
+// Size returns the current size of this canvas object.
+func (i *Image) Size() fyne.Size {
+	return i.size.Load()
+}
+
+// Visible returns true if this object is visible, false otherwise.
+func (i *Image) Visible() bool {
+	i.propertyLock.RLock()
+	defer i.propertyLock.RUnlock()
+
+	return !i.Hidden
 }
 
 // Refresh causes this image to be redrawn with its configured state.
@@ -168,17 +211,17 @@ func (i *Image) Refresh() {
 
 // Resize on an image will scale the content or reposition it according to FillMode.
 // It will normally cause a Refresh to ensure the pixels are recalculated.
-func (i *Image) Resize(s fyne.Size) {
-	if s == i.Size() {
+func (i *Image) Resize(size fyne.Size) {
+	if size == i.Size() {
 		return
 	}
-	i.baseObject.Resize(s)
+	i.size.Store(size)
 	if i.FillMode == ImageFillOriginal && i.Size().Height > 2 { // we can just ask for a GPU redraw to align
 		Refresh(i)
 		return
 	}
 
-	i.baseObject.Resize(s)
+	i.size.Store(size)
 	if i.isSVG || i.Image == nil {
 		i.Refresh() // we need to rasterise at the new size
 	} else {

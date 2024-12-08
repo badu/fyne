@@ -26,8 +26,8 @@ func TestProgressInfiniteDialog_Resize(t *testing.T) {
 	window.Resize(fyne.NewSize(600, 400))
 	defer window.Close()
 	d := NewProgressInfinite("title", "message", window)
-	theDialog := d.dialog
-	d.dialog.Show() // we cannot check window size if not shown
+	theDialog := d.Dialog
+	d.Dialog.Show() // we cannot check window size if not shown
 
 	//Test resize - normal size scenario
 	size := fyne.NewSize(300, 180) //normal size to fit (600,400)

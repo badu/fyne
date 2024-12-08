@@ -10,7 +10,7 @@ import (
 
 // ConfirmDialog is like the standard Dialog but with an additional confirmation button
 type ConfirmDialog struct {
-	*dialog
+	*Dialog
 
 	confirm *widget.Button
 }
@@ -45,7 +45,7 @@ func NewConfirm(title, message string, callback func(bool), parent fyne.Window) 
 	}
 	d.create(container.NewGridWithColumns(2, d.dismiss, confirm))
 
-	return &ConfirmDialog{dialog: d, confirm: confirm}
+	return &ConfirmDialog{Dialog: d, confirm: confirm}
 }
 
 // ShowConfirm shows a dialog over the specified window for a user

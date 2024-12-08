@@ -50,3 +50,4 @@ func (v Delta) Components() (float32, float32) {
 [ ] I am NOT sure that we got binding right.
 [ ] Goland doesn't know what this is `queueItem(key.(DataListener).DataChanged)`. We should help poor thing.
 [ ] The hardest one : the composition everywhere (e.g. /fyne/internal/driver/glfw/window_desktop.go contains keyboard, mouse, scale, state, menu, resources, and more)
+[ ] Code duplication is not as bad as confusing code. Overall, the code looks good, except the parts where it is avoiding duplication

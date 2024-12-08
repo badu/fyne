@@ -11,7 +11,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func createInformationDialog(title, message string, icon fyne.Resource, parent fyne.Window) Dialog {
+func createInformationDialog(title, message string, icon fyne.Resource, parent fyne.Window) *Dialog {
 	d := newTextDialog(title, message, icon, parent)
 	d.dismiss = &widget.Button{
 		Text:     lang.L("OK"),
@@ -24,7 +24,7 @@ func createInformationDialog(title, message string, icon fyne.Resource, parent f
 // NewInformation creates a dialog over the specified window for user information.
 // The title is used for the dialog window and message is the content.
 // After creation you should call Show().
-func NewInformation(title, message string, parent fyne.Window) Dialog {
+func NewInformation(title, message string, parent fyne.Window) *Dialog {
 	return createInformationDialog(title, message, theme.InfoIcon(), parent)
 }
 
@@ -37,7 +37,7 @@ func ShowInformation(title, message string, parent fyne.Window) {
 // NewError creates a dialog over the specified window for an application error.
 // The message is extracted from the provided error (should not be nil).
 // After creation you should call Show().
-func NewError(err error, parent fyne.Window) Dialog {
+func NewError(err error, parent fyne.Window) *Dialog {
 	dialogText := err.Error()
 	r, size := utf8.DecodeRuneInString(dialogText)
 	if r != utf8.RuneError {

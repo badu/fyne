@@ -18,20 +18,7 @@ const (
 	padHeight = 16
 )
 
-// Dialog is the common API for any dialog window with a single dismiss button
-type Dialog interface {
-	Show()
-	Hide()
-	SetDismissText(label string)
-	SetOnClosed(closed func())
-	Refresh()
-	Resize(size fyne.Size)
-
-	// Since: 2.1
-	MinSize() fyne.Size
-}
-
-type dialog struct {
+type Dialog struct {
 	callback    func(bool)
 	title       string
 	icon        fyne.Resource
@@ -46,18 +33,18 @@ type dialog struct {
 	beforeShowHook func()
 }
 
-func (d *dialog) Hide() {
+func (d *Dialog) Hide() {
 	d.hideWithResponse(false)
 }
 
 // MinSize returns the size that this dialog should not shrink below
 //
 // Since: 2.1
-func (d *dialog) MinSize() fyne.Size {
+func (d *Dialog) MinSize() fyne.Size {
 	return d.win.MinSize()
 }
 
-func (d *dialog) Show() {
+func (d *Dialog) Show() {
 	if d.beforeShowHook != nil {
 		d.beforeShowHook()
 	}
@@ -67,19 +54,19 @@ func (d *dialog) Show() {
 	d.win.Show()
 }
 
-func (d *dialog) Refresh() {
+func (d *Dialog) Refresh() {
 	d.win.Refresh()
 }
 
 // Resize dialog, call this function after dialog show
-func (d *dialog) Resize(size fyne.Size) {
+func (d *Dialog) Resize(size fyne.Size) {
 	d.desiredSize = size
 	d.win.Resize(size)
 }
 
 // SetDismissText allows custom text to be set in the dismiss button
 // This is a no-op for dialogs without dismiss buttons.
-func (d *dialog) SetDismissText(label string) {
+func (d *Dialog) SetDismissText(label string) {
 	if d.dismiss == nil {
 		return
 	}
@@ -90,7 +77,7 @@ func (d *dialog) SetDismissText(label string) {
 
 // SetOnClosed allows to set a callback function that is called when
 // the dialog is closed
-func (d *dialog) SetOnClosed(closed func()) {
+func (d *Dialog) SetOnClosed(closed func()) {
 	// if there is already a callback set, remember it and call both
 	originalCallback := d.callback
 
@@ -102,14 +89,14 @@ func (d *dialog) SetOnClosed(closed func()) {
 	}
 }
 
-func (d *dialog) hideWithResponse(resp bool) {
+func (d *Dialog) hideWithResponse(resp bool) {
 	d.win.Hide()
 	if d.callback != nil {
 		d.callback(resp)
 	}
 }
 
-func (d *dialog) create(buttons fyne.CanvasObject) {
+func (d *Dialog) create(buttons fyne.CanvasObject) {
 	label := widget.NewLabel(widget.LabelWithStaticText(d.title), widget.LabelWithAlignment(fyne.TextAlignLeading), widget.LabelWithStyle(fyne.TextStyle{Bold: true}))
 	var image fyne.CanvasObject
 	if d.icon != nil {
@@ -129,14 +116,14 @@ func (d *dialog) create(buttons fyne.CanvasObject) {
 	d.win = widget.NewModalPopUp(content, d.parent.Canvas())
 }
 
-func (d *dialog) setButtons(buttons fyne.CanvasObject) {
+func (d *Dialog) setButtons(buttons fyne.CanvasObject) {
 	d.win.Content.(*fyne.Container).Objects[3] = buttons
 	d.win.Refresh()
 }
 
 // The method .create() needs to be called before the dialog cna be shown.
-func newDialog(title, message string, icon fyne.Resource, callback func(bool), parent fyne.Window) *dialog {
-	d := &dialog{content: newCenterWrappedLabel(message), title: title, icon: icon, parent: parent}
+func newDialog(title, message string, icon fyne.Resource, callback func(bool), parent fyne.Window) *Dialog {
+	d := &Dialog{content: newCenterWrappedLabel(message), title: title, icon: icon, parent: parent}
 	d.callback = callback
 
 	return d
@@ -193,7 +180,7 @@ func (renderer *themedBackgroundRenderer) Refresh() {
 // ===============================================================
 
 type dialogLayout struct {
-	d *dialog
+	d *Dialog
 }
 
 func (l *dialogLayout) Layout(obj []fyne.CanvasObject, size fyne.Size) {
