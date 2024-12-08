@@ -91,7 +91,7 @@ func TestSelectEntry_DropDownMove(t *testing.T) {
 	inset, _ := w.Canvas().InteractiveArea()
 
 	// open the popup
-	test.Tap(e.ActionItem.(fyne.Tappable))
+	test.Tap(e.ActionItem.(Tappable))
 
 	// first movement
 	e.Move(fyne.NewPos(10, 10))

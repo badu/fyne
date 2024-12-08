@@ -19,9 +19,6 @@ type TappableImage struct {
 	hovered bool
 }
 
-var _ fyne.Tappable = (*TappableImage)(nil)
-var _ desktop.Hoverable = (*TappableImage)(nil)
-
 // NewTappableImage returns a new instance of a [TappableImage] widget.
 func NewTappableImage(res fyne.Resource, tapped func()) *TappableImage {
 	ti := &TappableImage{OnTapped: tapped, image: canvas.NewImageFromResource(res)}

@@ -18,7 +18,7 @@ func hideVirtualKeyboard() {
 
 func handleKeyboard(obj fyne.Focusable) {
 	isDisabled := false
-	if disWid, ok := obj.(fyne.Disableable); ok {
+	if disWid, ok := obj.(Disableable); ok {
 		isDisabled = disWid.Disabled()
 	}
 	if obj != nil && !isDisabled {

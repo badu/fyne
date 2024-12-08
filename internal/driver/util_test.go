@@ -15,6 +15,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// Scrollable describes any [CanvasObject] that can also be scrolled.
+// This is mostly used to implement the widget.ScrollContainer.
+type Scrollable interface {
+	Scrolled(*fyne.ScrollEvent)
+}
+
 func TestAbsolutePositionForObject(t *testing.T) {
 	t1r1c1 := widget.NewLabel(widget.LabelWithStaticText("row 1 col 1"))
 	t1r1c2 := widget.NewLabel(widget.LabelWithStaticText("row 1 col 2"))
@@ -314,7 +320,7 @@ func TestReverseWalkVisibleObjectTree_Clip(t *testing.T) {
 		if _, ok := object.(*internal_widget.Scroll); ok {
 			scClipPos = clippingPos
 			scClipSize = clippingSize
-		} else if _, ok = object.(fyne.Scrollable); ok {
+		} else if _, ok = object.(Scrollable); ok {
 			scrollableClipPos = clippingPos
 			scrollableClipSize = clippingSize
 		}
@@ -385,7 +391,7 @@ func TestWalkVisibleObjectTree_Clip(t *testing.T) {
 		if _, ok := object.(*internal_widget.Scroll); ok {
 			scClipPos = clippingPos
 			scClipSize = clippingSize
-		} else if _, ok = object.(fyne.Scrollable); ok {
+		} else if _, ok = object.(Scrollable); ok {
 			scrollableClipPos = clippingPos
 			scrollableClipSize = clippingSize
 		}

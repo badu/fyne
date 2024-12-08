@@ -1831,11 +1831,11 @@ func TestPasswordEntry_Disabled(t *testing.T) {
 	entry, _ := setupPasswordTest(t)
 	entry.Disable()
 
-	test.Tap(entry.ActionItem.(fyne.Tappable))
+	test.Tap(entry.ActionItem.(widget.Tappable))
 	assert.True(t, entry.Password)
 
 	entry.Enable()
-	test.Tap(entry.ActionItem.(fyne.Tappable))
+	test.Tap(entry.ActionItem.(widget.Tappable))
 	assert.False(t, entry.Password)
 }
 
@@ -2271,7 +2271,7 @@ func clickPrimary(c fyne.Canvas, obj desktop.Mouseable, ev *fyne.PointEvent) {
 	}
 	obj.MouseDown(mouseEvent)
 	obj.MouseUp(mouseEvent)
-	if tap, ok := obj.(fyne.Tappable); ok {
+	if tap, ok := obj.(widget.Tappable); ok {
 		tap.Tapped(ev)
 	}
 }
@@ -2282,7 +2282,7 @@ func handleFocusOnTap(c fyne.Canvas, obj any) {
 	}
 	unfocus := true
 	if focus, ok := obj.(fyne.Focusable); ok {
-		if dis, ok := obj.(fyne.Disableable); !ok || !dis.Disabled() {
+		if dis, ok := obj.(widget.Disableable); !ok || !dis.Disabled() {
 			unfocus = false
 			if focus != c.Focused() {
 				unfocus = true

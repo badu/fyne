@@ -88,7 +88,7 @@ type window struct {
 
 	mouseLock            sync.RWMutex
 	mousePos             fyne.Position
-	mouseDragged         fyne.Draggable
+	mouseDragged         Draggable
 	mouseDraggedObjStart fyne.Position
 	mouseDraggedOffset   fyne.Position
 	mouseDragPos         fyne.Position

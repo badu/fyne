@@ -369,7 +369,7 @@ func (f *Form) updateLabels() {
 	for i, item := range f.Items {
 		l := f.itemGrid.Objects[i*2].(*fyne.Container).Objects[0].(*canvas.Text)
 		l.TextSize = th.Size(theme.SizeNameText)
-		if dis, ok := item.Widget.(fyne.Disableable); ok {
+		if dis, ok := item.Widget.(Disableable); ok {
 			if dis.Disabled() {
 				l.Color = th.Color(theme.ColorNameDisabled, v)
 			} else {

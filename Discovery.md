@@ -1,9 +1,9 @@
 Project discovery
 ---
+Note to self : ALWAYS struct initialize using field names, BEFORE field alignment
 
 [x] Don't break the contract removal (e.g. `var _ fyne.Widget = (*Accordion)(nil)`). We are NOT at kinder-garden.
-[x] Note to self : ALWAYS struct initialize using field names, BEFORE field alignment
-[ ] Define interfaces where they are used. Use Go language when writing Go language.
+[x] Define interfaces where they are used. Use Go language when writing Go language.
 Notes:
 * There are interfaces that have methods that return interfaces:
 ```go

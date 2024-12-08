@@ -16,9 +16,6 @@ type TappableIcon struct {
 	hovered bool
 }
 
-var _ fyne.Tappable = (*TappableIcon)(nil)
-var _ desktop.Hoverable = (*TappableIcon)(nil)
-
 // NewTappableIcon returns a new instance of a [TappableIcon] widget.
 func NewTappableIcon(res fyne.Resource, tapped func()) *TappableIcon {
 	w := &TappableIcon{OnTapped: tapped, Icon: widget.NewIcon(res)}

@@ -7,6 +7,14 @@ import (
 	"fyne.io/fyne/v2/internal/driver"
 )
 
+// Disableable describes any [CanvasObject] that can be disabled.
+// This is primarily used with objects that also implement the Tappable interface.
+type Disableable interface {
+	Enable()
+	Disable()
+	Disabled() bool
+}
+
 // FocusManager represents a standard manager of input focus for a canvas
 type FocusManager struct {
 	sync.RWMutex
@@ -51,7 +59,7 @@ func (f *FocusManager) Focus(obj fyne.Focusable) bool {
 		if hidden {
 			return true
 		}
-		if dis, ok := obj.(fyne.Disableable); ok && dis.Disabled() {
+		if dis, ok := obj.(Disableable); ok && dis.Disabled() {
 			// TODO : @Badu - see about this
 			type selectableText interface {
 				SelectedText() string
@@ -124,7 +132,7 @@ func (f *FocusManager) nextWithWalker(current fyne.Focusable, walker walkerFunc)
 	var next fyne.Focusable
 	found := current == nil // if we have no starting point then pretend we matched already
 	walker(f.content, func(obj fyne.CanvasObject, _ fyne.Position, _ fyne.Position, _ fyne.Size) bool {
-		if w, ok := obj.(fyne.Disableable); ok && w.Disabled() {
+		if w, ok := obj.(Disableable); ok && w.Disabled() {
 			// disabled widget cannot receive focus
 			return false
 		}

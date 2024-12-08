@@ -134,7 +134,7 @@ func AssertRendersToMarkup(t *testing.T, masterFilename string, c fyne.Canvas, m
 // deltaX/Y is the dragging distance: <0 for dragging up/left, >0 for dragging down/right.
 func Drag(c fyne.Canvas, pos fyne.Position, deltaX, deltaY float32) {
 	matches := func(object fyne.CanvasObject) bool {
-		_, ok := object.(fyne.Draggable)
+		_, ok := object.(Draggable)
 		return ok
 	}
 	o, p, _ := intdriver.FindObjectAtPositionMatching(pos, matches, c.Overlays().Top(), c.Content())
@@ -145,8 +145,8 @@ func Drag(c fyne.Canvas, pos fyne.Position, deltaX, deltaY float32) {
 		Position: p,
 		Dragged:  fyne.Delta{DX: deltaX, DY: deltaY},
 	}
-	o.(fyne.Draggable).Dragged(e)
-	o.(fyne.Draggable).DragEnd()
+	o.(Draggable).Dragged(e)
+	o.(Draggable).DragEnd()
 }
 
 // FocusNext focuses the next focusable on the canvas.
@@ -219,7 +219,7 @@ func MoveMouse(c fyne.Canvas, pos fyne.Position) {
 // deltaX/Y is the scrolling distance: <0 for scrolling up/left, >0 for scrolling down/right.
 func Scroll(c fyne.Canvas, pos fyne.Position, deltaX, deltaY float32) {
 	matches := func(object fyne.CanvasObject) bool {
-		_, ok := object.(fyne.Scrollable)
+		_, ok := object.(Scrollable)
 		return ok
 	}
 	o, _, _ := intdriver.FindObjectAtPositionMatching(pos, matches, c.Overlays().Top(), c.Content())
@@ -228,23 +228,23 @@ func Scroll(c fyne.Canvas, pos fyne.Position, deltaX, deltaY float32) {
 	}
 
 	e := &fyne.ScrollEvent{Scrolled: fyne.Delta{DX: deltaX, DY: deltaY}}
-	o.(fyne.Scrollable).Scrolled(e)
+	o.(Scrollable).Scrolled(e)
 }
 
 // DoubleTap simulates a double left mouse click on the specified object.
-func DoubleTap(obj fyne.DoubleTappable) {
+func DoubleTap(obj DoubleTappable) {
 	ev, c := prepareTap(obj, fyne.NewPos(1, 1))
 	handleFocusOnTap(c, obj)
 	obj.DoubleTapped(ev)
 }
 
 // Tap simulates a left mouse click on the specified object.
-func Tap(obj fyne.Tappable) {
+func Tap(obj Tappable) {
 	TapAt(obj, fyne.NewPos(1, 1))
 }
 
 // TapAt simulates a left mouse click on the passed object at a specified place within it.
-func TapAt(obj fyne.Tappable, pos fyne.Position) {
+func TapAt(obj Tappable, pos fyne.Position) {
 	ev, c := prepareTap(obj, pos)
 	tap(c, obj, ev)
 }
@@ -252,17 +252,17 @@ func TapAt(obj fyne.Tappable, pos fyne.Position) {
 // TapCanvas taps at an absolute position on the canvas.
 func TapCanvas(c fyne.Canvas, pos fyne.Position) {
 	if o, p := findTappable(c, pos); o != nil {
-		tap(c, o.(fyne.Tappable), &fyne.PointEvent{AbsolutePosition: pos, Position: p})
+		tap(c, o.(Tappable), &fyne.PointEvent{AbsolutePosition: pos, Position: p})
 	}
 }
 
 // TapSecondary simulates a right mouse click on the specified object.
-func TapSecondary(obj fyne.SecondaryTappable) {
+func TapSecondary(obj SecondaryTappable) {
 	TapSecondaryAt(obj, fyne.NewPos(1, 1))
 }
 
 // TapSecondaryAt simulates a right mouse click on the passed object at a specified place within it.
-func TapSecondaryAt(obj fyne.SecondaryTappable, pos fyne.Position) {
+func TapSecondaryAt(obj SecondaryTappable, pos fyne.Position) {
 	ev, c := prepareTap(obj, pos)
 	handleFocusOnTap(c, obj)
 	obj.TappedSecondary(ev)
@@ -320,7 +320,7 @@ func WithTestTheme(t *testing.T, f func()) {
 
 func findTappable(c fyne.Canvas, pos fyne.Position) (o fyne.CanvasObject, p fyne.Position) {
 	matches := func(object fyne.CanvasObject) bool {
-		_, ok := object.(fyne.Tappable)
+		_, ok := object.(Tappable)
 		return ok
 	}
 	o, p, _ = intdriver.FindObjectAtPositionMatching(pos, matches, c.Overlays().Top(), c.Content())
@@ -338,7 +338,7 @@ func prepareTap(obj any, pos fyne.Position) (*fyne.PointEvent, fyne.Canvas) {
 	return ev, c
 }
 
-func tap(c fyne.Canvas, obj fyne.Tappable, ev *fyne.PointEvent) {
+func tap(c fyne.Canvas, obj Tappable, ev *fyne.PointEvent) {
 	handleFocusOnTap(c, obj)
 	obj.Tapped(ev)
 }
@@ -349,7 +349,7 @@ func handleFocusOnTap(c fyne.Canvas, obj any) {
 	}
 
 	if focus, ok := obj.(fyne.Focusable); ok {
-		dis, ok := obj.(fyne.Disableable)
+		dis, ok := obj.(Disableable)
 		if (!ok || !dis.Disabled()) && focus == c.Focused() {
 			return
 		}

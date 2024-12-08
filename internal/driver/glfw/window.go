@@ -386,7 +386,7 @@ func (w *window) processMouseMoved(xpos float64, ypos float64) {
 
 	if w.mouseButton != 0 && w.mouseButton != desktop.MouseButtonSecondary && !w.mouseDragStarted {
 		obj, pos, _ := w.findObjectAtPositionMatching(w.canvas, previousPos, func(object fyne.CanvasObject) bool {
-			_, ok := object.(fyne.Draggable)
+			_, ok := object.(Draggable)
 			return ok
 		})
 
@@ -394,7 +394,7 @@ func (w *window) processMouseMoved(xpos float64, ypos float64) {
 		deltaY := mousePos.Y - mouseDragPos.Y
 		overThreshold := math.Abs(float64(deltaX)) >= dragMoveThreshold || math.Abs(float64(deltaY)) >= dragMoveThreshold
 
-		if wid, ok := obj.(fyne.Draggable); ok && overThreshold {
+		if wid, ok := obj.(Draggable); ok && overThreshold {
 			w.mouseLock.Lock()
 			w.mouseDragged = wid
 			w.mouseDraggedOffset = previousPos.Subtract(pos)
@@ -465,7 +465,7 @@ func (w *window) processMouseMoved(xpos float64, ypos float64) {
 
 func (w *window) objIsDragged(obj any) bool {
 	if w.mouseDragged != nil && obj != nil {
-		draggedObj, _ := obj.(fyne.Draggable)
+		draggedObj, _ := obj.(Draggable)
 		return draggedObj == w.mouseDragged
 	}
 	return false
@@ -512,9 +512,9 @@ func (w *window) processMouseClicked(button desktop.MouseButton, action action, 
 
 	co, pos, _ := w.findObjectAtPositionMatching(w.canvas, mousePos, func(object fyne.CanvasObject) bool {
 		switch object.(type) {
-		case fyne.Tappable, fyne.SecondaryTappable, fyne.DoubleTappable, fyne.Focusable, desktop.Mouseable:
+		case Tappable, SecondaryTappable, DoubleTappable, fyne.Focusable, desktop.Mouseable:
 			return true
-		case fyne.Draggable:
+		case Draggable:
 			if mouseDragStarted {
 				return true
 			}
@@ -584,8 +584,8 @@ func (w *window) processMouseClicked(button desktop.MouseButton, action action, 
 		w.mouseLock.Unlock()
 	}
 
-	_, tap := co.(fyne.Tappable)
-	secondary, altTap := co.(fyne.SecondaryTappable)
+	_, tap := co.(Tappable)
+	secondary, altTap := co.(SecondaryTappable)
 	if tap || altTap {
 		if action == press {
 			w.mouseLock.Lock()
@@ -629,7 +629,7 @@ func (w *window) mouseClickedHandleMouseable(mev *desktop.MouseEvent, action act
 }
 
 func (w *window) mouseClickedHandleTapDoubleTap(co fyne.CanvasObject, ev *fyne.PointEvent) {
-	_, doubleTap := co.(fyne.DoubleTappable)
+	_, doubleTap := co.(DoubleTappable)
 	if doubleTap {
 		w.mouseLock.Lock()
 		w.mouseClickCount++
@@ -643,7 +643,7 @@ func (w *window) mouseClickedHandleTapDoubleTap(co fyne.CanvasObject, ev *fyne.P
 		go w.waitForDoubleTap(co, ev)
 	} else {
 		w.mouseLock.Lock()
-		if wid, ok := co.(fyne.Tappable); ok && co == w.mousePressed {
+		if wid, ok := co.(Tappable); ok && co == w.mousePressed {
 			w.QueueEvent(func() { wid.Tapped(ev) })
 		}
 		w.mousePressed = nil
@@ -664,11 +664,11 @@ func (w *window) waitForDoubleTap(co fyne.CanvasObject, ev *fyne.PointEvent) {
 	defer w.mouseLock.Unlock()
 
 	if w.mouseClickCount == 2 && w.mouseLastClick == co {
-		if wid, ok := co.(fyne.DoubleTappable); ok {
+		if wid, ok := co.(DoubleTappable); ok {
 			w.QueueEvent(func() { wid.DoubleTapped(ev) })
 		}
 	} else if co == w.mousePressed {
-		if wid, ok := co.(fyne.Tappable); ok {
+		if wid, ok := co.(Tappable); ok {
 			w.QueueEvent(func() { wid.Tapped(ev) })
 		}
 	}
@@ -684,11 +684,11 @@ func (w *window) processMouseScrolled(xoff float64, yoff float64) {
 	mousePos := w.mousePos
 	w.mouseLock.RUnlock()
 	co, pos, _ := w.findObjectAtPositionMatching(w.canvas, mousePos, func(object fyne.CanvasObject) bool {
-		_, ok := object.(fyne.Scrollable)
+		_, ok := object.(Scrollable)
 		return ok
 	})
 	switch wid := co.(type) {
-	case fyne.Scrollable:
+	case Scrollable:
 		if math.Abs(xoff) >= scrollAccelerateCutoff {
 			xoff *= scrollAccelerateRate
 		}
@@ -707,7 +707,7 @@ func (w *window) processMouseScrolled(xoff float64, yoff float64) {
 func (w *window) capturesTab(modifier fyne.KeyModifier) bool {
 	captures := false
 
-	if ent, ok := w.canvas.Focused().(fyne.Tabbable); ok {
+	if ent, ok := w.canvas.Focused().(Tabbable); ok {
 		captures = ent.AcceptsTab()
 	}
 	if !captures {
@@ -904,7 +904,7 @@ func (w *window) triggersShortcut(localizedKeyName fyne.KeyName, key fyne.KeyNam
 			shouldRunShortcut := true
 			// TODO: @Badu - see this
 			type selectableText interface {
-				fyne.Disableable
+				Disableable
 				SelectedText() string
 			}
 			if selectableTextWid, ok := focused.(selectableText); ok && selectableTextWid.Disabled() {

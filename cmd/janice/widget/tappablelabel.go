@@ -16,9 +16,6 @@ type TappableLabel struct {
 	hovered bool
 }
 
-var _ fyne.Tappable = (*TappableLabel)(nil)
-var _ desktop.Hoverable = (*TappableLabel)(nil)
-
 // NewTappableLabel returns a new TappableLabel instance.
 func NewTappableLabel(text string, tapped func()) *TappableLabel {
 	w := &TappableLabel{OnTapped: tapped, Label: widget.NewLabel(widget.LabelWithStaticText(text))}

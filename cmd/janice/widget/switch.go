@@ -26,12 +26,6 @@ type Switch struct {
 	mu      sync.RWMutex // property lock
 }
 
-var _ fyne.Widget = (*Switch)(nil)
-var _ fyne.Tappable = (*Switch)(nil)
-var _ fyne.Focusable = (*Switch)(nil)
-var _ desktop.Hoverable = (*Switch)(nil)
-var _ fyne.Disableable = (*Switch)(nil)
-
 // NewSwitch returns a new [Switch] instance.
 func NewSwitch(changed func(on bool)) *Switch {
 	w := &Switch{

@@ -55,7 +55,7 @@ func Test_canvas_ChildMinSizeChangeAffectsAncestorsUpToRoot(t *testing.T) {
 
 func Test_canvas_Dragged(t *testing.T) {
 	dragged := false
-	var draggedObj fyne.Draggable
+	var draggedObj Draggable
 	scroll := container.NewScroll(widget.NewLabel(widget.LabelWithStaticText("Hi\nHi\nHi")))
 	c := newCanvas(fyne.CurrentDevice()).(*canvas)
 	c.SetContent(scroll)
@@ -63,7 +63,7 @@ func Test_canvas_Dragged(t *testing.T) {
 	assert.Equal(t, float32(0), scroll.Offset.Y)
 
 	c.tapDown(fyne.NewPos(32, 3), 0)
-	c.tapMove(fyne.NewPos(32, 10), 0, func(wid fyne.Draggable, ev *fyne.DragEvent) {
+	c.tapMove(fyne.NewPos(32, 10), 0, func(wid Draggable, ev *fyne.DragEvent) {
 		wid.Dragged(ev)
 		dragged = true
 		draggedObj = wid
@@ -72,7 +72,7 @@ func Test_canvas_Dragged(t *testing.T) {
 	assert.True(t, dragged)
 	assert.Equal(t, scroll, draggedObj)
 	dragged = false
-	c.tapMove(fyne.NewPos(32, 5), 0, func(wid fyne.Draggable, ev *fyne.DragEvent) {
+	c.tapMove(fyne.NewPos(32, 5), 0, func(wid Draggable, ev *fyne.DragEvent) {
 		wid.Dragged(ev)
 		dragged = true
 	})
@@ -91,7 +91,7 @@ func Test_canvas_DraggingOutOfWidget(t *testing.T) {
 
 	dragged := false
 	c.tapDown(fyne.NewPos(23, 13), 0)
-	c.tapMove(fyne.NewPos(30, 13), 0, func(wid fyne.Draggable, ev *fyne.DragEvent) {
+	c.tapMove(fyne.NewPos(30, 13), 0, func(wid Draggable, ev *fyne.DragEvent) {
 		assert.Equal(t, slider, wid)
 		wid.Dragged(ev)
 		dragged = true
@@ -101,7 +101,7 @@ func Test_canvas_DraggingOutOfWidget(t *testing.T) {
 	lastValue = slider.Value
 
 	dragged = false
-	c.tapMove(fyne.NewPos(40, 120), 0, func(wid fyne.Draggable, ev *fyne.DragEvent) {
+	c.tapMove(fyne.NewPos(40, 120), 0, func(wid Draggable, ev *fyne.DragEvent) {
 		assert.Equal(t, slider, wid)
 		wid.Dragged(ev)
 		dragged = true
@@ -118,7 +118,7 @@ func Test_canvas_Focusable(t *testing.T) {
 
 	pos := fyne.NewPos(10, 10)
 	c.tapDown(pos, 0)
-	c.tapUp(pos, 0, func(wid fyne.Tappable, ev *fyne.PointEvent) {
+	c.tapUp(pos, 0, func(wid Tappable, ev *fyne.PointEvent) {
 		wid.Tapped(ev)
 	}, nil, nil, nil)
 	time.Sleep(tapDoubleDelay + 150*time.Millisecond)
@@ -126,7 +126,7 @@ func Test_canvas_Focusable(t *testing.T) {
 	assert.Equal(t, 0, content.unfocusedTimes)
 
 	c.tapDown(pos, 1)
-	c.tapUp(pos, 1, func(wid fyne.Tappable, ev *fyne.PointEvent) {
+	c.tapUp(pos, 1, func(wid Tappable, ev *fyne.PointEvent) {
 		wid.Tapped(ev)
 	}, nil, nil, nil)
 	time.Sleep(tapDoubleDelay + 150*time.Millisecond)
@@ -246,15 +246,15 @@ func Test_canvas_Tappable(t *testing.T) {
 	c.tapDown(fyne.NewPos(15, 15), 0)
 	assert.True(t, content.down)
 
-	c.tapUp(fyne.NewPos(15, 15), 0, func(wid fyne.Tappable, ev *fyne.PointEvent) {
-	}, func(wid fyne.SecondaryTappable, ev *fyne.PointEvent) {
-	}, func(wid fyne.DoubleTappable, ev *fyne.PointEvent) {
-	}, func(wid fyne.Draggable) {
+	c.tapUp(fyne.NewPos(15, 15), 0, func(wid Tappable, ev *fyne.PointEvent) {
+	}, func(wid SecondaryTappable, ev *fyne.PointEvent) {
+	}, func(wid DoubleTappable, ev *fyne.PointEvent) {
+	}, func(wid Draggable) {
 	})
 	assert.True(t, content.up)
 
 	c.tapDown(fyne.NewPos(15, 15), 0)
-	c.tapMove(fyne.NewPos(35, 15), 0, func(wid fyne.Draggable, ev *fyne.DragEvent) {
+	c.tapMove(fyne.NewPos(35, 15), 0, func(wid Draggable, ev *fyne.DragEvent) {
 		wid.Dragged(ev)
 	})
 	assert.True(t, content.cancel)
@@ -265,7 +265,7 @@ func Test_canvas_Tapped(t *testing.T) {
 	altTapped := false
 	buttonTap := false
 	var pointEvent *fyne.PointEvent
-	var tappedObj fyne.Tappable
+	var tappedObj Tappable
 	button := widget.NewButton(
 		widget.ButtonWithLabel("Test"),
 		widget.ButtonWithCallback(
@@ -281,17 +281,17 @@ func Test_canvas_Tapped(t *testing.T) {
 
 	tapPos := fyne.NewPos(6, 6)
 	c.tapDown(tapPos, 0)
-	c.tapUp(tapPos, 0, func(wid fyne.Tappable, ev *fyne.PointEvent) {
+	c.tapUp(tapPos, 0, func(wid Tappable, ev *fyne.PointEvent) {
 		tapped = true
 		tappedObj = wid
 		pointEvent = ev
 		wid.Tapped(ev)
-	}, func(wid fyne.SecondaryTappable, ev *fyne.PointEvent) {
+	}, func(wid SecondaryTappable, ev *fyne.PointEvent) {
 		altTapped = true
 		wid.TappedSecondary(ev)
-	}, func(wid fyne.DoubleTappable, ev *fyne.PointEvent) {
+	}, func(wid DoubleTappable, ev *fyne.PointEvent) {
 		wid.DoubleTapped(ev)
-	}, func(wid fyne.Draggable) {
+	}, func(wid Draggable) {
 	})
 
 	assert.True(t, tapped, "tap primary")
@@ -345,12 +345,12 @@ func Test_canvas_TappedMulti(t *testing.T) {
 
 	tapPos := fyne.NewPos(6, 6)
 	c.tapDown(tapPos, 0)
-	c.tapUp(tapPos, 1, func(wid fyne.Tappable, ev *fyne.PointEvent) { // different tapID
+	c.tapUp(tapPos, 1, func(wid Tappable, ev *fyne.PointEvent) { // different tapID
 		wid.Tapped(ev)
-	}, func(wid fyne.SecondaryTappable, ev *fyne.PointEvent) {
-	}, func(wid fyne.DoubleTappable, ev *fyne.PointEvent) {
+	}, func(wid SecondaryTappable, ev *fyne.PointEvent) {
+	}, func(wid DoubleTappable, ev *fyne.PointEvent) {
 		wid.DoubleTapped(ev)
-	}, func(wid fyne.Draggable) {
+	}, func(wid Draggable) {
 	})
 
 	assert.False(t, buttonTap, "button should not be tapped")
@@ -358,7 +358,7 @@ func Test_canvas_TappedMulti(t *testing.T) {
 
 func Test_canvas_TappedSecondary(t *testing.T) {
 	var pointEvent *fyne.PointEvent
-	var altTappedObj fyne.SecondaryTappable
+	var altTappedObj SecondaryTappable
 	obj := &tappableLabel{}
 	obj.ExtendBaseWidget(obj)
 	c := newCanvas(fyne.CurrentDevice()).(*canvas)
@@ -369,17 +369,17 @@ func Test_canvas_TappedSecondary(t *testing.T) {
 	tapPos := fyne.NewPos(6, 6)
 	c.tapDown(tapPos, 0)
 	time.Sleep(310 * time.Millisecond)
-	c.tapUp(tapPos, 0, func(wid fyne.Tappable, ev *fyne.PointEvent) {
+	c.tapUp(tapPos, 0, func(wid Tappable, ev *fyne.PointEvent) {
 		obj.tap = true
 		wid.Tapped(ev)
-	}, func(wid fyne.SecondaryTappable, ev *fyne.PointEvent) {
+	}, func(wid SecondaryTappable, ev *fyne.PointEvent) {
 		obj.altTap = true
 		altTappedObj = wid
 		pointEvent = ev
 		wid.TappedSecondary(ev)
-	}, func(wid fyne.DoubleTappable, ev *fyne.PointEvent) {
+	}, func(wid DoubleTappable, ev *fyne.PointEvent) {
 		wid.DoubleTapped(ev)
-	}, func(wid fyne.Draggable) {
+	}, func(wid Draggable) {
 	})
 
 	assert.False(t, obj.tap, "don't tap primary")
@@ -469,12 +469,12 @@ func newDoubleTappableButton() *doubleTappableButton {
 func simulateTap(c *canvas) {
 	c.tapDown(fyne.NewPos(15, 15), 0)
 	time.Sleep(50 * time.Millisecond)
-	c.tapUp(fyne.NewPos(15, 15), 0, func(wid fyne.Tappable, ev *fyne.PointEvent) {
+	c.tapUp(fyne.NewPos(15, 15), 0, func(wid Tappable, ev *fyne.PointEvent) {
 		wid.Tapped(ev)
-	}, func(wid fyne.SecondaryTappable, ev *fyne.PointEvent) {
-	}, func(wid fyne.DoubleTappable, ev *fyne.PointEvent) {
+	}, func(wid SecondaryTappable, ev *fyne.PointEvent) {
+	}, func(wid DoubleTappable, ev *fyne.PointEvent) {
 		wid.DoubleTapped(ev)
-	}, func(wid fyne.Draggable) {
+	}, func(wid Draggable) {
 	})
 }
 

@@ -313,7 +313,7 @@ func (d *driver) paintWindow(window fyne.Window, size fyne.Size) {
 
 	draw := func(node *common.RenderCacheNode, pos fyne.Position) {
 		obj := node.Obj()
-		if _, ok := obj.(fyne.Scrollable); ok {
+		if _, ok := obj.(Scrollable); ok {
 			inner := clips.Push(pos, obj.Size())
 			c.Painter().StartClipping(inner.Rect())
 		}
@@ -324,7 +324,7 @@ func (d *driver) paintWindow(window fyne.Window, size fyne.Size) {
 		c.Painter().Paint(obj, pos, size)
 	}
 	afterDraw := func(node *common.RenderCacheNode, pos fyne.Position) {
-		if _, ok := node.Obj().(fyne.Scrollable); ok {
+		if _, ok := node.Obj().(Scrollable); ok {
 			c.Painter().StopClipping()
 			clips.Pop()
 			if top := clips.Top(); top != nil {
@@ -375,7 +375,7 @@ func (d *driver) tapMoveCanvas(w *window, x, y float32, tapID touch.Sequence) {
 	tapY := scale.ToFyneCoordinate(w.canvas, int(y))
 	pos := fyne.NewPos(tapX, tapY+tapYOffset)
 
-	w.canvas.tapMove(pos, int(tapID), func(wid fyne.Draggable, ev *fyne.DragEvent) {
+	w.canvas.tapMove(pos, int(tapID), func(wid Draggable, ev *fyne.DragEvent) {
 		w.QueueEvent(func() { wid.Dragged(ev) })
 	})
 }
@@ -385,13 +385,13 @@ func (d *driver) tapUpCanvas(w *window, x, y float32, tapID touch.Sequence) {
 	tapY := scale.ToFyneCoordinate(w.canvas, int(y))
 	pos := fyne.NewPos(tapX, tapY+tapYOffset)
 
-	w.canvas.tapUp(pos, int(tapID), func(wid fyne.Tappable, ev *fyne.PointEvent) {
+	w.canvas.tapUp(pos, int(tapID), func(wid Tappable, ev *fyne.PointEvent) {
 		w.QueueEvent(func() { wid.Tapped(ev) })
-	}, func(wid fyne.SecondaryTappable, ev *fyne.PointEvent) {
+	}, func(wid SecondaryTappable, ev *fyne.PointEvent) {
 		w.QueueEvent(func() { wid.TappedSecondary(ev) })
-	}, func(wid fyne.DoubleTappable, ev *fyne.PointEvent) {
+	}, func(wid DoubleTappable, ev *fyne.PointEvent) {
 		w.QueueEvent(func() { wid.DoubleTapped(ev) })
-	}, func(wid fyne.Draggable) {
+	}, func(wid Draggable) {
 		w.QueueEvent(wid.DragEnd)
 	})
 }
@@ -512,7 +512,7 @@ func (d *driver) typeDownCanvas(canvas *canvas, r rune, code key.Code, mod key.M
 	switch keyName {
 	case fyne.KeyTab:
 		capture := false
-		if ent, ok := canvas.Focused().(fyne.Tabbable); ok {
+		if ent, ok := canvas.Focused().(Tabbable); ok {
 			capture = ent.AcceptsTab()
 		}
 		if !capture {

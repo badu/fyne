@@ -35,7 +35,7 @@ func (e *SelectEntry) CreateRenderer() fyne.WidgetRenderer {
 // Implements: fyne.DisableableWidget
 func (e *SelectEntry) Enable() {
 	if e.ActionItem != nil {
-		e.ActionItem.(fyne.Disableable).Enable()
+		e.ActionItem.(Disableable).Enable()
 	}
 	e.Entry.Enable()
 }
@@ -45,7 +45,7 @@ func (e *SelectEntry) Enable() {
 // Implements: fyne.DisableableWidget
 func (e *SelectEntry) Disable() {
 	if e.ActionItem != nil {
-		e.ActionItem.(fyne.Disableable).Disable()
+		e.ActionItem.(Disableable).Disable()
 	}
 	e.Entry.Disable()
 }
@@ -91,7 +91,7 @@ func (e *SelectEntry) SetOptions(options []string) {
 	if e.ActionItem == nil {
 		e.ActionItem = e.setupDropDown()
 		if e.Disabled() {
-			e.ActionItem.(fyne.Disableable).Disable()
+			e.ActionItem.(Disableable).Disable()
 		}
 	}
 }

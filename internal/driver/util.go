@@ -7,6 +7,12 @@ import (
 	"fyne.io/fyne/v2/internal/cache"
 )
 
+// Scrollable describes any [CanvasObject] that can also be scrolled.
+// This is mostly used to implement the widget.ScrollContainer.
+type Scrollable interface {
+	Scrolled(*fyne.ScrollEvent)
+}
+
 // AbsolutePositionForObject returns the absolute position of an object in a set of object trees.
 // If the object is not part of any of the trees, the position (0,0) is returned.
 func AbsolutePositionForObject(object fyne.CanvasObject, trees []fyne.CanvasObject) fyne.Position {
@@ -162,7 +168,7 @@ func walkObjectTree(
 		}
 	}
 
-	if _, ok := obj.(fyne.Scrollable); ok {
+	if _, ok := obj.(Scrollable); ok {
 		clipPos = pos
 		clipSize = obj.Size()
 	}
