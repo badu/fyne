@@ -6,9 +6,9 @@ import (
 	"net/url"
 
 	"fyne.io/fyne/v2"
-	ttwidget "fyne.io/fyne/v2/cmd/janice/widget"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/widget"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 
@@ -25,13 +25,13 @@ type statusBarFrame struct {
 	content *fyne.Container
 	u       *UI
 
-	elementsCount *ttwidget.Label
+	elementsCount *widget.TooltippedLabel
 }
 
 func (u *UI) newStatusBarFrame() *statusBarFrame {
 	f := &statusBarFrame{
 		u:             u,
-		elementsCount: ttwidget.NewLabel(""),
+		elementsCount: widget.NewTooltippedLabel(""),
 	}
 	f.elementsCount.SetToolTip("Total count of elements in the JSON document")
 	// status bar frame
@@ -50,7 +50,7 @@ func (u *UI) newStatusBarFrame() *statusBarFrame {
 			}
 			c.Add(layout.NewSpacer())
 			x, _ := url.Parse(websiteURL + "/releases")
-			l := ttwidget.NewHyperlink("Update available", x)
+			l := widget.NewTooltippedHyperlink("Update available", x)
 			l.SetToolTip(fmt.Sprintf("Newer version %s available for download", latest))
 			c.Add(l)
 		}()

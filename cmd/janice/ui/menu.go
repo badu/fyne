@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"fyne.io/fyne/v2"
-	kxdialog "fyne.io/fyne/v2/cmd/janice/dialog"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/storage"
@@ -73,7 +72,7 @@ func (u *UI) makeMenu() *fyne.MainMenu {
 					return
 				}
 			}, u.window)
-			kxdialog.AddDialogKeyHandler(d, u.window)
+			dialog.CloseOnEscape(d, u.window)
 			d.Show()
 		}),
 		fyne.NewMenuItem("Export Selection To Clipboard", func() {
@@ -152,7 +151,7 @@ func (u *UI) fileOpen() {
 		}
 		u.loadDocument(reader)
 	}, u.window)
-	kxdialog.AddDialogKeyHandler(d, u.window)
+	dialog.CloseOnEscape(d, u.window)
 	d.Show()
 	filterEnabled := u.app.Preferences().BoolWithFallback(settingExtensionFilter, settingExtensionDefault)
 	if filterEnabled {

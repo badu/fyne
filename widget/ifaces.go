@@ -41,9 +41,7 @@ type DoubleTappable interface {
 	DoubleTapped(*fyne.PointEvent)
 }
 
-// Draggable indicates that a [CanvasObject] can be dragged.
-// This is used for any item that the user has indicated should be moved across the screen.
-type Draggable interface {
-	Dragged(*fyne.DragEvent)
-	DragEnd()
+// Shortcutable describes any [CanvasObject] that can respond to shortcut commands (quit, cut, copy, and paste).
+type Shortcutable interface {
+	TypedShortcut(fyne.Shortcut)
 }

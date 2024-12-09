@@ -588,13 +588,13 @@ func (e *Entry) TappedSecondary(pe *fyne.PointEvent) {
 	undoItem := fyne.NewMenuItem(lang.L("Undo"), e.Undo)
 	redoItem := fyne.NewMenuItem(lang.L("Redo"), e.Redo)
 	cutItem := fyne.NewMenuItem(lang.L("Cut"), func() {
-		super.(fyne.Shortcutable).TypedShortcut(&fyne.ShortcutCut{Clipboard: clipboard})
+		super.(Shortcutable).TypedShortcut(&fyne.ShortcutCut{Clipboard: clipboard})
 	})
 	copyItem := fyne.NewMenuItem(lang.L("Copy"), func() {
-		super.(fyne.Shortcutable).TypedShortcut(&fyne.ShortcutCopy{Clipboard: clipboard})
+		super.(Shortcutable).TypedShortcut(&fyne.ShortcutCopy{Clipboard: clipboard})
 	})
 	pasteItem := fyne.NewMenuItem(lang.L("Paste"), func() {
-		super.(fyne.Shortcutable).TypedShortcut(&fyne.ShortcutPaste{Clipboard: clipboard})
+		super.(Shortcutable).TypedShortcut(&fyne.ShortcutPaste{Clipboard: clipboard})
 	})
 	selectAllItem := fyne.NewMenuItem(lang.L("Select all"), e.selectAll)
 
@@ -953,7 +953,7 @@ func (e *Entry) TypedRune(r rune) {
 
 // TypedShortcut implements the Shortcutable interface
 //
-// Implements: fyne.Shortcutable
+// Implements: Shortcutable
 func (e *Entry) TypedShortcut(shortcut fyne.Shortcut) {
 	e.shortcut.TypedShortcut(shortcut)
 }

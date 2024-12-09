@@ -3,12 +3,11 @@ package widget
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
-	"fyne.io/fyne/v2/widget"
 )
 
-// TappableLabel is a variant of the Fyne Label which runs a function when tapped.
+// TappableLabel is a variant of the Fyne TooltippedLabel which runs a function when tapped.
 type TappableLabel struct {
-	*widget.Label
+	*Label
 
 	// The function that is called when the label is tapped.
 	OnTapped func()
@@ -18,7 +17,7 @@ type TappableLabel struct {
 
 // NewTappableLabel returns a new TappableLabel instance.
 func NewTappableLabel(text string, tapped func()) *TappableLabel {
-	w := &TappableLabel{OnTapped: tapped, Label: widget.NewLabel(widget.LabelWithStaticText(text))}
+	w := &TappableLabel{OnTapped: tapped, Label: NewLabel(LabelWithStaticText(text))}
 	w.ExtendBaseWidget(w)
 	return w
 }

@@ -1,8 +1,6 @@
 package ui
 
 import (
-	kxdialog "fyne.io/fyne/v2/cmd/janice/dialog"
-	kxwidget "fyne.io/fyne/v2/cmd/janice/widget"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 )
@@ -19,7 +17,7 @@ const (
 
 func (u *UI) showSettingsDialog() {
 	// recent files
-	recentEntry := kxwidget.NewSlider(3, 20)
+	recentEntry := widget.NewTooltippedSlider(3, 20)
 	x := u.app.Preferences().IntWithFallback(settingRecentFileCount, settingRecentFileCountDefault)
 	recentEntry.SetValue(float64(x))
 	recentEntry.OnChangeEnded = func(v float64) {
@@ -27,13 +25,13 @@ func (u *UI) showSettingsDialog() {
 	}
 
 	// apply file filter
-	extFilter := kxwidget.NewSwitch(func(v bool) {
+	extFilter := widget.NewSwitch(func(v bool) {
 		u.app.Preferences().SetBool(settingExtensionFilter, v)
 	})
 	y := u.app.Preferences().BoolWithFallback(settingExtensionFilter, settingExtensionDefault)
 	extFilter.SetState(y)
 
-	notifyUpdates := kxwidget.NewSwitch(func(v bool) {
+	notifyUpdates := widget.NewSwitch(func(v bool) {
 		u.app.Preferences().SetBool(settingNotifyUpdates, v)
 	})
 	z := u.app.Preferences().BoolWithFallback(settingNotifyUpdates, settingNotifyUpdatesDefault)
@@ -45,6 +43,6 @@ func (u *UI) showSettingsDialog() {
 		{Text: "Notify about updates", Widget: notifyUpdates, HintText: "Wether to notify when an update is available (requires restart)"},
 	}
 	d := dialog.NewCustom("Settings", "Close", widget.NewForm(items...), u.window)
-	kxdialog.AddDialogKeyHandler(d, u.window)
+	dialog.CloseOnEscape(d, u.window)
 	d.Show()
 }

@@ -7,7 +7,6 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/theme"
-	"fyne.io/fyne/v2/widget"
 )
 
 const (
@@ -17,12 +16,12 @@ const (
 // Badge is a variant of the Fyne label widget that renders a rounded box around the text.
 // Badges are commonly used to display counts.
 type Badge struct {
-	*widget.Label
+	*Label
 }
 
 // NewBadge returns a new instance of a [Badge] widget.
 func NewBadge(text string) *Badge {
-	w := &Badge{Label: widget.NewLabel(widget.LabelWithStaticText(text))}
+	w := &Badge{Label: NewLabel(LabelWithStaticText(text))}
 	w.ExtendBaseWidget(w)
 	return w
 }

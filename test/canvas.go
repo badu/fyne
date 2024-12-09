@@ -16,6 +16,10 @@ import (
 
 var dummyCanvas WindowlessCanvas
 
+type popupWidget interface {
+	Refresh()
+}
+
 // WindowlessCanvas provides functionality for a canvas to operate without a window
 type WindowlessCanvas interface {
 	Content() fyne.CanvasObject
@@ -228,19 +232,6 @@ func (c *canvas) Resize(size fyne.Size) {
 
 	// Ensure testcanvas mimics real canvas.Resize behavior
 	for _, overlay := range overlays.List() {
-		// TODO : @Badu - see this
-		type popupWidget interface {
-			MinSize() fyne.Size
-			Move(fyne.Position)
-			Position() fyne.Position
-			Resize(fyne.Size)
-			Size() fyne.Size
-			Hide()
-			Visible() bool
-			Show()
-			Refresh()
-			ShowAtPosition(fyne.Position)
-		}
 		if p, ok := overlay.(popupWidget); ok {
 			// TODO: remove this when #707 is being addressed.
 			// “Notifies” the PopUp of the canvas size change.

@@ -54,8 +54,3 @@ type Focusable interface {
 	// TypedKey is a hook called by the input handling logic on key events if this object is focused.
 	TypedKey(*KeyEvent)
 }
-
-// Shortcutable describes any [CanvasObject] that can respond to shortcut commands (quit, cut, copy, and paste).
-type Shortcutable interface {
-	TypedShortcut(Shortcut)
-}

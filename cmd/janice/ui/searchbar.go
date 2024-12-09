@@ -7,8 +7,6 @@ import (
 	"strings"
 
 	"fyne.io/fyne/v2"
-	kxdialog "fyne.io/fyne/v2/cmd/janice/dialog"
-	ttwidget "fyne.io/fyne/v2/cmd/janice/widget"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
@@ -40,11 +38,11 @@ type searchBarFrame struct {
 	u       *UI
 
 	searchEntry  *widget.Entry
-	searchButton *ttwidget.Button
-	searchType   *ttwidget.Select
-	scrollBottom *ttwidget.Button
-	scrollTop    *ttwidget.Button
-	collapseAll  *ttwidget.Button
+	searchButton *widget.TooltippedButton
+	searchType   *widget.TooltippedSelect
+	scrollBottom *widget.TooltippedButton
+	scrollTop    *widget.TooltippedButton
+	collapseAll  *widget.TooltippedButton
 }
 
 func (u *UI) newSearchBarFrame() *searchBarFrame {
@@ -53,33 +51,33 @@ func (u *UI) newSearchBarFrame() *searchBarFrame {
 		searchEntry: widget.NewEntry(),
 	}
 	// search frame
-	f.searchType = ttwidget.NewSelect([]string{
+	f.searchType = widget.NewTooltippedSelect([]string{
 		searchTypeKey,
 		searchTypeKeyword,
 		searchTypeNumber,
 		searchTypeString,
 	}, nil)
 	f.searchType.SetSelected(searchTypeKey)
-	f.searchType.SetToolTip("Select what to search")
+	f.searchType.SetToolTip("TooltippedSelect what to search")
 	f.searchType.Disable()
 	f.searchEntry.SetPlaceHolder(
 		"Enter pattern to search for...")
 	f.searchEntry.OnSubmitted = func(s string) {
 		f.doSearch()
 	}
-	f.searchButton = ttwidget.NewButtonWithIcon("", theme.SearchIcon(), func() {
+	f.searchButton = widget.NewTooltippedButtonWithIcon("", theme.SearchIcon(), func() {
 		f.doSearch()
 	})
 	f.searchButton.SetToolTip("Search")
-	f.scrollBottom = ttwidget.NewButtonWithIcon("", theme.NewThemedResource(resourceVerticalalignbottomSvg), func() {
+	f.scrollBottom = widget.NewTooltippedButtonWithIcon("", theme.NewThemedResource(resourceVerticalalignbottomSvg), func() {
 		f.u.treeWidget.ScrollToBottom()
 	})
 	f.scrollBottom.SetToolTip("Scroll to bottom")
-	f.scrollTop = ttwidget.NewButtonWithIcon("", theme.NewThemedResource(resourceVerticalaligntopSvg), func() {
+	f.scrollTop = widget.NewTooltippedButtonWithIcon("", theme.NewThemedResource(resourceVerticalaligntopSvg), func() {
 		f.u.treeWidget.ScrollToTop()
 	})
 	f.scrollTop.SetToolTip("Scroll to top")
-	f.collapseAll = ttwidget.NewButtonWithIcon("", theme.NewThemedResource(resourceUnfoldlessSvg), func() {
+	f.collapseAll = widget.NewTooltippedButtonWithIcon("", theme.NewThemedResource(resourceUnfoldlessSvg), func() {
 		f.u.treeWidget.CloseAllBranches()
 	})
 	f.collapseAll.SetToolTip("Collapse all")
@@ -134,7 +132,7 @@ func (f *searchBarFrame) doSearch() {
 		widget.ButtonWithCallback(cancel),
 	)
 	d := dialog.NewCustomWithoutButtons("Search", container.NewVBox(c, b), f.u.window)
-	kxdialog.AddDialogKeyHandler(d, f.u.window)
+	dialog.CloseOnEscape(d, f.u.window)
 	d.Show()
 	d.SetOnClosed(func() {
 		cancel()
@@ -167,7 +165,7 @@ func (f *searchBarFrame) doSearch() {
 				fmt.Sprintf("No %s found matching %s", searchType, search),
 				f.u.window,
 			)
-			kxdialog.AddDialogKeyHandler(d, f.u.window)
+			dialog.CloseOnEscape(d, f.u.window)
 			d2.Show()
 			return
 		} else if err != nil {

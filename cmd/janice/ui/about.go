@@ -7,8 +7,6 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
-
-	kxdialog "fyne.io/fyne/v2/cmd/janice/dialog"
 )
 
 func (u *UI) showAboutDialog() {
@@ -28,6 +26,6 @@ func (u *UI) showAboutDialog() {
 		widget.NewHyperlink(widget.HyperlinkWithLabel("Website"), widget.HyperlinkWithURL(x)),
 	)
 	d := dialog.NewCustom("About", "OK", c, u.window)
-	kxdialog.AddDialogKeyHandler(d, u.window)
+	dialog.CloseOnEscape(d, u.window)
 	d.Show()
 }

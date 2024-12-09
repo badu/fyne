@@ -12,13 +12,9 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-
-	kxdialog "fyne.io/fyne/v2/cmd/janice/dialog"
-	kxlayout "fyne.io/fyne/v2/cmd/janice/layout"
-	kxmodal "fyne.io/fyne/v2/cmd/janice/modal"
-	kxwidget "fyne.io/fyne/v2/cmd/janice/widget"
 )
 
 func main() {
@@ -51,7 +47,7 @@ func makeDialogs(w fyne.Window) fyne.CanvasObject {
 			widget.ButtonWithCallback(
 				func() {
 					d := dialog.NewInformation("Info", "You can close this dialog with the Escape key.", w)
-					kxdialog.AddDialogKeyHandler(d, w)
+					dialog.CloseOnEscape(d, w)
 					d.Show()
 				},
 			),
@@ -63,7 +59,7 @@ func makeDialogs(w fyne.Window) fyne.CanvasObject {
 					d := dialog.NewConfirm("Confirm", "You can close this dialog with the Escape key.", func(b bool) {
 						fmt.Printf("Confirm dialog: %v\n", b)
 					}, w)
-					kxdialog.AddDialogKeyHandler(d, w)
+					dialog.CloseOnEscape(d, w)
 					d.Show()
 				},
 			),
@@ -73,7 +69,7 @@ func makeDialogs(w fyne.Window) fyne.CanvasObject {
 }
 
 func makeLayouts() fyne.CanvasObject {
-	layout := kxlayout.NewColumns(150, 100, 50)
+	layout := layout.NewColumns(150, 100, 50)
 	makeBox := func(h float32) fyne.CanvasObject {
 		x := canvas.NewRectangle(theme.Color(theme.ColorNameInputBorder))
 		w := rand.Float32()*100 + 50
@@ -97,25 +93,25 @@ func makeLayouts() fyne.CanvasObject {
 }
 
 func makeWidgets(w fyne.Window) fyne.CanvasObject {
-	badge := kxwidget.NewBadge("1234")
-	img := kxwidget.NewTappableImage(theme.FyneLogo(), func() {
+	badge := widget.NewBadge("1234")
+	img := widget.NewTappableImage(theme.FyneLogo(), func() {
 		d := dialog.NewInformation("TappableImage", "tapped", w)
-		kxdialog.AddDialogKeyHandler(d, w)
+		dialog.CloseOnEscape(d, w)
 		d.Show()
 	})
 	img.SetFillMode(canvas.ImageFillContain)
 	img.SetMinSize(fyne.NewSize(100, 100))
-	icon := kxwidget.NewTappableIcon(theme.AccountIcon(), func() {
+	icon := widget.NewTappableIcon(theme.AccountIcon(), func() {
 		d := dialog.NewInformation("TappableIcon", "tapped", w)
-		kxdialog.AddDialogKeyHandler(d, w)
+		dialog.CloseOnEscape(d, w)
 		d.Show()
 	})
-	label := kxwidget.NewTappableLabel("Tap me", func() {
+	label := widget.NewTappableLabel("Tap me", func() {
 		d := dialog.NewInformation("TappableLabel", "tapped", w)
-		kxdialog.AddDialogKeyHandler(d, w)
+		dialog.CloseOnEscape(d, w)
 		d.Show()
 	})
-	slider := kxwidget.NewSlider(0, 100)
+	slider := widget.NewTooltippedSlider(0, 100)
 	slider.SetValue(25)
 
 	textForBool := func(b bool) string {
@@ -125,7 +121,7 @@ func makeWidgets(w fyne.Window) fyne.CanvasObject {
 		return "off"
 	}
 	switchLabel1 := widget.NewLabel(widget.LabelWithStaticText(""))
-	switch1 := kxwidget.NewSwitch(func(on bool) {
+	switch1 := widget.NewSwitch(func(on bool) {
 		switchLabel1.SetText(textForBool(on))
 	})
 	switch1.On = true
@@ -133,16 +129,16 @@ func makeWidgets(w fyne.Window) fyne.CanvasObject {
 	switch1Box := container.NewHBox(switch1, switchLabel1)
 
 	switchLabel2 := widget.NewLabel(widget.LabelWithStaticText(""))
-	switch2 := kxwidget.NewSwitch(func(on bool) {
+	switch2 := widget.NewSwitch(func(on bool) {
 		switchLabel2.SetText(textForBool(on))
 	})
 	switchLabel2.Text = textForBool(switch2.State())
 	switch2Box := container.NewHBox(switch2, switchLabel2)
 
-	switch3 := kxwidget.NewSwitch(nil)
+	switch3 := widget.NewSwitch(nil)
 	switch3.On = true
 	switch3.Disable()
-	switch4 := kxwidget.NewSwitch(nil)
+	switch4 := widget.NewSwitch(nil)
 	switch4.Disable()
 	addLabel := func(c fyne.CanvasObject, text string) fyne.CanvasObject {
 		return container.NewHBox(c, widget.NewLabel(widget.LabelWithStaticText(text)))
@@ -176,7 +172,7 @@ func makeModals(w fyne.Window) *fyne.Container {
 		widget.ButtonWithLabel("ProgressModal"),
 		widget.ButtonWithCallback(
 			func() {
-				m := kxmodal.NewProgress("ProgressModal", "Please wait...", func(progress binding.Float) error {
+				m := dialog.NewProgress("ProgressModal", "Please wait...", func(progress binding.Float) error {
 					for i := 1; i < 50; i++ {
 						progress.Set(float64(i))
 						time.Sleep(100 * time.Millisecond)
@@ -192,7 +188,7 @@ func makeModals(w fyne.Window) *fyne.Container {
 		widget.ButtonWithLabel("ProgressCancelModal"),
 		widget.ButtonWithCallback(
 			func() {
-				m := kxmodal.NewProgressWithCancel("ProgressCancelModal", "Please wait...", func(progress binding.Float, canceled chan struct{}) error {
+				m := dialog.NewProgressWithCancel("ProgressCancelModal", "Please wait...", func(progress binding.Float, canceled chan struct{}) error {
 					ticker := time.NewTicker(100 * time.Millisecond)
 					for i := 1; i < 50; i++ {
 						progress.Set(float64(i))
@@ -213,7 +209,7 @@ func makeModals(w fyne.Window) *fyne.Container {
 		widget.ButtonWithLabel("ProgressInfiniteModal"),
 		widget.ButtonWithCallback(
 			func() {
-				m := kxmodal.NewProgressInfinite("ProgressInfiniteModal", "Please wait...", func() error {
+				m := dialog.NewProgressDialogInfinite("ProgressInfiniteModal", "Please wait...", func() error {
 					time.Sleep(3 * time.Second)
 					return nil
 				}, w)
@@ -226,7 +222,7 @@ func makeModals(w fyne.Window) *fyne.Container {
 		widget.ButtonWithLabel("ProgressInfiniteCancelModal"),
 		widget.ButtonWithCallback(
 			func() {
-				m := kxmodal.NewProgressInfiniteWithCancel("ProgressInfiniteCancelModal", "Please wait...", func(canceled chan struct{}) error {
+				m := dialog.NewProgressInfiniteWithCancel("ProgressInfiniteCancelModal", "Please wait...", func(canceled chan struct{}) error {
 					ticker := time.NewTicker(100 * time.Millisecond)
 					for i := 1; i < 50; i++ {
 						select {

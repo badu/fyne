@@ -8,14 +8,13 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/theme"
-	"fyne.io/fyne/v2/widget"
 )
 
 // - Add animation?
 
 // Switch is a widget representing a digital switch with two mutually exclusive states: on/off.
 type Switch struct {
-	widget.DisableableWidget
+	DisableableWidget
 	On bool
 
 	OnChanged func(on bool)

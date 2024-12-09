@@ -28,14 +28,6 @@ type Tappable interface {
 	Tapped(*fyne.PointEvent)
 }
 
-// Disableable describes any [CanvasObject] that can be disabled.
-// This is primarily used with objects that also implement the Tappable interface.
-type Disableable interface {
-	Enable()
-	Disable()
-	Disabled() bool
-}
-
 // DoubleTappable describes any [CanvasObject] that can also be double tapped.
 type DoubleTappable interface {
 	DoubleTapped(*fyne.PointEvent)
@@ -46,4 +38,16 @@ type DoubleTappable interface {
 type Draggable interface {
 	Dragged(*fyne.DragEvent)
 	DragEnd()
+}
+
+type selectableText interface {
+	Enable()
+	Disable()
+	Disabled() bool
+	SelectedText() string
+}
+
+// Shortcutable describes any [CanvasObject] that can respond to shortcut commands (quit, cut, copy, and paste).
+type Shortcutable interface {
+	TypedShortcut(fyne.Shortcut)
 }

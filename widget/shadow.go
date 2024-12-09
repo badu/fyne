@@ -1,4 +1,4 @@
-package shadow
+package widget
 
 import (
 	"image/color"
@@ -6,14 +6,11 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/theme"
-	"fyne.io/fyne/v2/widget"
 )
-
-var _ fyne.Widget = (*Shadow)(nil)
 
 // Shadow is a widget that renders a shadow.
 type Shadow struct {
-	widget.BaseWidget
+	BaseWidget
 	level ElevationLevel
 	typ   ShadowType
 }

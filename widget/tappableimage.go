@@ -3,14 +3,13 @@ package widget
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
-	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
-	"fyne.io/fyne/v2/widget"
+	"fyne.io/fyne/v2/layout"
 )
 
 // TappableImage is widget which shows an image and runs a function when tapped.
 type TappableImage struct {
-	widget.BaseWidget
+	BaseWidget
 	image *canvas.Image
 
 	// The function that is called when the label is tapped.
@@ -68,5 +67,6 @@ func (w *TappableImage) MouseOut() {
 }
 
 func (w *TappableImage) CreateRenderer() fyne.WidgetRenderer {
-	return widget.NewSimpleRenderer(container.NewPadded(w.image))
+	c := &fyne.Container{Layout: layout.NewPaddedLayout(), Objects: []fyne.CanvasObject{w.image}}
+	return NewSimpleRenderer(c)
 }

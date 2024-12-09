@@ -3,12 +3,11 @@ package widget
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
-	"fyne.io/fyne/v2/widget"
 )
 
 // TappableIcon is an icon widget, which runs a function when tapped.
 type TappableIcon struct {
-	*widget.Icon
+	*Icon
 
 	// The function that is called when the icon is tapped.
 	OnTapped func()
@@ -18,7 +17,7 @@ type TappableIcon struct {
 
 // NewTappableIcon returns a new instance of a [TappableIcon] widget.
 func NewTappableIcon(res fyne.Resource, tapped func()) *TappableIcon {
-	w := &TappableIcon{OnTapped: tapped, Icon: widget.NewIcon(res)}
+	w := &TappableIcon{OnTapped: tapped, Icon: NewIcon(res)}
 	w.ExtendBaseWidget(w)
 	return w
 }

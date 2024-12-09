@@ -2,8 +2,6 @@ package ui
 
 import (
 	"fyne.io/fyne/v2"
-	kxwidget "fyne.io/fyne/v2/cmd/janice/widget"
-	ttwidget "fyne.io/fyne/v2/cmd/janice/widget"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
@@ -19,8 +17,8 @@ type selectionFrame struct {
 
 	selectedUID      widget.TreeNodeID
 	selectedPath     *fyne.Container
-	jumpToSelection  *ttwidget.Button
-	copyKeyClipboard *ttwidget.Button
+	jumpToSelection  *widget.TooltippedButton
+	copyKeyClipboard *widget.TooltippedButton
 }
 
 func (u *UI) newSelectionFrame() *selectionFrame {
@@ -30,12 +28,12 @@ func (u *UI) newSelectionFrame() *selectionFrame {
 		u:            u,
 		selectedPath: container.New(myHBox),
 	}
-	f.jumpToSelection = ttwidget.NewButtonWithIcon("", theme.NewThemedResource(resourceReadmoreSvg), func() {
+	f.jumpToSelection = widget.NewTooltippedButtonWithIcon("", theme.NewThemedResource(resourceReadmoreSvg), func() {
 		u.scrollTo(f.selectedUID)
 	})
 	f.jumpToSelection.SetToolTip("Jump to selection")
 	f.jumpToSelection.Disable()
-	f.copyKeyClipboard = ttwidget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
+	f.copyKeyClipboard = widget.NewTooltippedButtonWithIcon("", theme.ContentCopyIcon(), func() {
 		n := u.document.Value(f.selectedUID)
 		u.window.Clipboard().SetContent(n.Key)
 	})
@@ -98,7 +96,7 @@ func (f *selectionFrame) set(uid string) {
 	for i, n := range path {
 		isLast := i == len(path)-1
 		if !isLast {
-			l := kxwidget.NewTappableLabel(n.Key, func() {
+			l := widget.NewTappableLabel(n.Key, func() {
 				f.u.scrollTo(n.UID)
 				f.u.selectElement(n.UID)
 			})

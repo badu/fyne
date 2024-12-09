@@ -260,6 +260,11 @@ func makeNav(setTutorial func(tutorial tutorials.Tutorial), loadPrevious bool) f
 	return container.NewBorder(nil, themes, nil, nil, tree)
 }
 
+// Shortcutable describes any [CanvasObject] that can respond to shortcut commands (quit, cut, copy, and paste).
+type Shortcutable interface {
+	TypedShortcut(fyne.Shortcut)
+}
+
 func shortcutFocused(s fyne.Shortcut, w fyne.Window) {
 	switch sh := s.(type) {
 	case *fyne.ShortcutCopy:
@@ -269,7 +274,7 @@ func shortcutFocused(s fyne.Shortcut, w fyne.Window) {
 	case *fyne.ShortcutPaste:
 		sh.Clipboard = w.Clipboard()
 	}
-	if focused, ok := w.Canvas().Focused().(fyne.Shortcutable); ok {
+	if focused, ok := w.Canvas().Focused().(Shortcutable); ok {
 		focused.TypedShortcut(s)
 	}
 }

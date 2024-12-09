@@ -1,4 +1,4 @@
-package shadow
+package widget
 
 import (
 	"fyne.io/fyne/v2"

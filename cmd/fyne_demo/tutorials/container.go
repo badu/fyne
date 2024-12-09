@@ -74,14 +74,16 @@ func makeButtonList(count int) []fyne.CanvasObject {
 	var items []fyne.CanvasObject
 	for i := 1; i <= count; i++ {
 		index := i // capture
-		items = append(items, widget.NewButton(
-			widget.ButtonWithLabel("Button "+strconv.Itoa(index)),
-			widget.ButtonWithCallback(
-				func() {
-					fmt.Println("Tapped", index)
-				},
+		items = append(
+			items,
+			widget.NewButton(
+				widget.ButtonWithLabel("Button "+strconv.Itoa(index)),
+				widget.ButtonWithCallback(
+					func() {
+						fmt.Println("Tapped", index)
+					},
+				),
 			),
-		),
 		)
 	}
 

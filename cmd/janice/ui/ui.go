@@ -10,7 +10,6 @@ import (
 	"strconv"
 
 	"fyne.io/fyne/v2"
-	fynetooltip "fyne.io/fyne/v2/cmd/janice/tooltip"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/dialog"
@@ -19,8 +18,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
-
-	kxdialog "fyne.io/fyne/v2/cmd/janice/dialog"
 
 	"fyne.io/fyne/v2/cmd/janice/jsondocument"
 )
@@ -86,7 +83,7 @@ func NewUI(app fyne.App) (*UI, error) {
 		nil,
 		container.NewStack(u.welcomeMessage, u.treeWidget))
 
-	u.window.SetContent(fynetooltip.AddWindowToolTipLayer(c, u.window.Canvas()))
+	u.window.SetContent(widget.AddWindowToolTipLayer(c, u.window.Canvas()))
 	u.window.SetMainMenu(u.makeMenu())
 	u.toogleHasDocument(false)
 	u.updateRecentFilesMenu()
@@ -210,7 +207,7 @@ func (u *UI) showErrorDialog(message string, err error) {
 		slog.Error(message, "err", err)
 	}
 	d := dialog.NewInformation("Error", message, u.window)
-	kxdialog.AddDialogKeyHandler(d, u.window)
+	dialog.CloseOnEscape(d, u.window)
 	d.Show()
 }
 
@@ -295,7 +292,7 @@ func (u *UI) loadDocument(reader fyne.URIReadCloser) {
 	d2.SetOnClosed(func() {
 		cancel()
 	})
-	kxdialog.AddDialogKeyHandler(d2, u.window)
+	dialog.CloseOnEscape(d2, u.window)
 	d2.Show()
 	go func() {
 		doc := jsondocument.New()

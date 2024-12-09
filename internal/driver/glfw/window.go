@@ -900,13 +900,9 @@ func (w *window) triggersShortcut(localizedKeyName fyne.KeyName, key fyne.KeyNam
 	}
 
 	if shortcut != nil {
-		if focused, ok := w.canvas.Focused().(fyne.Shortcutable); ok {
+		if focused, ok := w.canvas.Focused().(Shortcutable); ok {
 			shouldRunShortcut := true
-			// TODO: @Badu - see this
-			type selectableText interface {
-				Disableable
-				SelectedText() string
-			}
+
 			if selectableTextWid, ok := focused.(selectableText); ok && selectableTextWid.Disabled() {
 				shouldRunShortcut = shortcut.ShortcutName() == "Copy"
 			}

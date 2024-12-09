@@ -7,6 +7,10 @@ import (
 	"fyne.io/fyne/v2/internal/driver"
 )
 
+type selectableText interface {
+	SelectedText() string
+}
+
 // Disableable describes any [CanvasObject] that can be disabled.
 // This is primarily used with objects that also implement the Tappable interface.
 type Disableable interface {
@@ -60,10 +64,6 @@ func (f *FocusManager) Focus(obj fyne.Focusable) bool {
 			return true
 		}
 		if dis, ok := obj.(Disableable); ok && dis.Disabled() {
-			// TODO : @Badu - see about this
-			type selectableText interface {
-				SelectedText() string
-			}
 			if _, isSelectableText := obj.(selectableText); !isSelectableText || fyne.CurrentDevice().IsMobile() {
 				return true
 			}
