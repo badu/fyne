@@ -11,7 +11,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/driver/desktop"
-	"fyne.io/fyne/v2/internal/driver"
+	internalDriver "fyne.io/fyne/v2/internal/driver"
 	"fyne.io/fyne/v2/test"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -2259,7 +2259,7 @@ func findMouseable(c fyne.Canvas, pos fyne.Position) (o fyne.CanvasObject, p fyn
 		_, ok := object.(desktop.Mouseable)
 		return ok
 	}
-	o, p, _ = driver.FindObjectAtPositionMatching(pos, matches, c.Overlays().Top(), c.Content())
+	o, p, _ = internalDriver.FindObjectAtPositionMatching(pos, matches, c.Overlays().Top(), c.Content())
 	return
 }
 

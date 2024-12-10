@@ -7,7 +7,7 @@ import (
 )
 
 func hideVirtualKeyboard() {
-	if d, ok := fyne.CurrentApp().Driver().(*driver); ok {
+	if d, ok := fyne.CurrentApp().Driver().(*mobileDriver); ok {
 		if d.app == nil { // not yet running
 			return
 		}
@@ -33,7 +33,7 @@ func handleKeyboard(obj fyne.Focusable) {
 }
 
 func showVirtualKeyboard(keyboard mobile.KeyboardType) {
-	if d, ok := fyne.CurrentApp().Driver().(*driver); ok {
+	if d, ok := fyne.CurrentApp().Driver().(*mobileDriver); ok {
 		if d.app == nil { // not yet running
 			fyne.LogError("Cannot show keyboard before app is running", nil)
 			return

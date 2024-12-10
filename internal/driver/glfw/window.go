@@ -16,7 +16,6 @@ import (
 	"fyne.io/fyne/v2/internal/build"
 	"fyne.io/fyne/v2/internal/cache"
 	"fyne.io/fyne/v2/internal/driver"
-	"fyne.io/fyne/v2/internal/driver/common"
 	"fyne.io/fyne/v2/internal/scale"
 )
 
@@ -223,8 +222,8 @@ func (w *window) Close() {
 		cache.RangeTexturesFor(w.canvas, w.canvas.Painter().Free)
 	})
 
-	w.canvas.WalkTrees(nil, func(node *common.RenderCacheNode, _ fyne.Position) {
-		if wid, ok := node.Obj().(fyne.Widget); ok {
+	w.canvas.WalkTrees(nil, func(node *driver.RenderCacheNode, _ fyne.Position) {
+		if wid, ok := node.Obj.(fyne.Widget); ok {
 			cache.DestroyRenderer(wid)
 		}
 	})
@@ -329,13 +328,13 @@ func (w *window) processFrameSized(width, height int) {
 
 	winWidth, _ := w.view().GetSize()
 	newTexScale := float32(width) / float32(winWidth) // This will be > 1.0 on a HiDPI screen
-	w.canvas.RLock()
+	w.canvas.Mu.RLock()
 	texScale := w.canvas.texScale
-	w.canvas.RUnlock()
+	w.canvas.Mu.RUnlock()
 	if texScale != newTexScale {
-		w.canvas.Lock()
+		w.canvas.Mu.Lock()
 		w.canvas.texScale = newTexScale
-		w.canvas.Unlock()
+		w.canvas.Mu.Unlock()
 		w.canvas.Refresh(w.canvas.Content()) // reset graphics to apply texture scale
 	}
 }

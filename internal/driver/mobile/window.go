@@ -5,7 +5,8 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/internal/async"
 	"fyne.io/fyne/v2/internal/cache"
-	"fyne.io/fyne/v2/internal/driver/common"
+	intdriver "fyne.io/fyne/v2/internal/driver"
+
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -28,7 +29,7 @@ type window struct {
 	isChild            bool
 
 	clipboard fyne.Clipboard
-	canvas    *canvas
+	canvas    *mobileCanvas
 	icon      fyne.Resource
 	menu      *fyne.MainMenu
 	handle    uintptr // the window handle - currently just Android
@@ -85,7 +86,7 @@ func (w *window) SetFullScreen(bool) {
 }
 
 func (w *window) Resize(size fyne.Size) {
-	w.Canvas().(*canvas).Resize(size)
+	w.Canvas().(*mobileCanvas).Resize(size)
 }
 
 func (w *window) RequestFocus() {
@@ -149,7 +150,7 @@ func (w *window) SetOnDropped(dropped func(fyne.Position, []fyne.URI)) {
 }
 
 func (w *window) Show() {
-	menu := fyne.CurrentApp().Driver().(*driver).findMenu(w)
+	menu := fyne.CurrentApp().Driver().(*mobileDriver).findMenu(w)
 	menuButton := w.newMenuButton(menu)
 	if menu == nil {
 		menuButton.Hide()
@@ -197,7 +198,7 @@ func (w *window) tryClose() {
 }
 
 func (w *window) Close() {
-	d := fyne.CurrentApp().Driver().(*driver)
+	d := fyne.CurrentApp().Driver().(*mobileDriver)
 	pos := -1
 	for i, win := range d.windows {
 		if win == w {
@@ -210,8 +211,8 @@ func (w *window) Close() {
 
 	cache.RangeTexturesFor(w.canvas, w.canvas.Painter().Free)
 
-	w.canvas.WalkTrees(nil, func(node *common.RenderCacheNode, _ fyne.Position) {
-		if wid, ok := node.Obj().(fyne.Widget); ok {
+	w.canvas.WalkTrees(nil, func(node *intdriver.RenderCacheNode, _ fyne.Position) {
+		if wid, ok := node.Obj.(fyne.Widget); ok {
 			cache.DestroyRenderer(wid)
 		}
 	})
@@ -266,5 +267,5 @@ func (w *window) RescaleContext() {
 }
 
 func (w *window) Context() any {
-	return fyne.CurrentApp().Driver().(*driver).glctx
+	return fyne.CurrentApp().Driver().(*mobileDriver).glctx
 }

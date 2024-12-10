@@ -11,7 +11,7 @@ import (
 )
 
 func Test_driver_AbsolutePositionForObject(t *testing.T) {
-	d := &driver{}
+	d := &testDriver{}
 	w := d.CreateWindow("Test Window")
 	o := fynecanvas.NewRectangle(color.Black)
 	w.SetContent(o)
@@ -29,7 +29,7 @@ func Test_driver_AbsolutePositionForObject(t *testing.T) {
 }
 
 func TestDriver_CreateWindow(t *testing.T) {
-	d := &driver{}
+	d := &testDriver{}
 	w := d.CreateWindow("Test Window")
 
 	assert.Equal(t, "Test Window", w.Title())

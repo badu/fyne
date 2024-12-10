@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/internal/driver"
+	internalDriver "fyne.io/fyne/v2/internal/driver"
 )
 
 type selectableText interface {
@@ -39,7 +39,7 @@ func (f *FocusManager) Focus(obj fyne.Focusable) bool {
 	if obj != nil {
 		var hiddenAncestor fyne.CanvasObject
 		hidden := false
-		found := driver.WalkCompleteObjectTree(
+		found := internalDriver.WalkCompleteObjectTree(
 			f.content,
 			func(object fyne.CanvasObject, _, _ fyne.Position, _ fyne.Size) bool {
 				if hiddenAncestor == nil && !object.Visible() {
@@ -125,7 +125,7 @@ func (f *FocusManager) focus(obj fyne.Focusable) {
 }
 
 func (f *FocusManager) nextInChain(current fyne.Focusable) fyne.Focusable {
-	return f.nextWithWalker(current, driver.WalkVisibleObjectTree)
+	return f.nextWithWalker(current, internalDriver.WalkVisibleObjectTree)
 }
 
 func (f *FocusManager) nextWithWalker(current fyne.Focusable, walker walkerFunc) fyne.Focusable {
@@ -161,7 +161,7 @@ func (f *FocusManager) nextWithWalker(current fyne.Focusable, walker walkerFunc)
 }
 
 func (f *FocusManager) previousInChain(current fyne.Focusable) fyne.Focusable {
-	return f.nextWithWalker(current, driver.ReverseWalkVisibleObjectTree)
+	return f.nextWithWalker(current, internalDriver.ReverseWalkVisibleObjectTree)
 }
 
 type walkerFunc func(

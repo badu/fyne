@@ -20,8 +20,8 @@ func init() {
 	NewApp()
 }
 
-type app struct {
-	driver       *driver
+type testApp struct {
+	driver       *testDriver
 	settings     *testSettings
 	prefs        fyne.Preferences
 	propertyLock sync.RWMutex
@@ -34,51 +34,51 @@ type app struct {
 	lastNotification *fyne.Notification
 }
 
-func (a *app) CloudProvider() fyne.CloudProvider {
+func (a *testApp) CloudProvider() fyne.CloudProvider {
 	return a.cloud
 }
 
-func (a *app) Icon() fyne.Resource {
+func (a *testApp) Icon() fyne.Resource {
 	return nil
 }
 
-func (a *app) SetIcon(fyne.Resource) {
+func (a *testApp) SetIcon(fyne.Resource) {
 	// no-op
 }
 
-func (a *app) NewWindow(title string) fyne.Window {
+func (a *testApp) NewWindow(title string) fyne.Window {
 	return a.driver.CreateWindow(title)
 }
 
-func (a *app) OpenURL(url *url.URL) error {
+func (a *testApp) OpenURL(url *url.URL) error {
 	// no-op
 	return nil
 }
 
-func (a *app) Run() {
+func (a *testApp) Run() {
 	// no-op
 }
 
-func (a *app) Quit() {
+func (a *testApp) Quit() {
 	// no-op
 }
 
-func (a *app) UniqueID() string {
+func (a *testApp) UniqueID() string {
 	return "testApp" // TODO should this be randomised?
 }
 
-func (a *app) Driver() fyne.Driver {
+func (a *testApp) Driver() fyne.Driver {
 	return a.driver
 }
 
-func (a *app) SendNotification(notify *fyne.Notification) {
+func (a *testApp) SendNotification(notify *fyne.Notification) {
 	a.propertyLock.Lock()
 	defer a.propertyLock.Unlock()
 
 	a.lastNotification = notify
 }
 
-func (a *app) SetCloudProvider(p fyne.CloudProvider) {
+func (a *testApp) SetCloudProvider(p fyne.CloudProvider) {
 	if p == nil {
 		a.cloud = nil
 		return
@@ -87,34 +87,34 @@ func (a *app) SetCloudProvider(p fyne.CloudProvider) {
 	a.transitionCloud(p)
 }
 
-func (a *app) Settings() fyne.Settings {
+func (a *testApp) Settings() fyne.Settings {
 	return a.settings
 }
 
-func (a *app) Preferences() fyne.Preferences {
+func (a *testApp) Preferences() fyne.Preferences {
 	return a.prefs
 }
 
-func (a *app) Storage() fyne.Storage {
+func (a *testApp) Storage() fyne.Storage {
 	return a.storage
 }
 
-func (a *app) Lifecycle() fyne.Lifecycle {
+func (a *testApp) Lifecycle() fyne.Lifecycle {
 	return &a.lifecycle
 }
 
-func (a *app) Metadata() fyne.AppMetadata {
+func (a *testApp) Metadata() fyne.AppMetadata {
 	return fyne.AppMetadata{} // just dummy data
 }
 
-func (a *app) lastAppliedTheme() fyne.Theme {
+func (a *testApp) lastAppliedTheme() fyne.Theme {
 	a.propertyLock.Lock()
 	defer a.propertyLock.Unlock()
 
 	return a.appliedTheme
 }
 
-func (a *app) transitionCloud(p fyne.CloudProvider) {
+func (a *testApp) transitionCloud(p fyne.CloudProvider) {
 	if a.cloud != nil {
 		a.cloud.Cleanup(a)
 	}
@@ -162,7 +162,7 @@ func NewApp() fyne.App {
 	settings := &testSettings{scale: 1.0, theme: Theme()}
 	prefs := internal.NewInMemoryPreferences()
 	store := &testStorage{}
-	test := &app{settings: settings, prefs: prefs, storage: store, driver: NewDriver().(*driver)}
+	test := &testApp{settings: settings, prefs: prefs, storage: store, driver: NewDriver().(*testDriver)}
 	root, _ := store.docRootURI()
 	store.Docs = &internal.Docs{RootDocURI: root}
 	painter.ClearFontCache()

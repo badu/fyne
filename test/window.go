@@ -14,9 +14,9 @@ type window struct {
 	onClosed           func()
 	onCloseIntercepted func()
 
-	canvas    *canvas
+	canvas    *testCanvas
 	clipboard clipboard
-	driver    *driver
+	driver    *testDriver
 	menu      *fyne.MainMenu
 }
 

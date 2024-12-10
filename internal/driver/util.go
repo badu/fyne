@@ -7,6 +7,22 @@ import (
 	"fyne.io/fyne/v2/internal/cache"
 )
 
+// RenderCacheNode represents a node in a render cache tree.
+type RenderCacheNode struct {
+	// structural data
+	FirstChild  *RenderCacheNode
+	NextSibling *RenderCacheNode
+	Obj         fyne.CanvasObject
+	Parent      *RenderCacheNode
+	// cache data
+	MinSize fyne.Size
+	// painterData is some data from the painter associated with the drawed node
+	// it may for instance point to a GL texture
+	// it should free all associated resources when released
+	// i.e. it should not simply be a texture reference integer
+	PainterData any
+}
+
 // Scrollable describes any [CanvasObject] that can also be scrolled.
 // This is mostly used to implement the widget.ScrollContainer.
 type Scrollable interface {

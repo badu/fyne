@@ -8,7 +8,7 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/internal/driver"
-	internal_widget "fyne.io/fyne/v2/internal/widget"
+	internalWidget "fyne.io/fyne/v2/internal/widget"
 	_ "fyne.io/fyne/v2/test"
 	"fyne.io/fyne/v2/widget"
 
@@ -301,7 +301,7 @@ func TestReverseWalkVisibleObjectTree_Clip(t *testing.T) {
 	child := canvas.NewRectangle(color.Black)
 	base := container.NewGridWithColumns(1,
 		rect,
-		internal_widget.NewScroll(child),
+		internalWidget.NewScroll(child),
 		container.NewGridWithColumns(2,
 			canvas.NewCircle(color.White),
 			canvas.NewCircle(color.White),
@@ -317,7 +317,7 @@ func TestReverseWalkVisibleObjectTree_Clip(t *testing.T) {
 	var scClipSize, scrollableClipSize fyne.Size
 
 	driver.ReverseWalkVisibleObjectTree(base, func(object fyne.CanvasObject, position fyne.Position, clippingPos fyne.Position, clippingSize fyne.Size) bool {
-		if _, ok := object.(*internal_widget.Scroll); ok {
+		if _, ok := object.(*internalWidget.Scroll); ok {
 			scClipPos = clippingPos
 			scClipSize = clippingSize
 		} else if _, ok = object.(Scrollable); ok {
@@ -372,7 +372,7 @@ func TestWalkVisibleObjectTree_Clip(t *testing.T) {
 	child := canvas.NewRectangle(color.Black)
 	base := container.NewGridWithColumns(1,
 		rect,
-		internal_widget.NewScroll(child),
+		internalWidget.NewScroll(child),
 		container.NewGridWithColumns(2,
 			canvas.NewCircle(color.White),
 			canvas.NewCircle(color.White),
@@ -388,7 +388,7 @@ func TestWalkVisibleObjectTree_Clip(t *testing.T) {
 	var scClipSize, scrollableClipSize fyne.Size
 
 	driver.WalkVisibleObjectTree(base, func(object fyne.CanvasObject, position fyne.Position, clippingPos fyne.Position, clippingSize fyne.Size) bool {
-		if _, ok := object.(*internal_widget.Scroll); ok {
+		if _, ok := object.(*internalWidget.Scroll); ok {
 			scClipPos = clippingPos
 			scClipSize = clippingSize
 		} else if _, ok = object.(Scrollable); ok {
@@ -486,7 +486,7 @@ func (o *objectTree) CreateRenderer() fyne.WidgetRenderer {
 }
 
 type objectTreeRenderer struct {
-	internal_widget.BaseRenderer
+	internalWidget.BaseRenderer
 }
 
 func (o objectTreeRenderer) Layout(_ fyne.Size) {

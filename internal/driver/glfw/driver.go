@@ -5,6 +5,7 @@ package glfw
 import (
 	"bytes"
 	"fyne.io/fyne/v2/internal/cache"
+	internalDriver "fyne.io/fyne/v2/internal/driver"
 	"image"
 	"os"
 	"runtime"
@@ -15,7 +16,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/internal/animation"
 	intapp "fyne.io/fyne/v2/internal/app"
-	"fyne.io/fyne/v2/internal/driver"
+
 	"fyne.io/fyne/v2/internal/painter"
 	intRepo "fyne.io/fyne/v2/internal/repository"
 	"fyne.io/fyne/v2/storage/repository"
@@ -85,7 +86,7 @@ func (d *gLDriver) AbsolutePositionForObject(co fyne.CanvasObject) fyne.Position
 	}
 
 	glc := c.(*glCanvas)
-	return driver.AbsolutePositionForObject(co, glc.ObjectTrees())
+	return internalDriver.AbsolutePositionForObject(co, glc.ObjectTrees())
 }
 
 func (d *gLDriver) Device() fyne.Device {

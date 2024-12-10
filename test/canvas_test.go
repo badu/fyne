@@ -35,7 +35,7 @@ func Test_canvas_InteractiveArea(t *testing.T) {
 }
 
 func Test_canvas_PixelCoordinateAtPosition(t *testing.T) {
-	c := NewCanvas().(*canvas)
+	c := NewCanvas().(*testCanvas)
 
 	pos := fyne.NewPos(4, 4)
 	c.scale = 2.5

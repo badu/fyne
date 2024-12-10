@@ -104,9 +104,9 @@ func TestWindow_ToggleMainMenuByKeyboard(t *testing.T) {
 	c := w.canvas
 	m := fyne.NewMainMenu(fyne.NewMenu("File"), fyne.NewMenu("Edit"), fyne.NewMenu("Help"))
 	menuBar := buildMenuOverlay(m, w).(*MenuBar)
-	c.Lock()
+	c.Mu.Lock()
 	c.setMenuOverlay(menuBar)
-	c.Unlock()
+	c.Mu.Unlock()
 	w.SetContent(canvas.NewRectangle(color.Black))
 
 	altPressingMod := glfw.ModAlt
@@ -1811,13 +1811,13 @@ func TestWindow_SetFullScreen(t *testing.T) {
 //		KeyName: fyne.KeyF12,
 //	}
 //
-//	w.Canvas().AddShortcut(shortcutFullScreenWindow, func(sc fyne.Shortcut) {
+//	w.glCanvas().AddShortcut(shortcutFullScreenWindow, func(sc fyne.Shortcut) {
 //		w.SetFullScreen(true)
 //	})
 //
 //	assert.False(t, w.FullScreen())
 //
-//	w.Canvas().(*glCanvas).shortcut.TypedShortcut(shortcutFullScreenWindow)
+//	w.glCanvas().(*glCanvas).shortcut.TypedShortcut(shortcutFullScreenWindow)
 //	assert.True(t, w.FullScreen())
 // }
 

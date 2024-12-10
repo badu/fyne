@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"fyne.io/fyne/v2"
-	intdriver "fyne.io/fyne/v2/internal/driver"
+	"fyne.io/fyne/v2/internal/driver"
 	"fyne.io/fyne/v2/internal/painter"
 	"fyne.io/fyne/v2/internal/painter/software"
 	intRepo "fyne.io/fyne/v2/internal/repository"
@@ -18,7 +18,7 @@ type SoftwarePainter interface {
 	Paint(fyne.Canvas) image.Image
 }
 
-type driver struct {
+type testDriver struct {
 	device       device
 	painter      SoftwarePainter
 	windows      []fyne.Window
@@ -27,7 +27,7 @@ type driver struct {
 
 // NewDriver sets up and registers a new dummy driver for test purpose
 func NewDriver() fyne.Driver {
-	drv := &driver{windowsMutex: sync.RWMutex{}}
+	drv := &testDriver{windowsMutex: sync.RWMutex{}}
 	repository.Register("file", intRepo.NewFileRepository())
 
 	httpHandler := intRepo.NewHTTPRepository()
@@ -43,36 +43,36 @@ func NewDriver() fyne.Driver {
 // NewDriverWithPainter creates a new dummy driver that will pass the given
 // painter to all canvases created
 func NewDriverWithPainter(painter SoftwarePainter) fyne.Driver {
-	return &driver{painter: painter}
+	return &testDriver{painter: painter}
 }
 
-func (d *driver) AbsolutePositionForObject(co fyne.CanvasObject) fyne.Position {
+func (d *testDriver) AbsolutePositionForObject(co fyne.CanvasObject) fyne.Position {
 	c := d.CanvasForObject(co)
 	if c == nil {
 		return fyne.NewPos(0, 0)
 	}
 
-	tc := c.(*canvas)
-	pos := intdriver.AbsolutePositionForObject(co, tc.objectTrees())
+	tc := c.(*testCanvas)
+	pos := driver.AbsolutePositionForObject(co, tc.objectTrees())
 	inset, _ := c.InteractiveArea()
 	return pos.Subtract(inset)
 }
 
-func (d *driver) AllWindows() []fyne.Window {
+func (d *testDriver) AllWindows() []fyne.Window {
 	d.windowsMutex.RLock()
 	defer d.windowsMutex.RUnlock()
 	return d.windows
 }
 
-func (d *driver) CanvasForObject(fyne.CanvasObject) fyne.Canvas {
+func (d *testDriver) CanvasForObject(fyne.CanvasObject) fyne.Canvas {
 	d.windowsMutex.RLock()
 	defer d.windowsMutex.RUnlock()
 	// cheating: probably the last created window is meant
 	return d.windows[len(d.windows)-1].Canvas()
 }
 
-func (d *driver) CreateWindow(title string) fyne.Window {
-	c := NewCanvas().(*canvas)
+func (d *testDriver) CreateWindow(title string) fyne.Window {
+	c := NewCanvas().(*testCanvas)
 	if d.painter != nil {
 		c.painter = d.painter
 	} else {
@@ -87,33 +87,33 @@ func (d *driver) CreateWindow(title string) fyne.Window {
 	return w
 }
 
-func (d *driver) Device() fyne.Device {
+func (d *testDriver) Device() fyne.Device {
 	return &d.device
 }
 
 // RenderedTextSize looks up how bit a string would be if drawn on screen
-func (d *driver) RenderedTextSize(text string, size float32, style fyne.TextStyle, source fyne.Resource) (fyne.Size, float32) {
+func (d *testDriver) RenderedTextSize(text string, size float32, style fyne.TextStyle, source fyne.Resource) (fyne.Size, float32) {
 	return painter.RenderedTextSize(text, size, style, source)
 }
 
-func (d *driver) Run() {
+func (d *testDriver) Run() {
 	// no-op
 }
 
-func (d *driver) StartAnimation(a *fyne.Animation) {
+func (d *testDriver) StartAnimation(a *fyne.Animation) {
 	// currently no animations in test app, we just initialise it and leave
 	a.Tick(1.0)
 }
 
-func (d *driver) StopAnimation(a *fyne.Animation) {
+func (d *testDriver) StopAnimation(a *fyne.Animation) {
 	// currently no animations in test app, do nothing
 }
 
-func (d *driver) Quit() {
+func (d *testDriver) Quit() {
 	// no-op
 }
 
-func (d *driver) removeWindow(w *window) {
+func (d *testDriver) removeWindow(w *window) {
 	d.windowsMutex.Lock()
 	i := 0
 	for _, win := range d.windows {
@@ -130,10 +130,10 @@ func (d *driver) removeWindow(w *window) {
 	d.windowsMutex.Unlock()
 }
 
-func (d *driver) DoubleTapDelay() time.Duration {
+func (d *testDriver) DoubleTapDelay() time.Duration {
 	return 300 * time.Millisecond
 }
 
-func (d *driver) SetDisableScreenBlanking(_ bool) {
+func (d *testDriver) SetDisableScreenBlanking(_ bool) {
 	// no-op for test
 }

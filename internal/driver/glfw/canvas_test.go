@@ -3,6 +3,10 @@
 package glfw
 
 import (
+	"errors"
+	"fmt"
+	"fyne.io/fyne/v2/internal/driver"
+	"fyne.io/fyne/v2/test"
 	"image/color"
 	"testing"
 
@@ -18,7 +22,7 @@ import (
 
 func TestGlCanvas_ChildMinSizeChangeAffectsAncestorsUpToRoot(t *testing.T) {
 	w := createWindow("Test").(*window)
-	c := w.Canvas().(*glCanvas)
+	c := w.canvas
 	leftObj1 := canvas.NewRectangle(color.Black)
 	leftObj1.SetMinSize(fyne.NewSize(100, 50))
 	leftObj2 := canvas.NewRectangle(color.Black)
@@ -46,7 +50,7 @@ func TestGlCanvas_ChildMinSizeChangeAffectsAncestorsUpToRoot(t *testing.T) {
 
 func TestGlCanvas_ChildMinSizeChangeAffectsAncestorsUpToScroll(t *testing.T) {
 	w := createWindow("Test").(*window)
-	c := w.Canvas().(*glCanvas)
+	c := w.canvas
 	leftObj1 := canvas.NewRectangle(color.Black)
 	leftObj1.SetMinSize(fyne.NewSize(50, 50))
 	leftObj2 := canvas.NewRectangle(color.Black)
@@ -81,7 +85,7 @@ func TestGlCanvas_ChildMinSizeChangeAffectsAncestorsUpToScroll(t *testing.T) {
 
 func TestGlCanvas_ChildMinSizeChangesInDifferentScrollAffectAncestorsUpToScroll(t *testing.T) {
 	w := createWindow("Test").(*window)
-	c := w.Canvas().(*glCanvas)
+	c := w.canvas
 	leftObj1 := canvas.NewRectangle(color.Black)
 	leftObj1.SetMinSize(fyne.NewSize(50, 50))
 	leftObj2 := canvas.NewRectangle(color.Black)
@@ -133,7 +137,7 @@ func TestGlCanvas_Content(t *testing.T) {
 
 func TestGlCanvas_ContentChangeWithoutMinSizeChangeDoesNotLayout(t *testing.T) {
 	w := createWindow("Test").(*window)
-	c := w.Canvas().(*glCanvas)
+	c := w.canvas
 	leftObj1 := canvas.NewRectangle(color.Black)
 	leftObj1.SetMinSize(fyne.NewSize(50, 50))
 	leftObj2 := canvas.NewRectangle(color.Black)
@@ -368,16 +372,16 @@ func TestGlCanvas_PixelCoordinateAtPosition(t *testing.T) {
 	c := w.Canvas().(*glCanvas)
 
 	pos := fyne.NewPos(4, 4)
-	c.Lock()
+	c.Mu.Lock()
 	c.scale = 2.5
-	c.Unlock()
+	c.Mu.Unlock()
 	x, y := c.PixelCoordinateForPosition(pos)
 	assert.Equal(t, int(10*c.texScale), x)
 	assert.Equal(t, int(10*c.texScale), y)
 
-	c.Lock()
+	c.Mu.Lock()
 	c.texScale = 2.0
-	c.Unlock()
+	c.Mu.Unlock()
 	x, y = c.PixelCoordinateForPosition(pos)
 	assert.Equal(t, 20, x)
 	assert.Equal(t, 20, y)
@@ -503,9 +507,9 @@ func TestGlCanvas_Scale(t *testing.T) {
 	w := createWindow("Test").(*window)
 	c := w.Canvas().(*glCanvas)
 
-	c.Lock()
+	c.Mu.Lock()
 	c.scale = 2.5
-	c.Unlock()
+	c.Mu.Unlock()
 	assert.Equal(t, 5, int(2*c.Scale()))
 }
 
@@ -568,4 +572,427 @@ func (l *recordingLayout) MinSize([]fyne.CanvasObject) fyne.Size {
 func (l *recordingLayout) popLayoutEvent() (e any) {
 	e, l.layoutEvents = pop(l.layoutEvents)
 	return
+}
+
+func TestCanvas_walkTree(t *testing.T) {
+	test.NewTempApp(t)
+
+	leftObj1 := canvas.NewRectangle(color.Gray16{Y: 1})
+	leftObj2 := canvas.NewRectangle(color.Gray16{Y: 2})
+	leftCol := container.NewWithoutLayout(leftObj1, leftObj2)
+	rightObj1 := canvas.NewRectangle(color.Gray16{Y: 10})
+	rightObj2 := canvas.NewRectangle(color.Gray16{Y: 20})
+	rightCol := container.NewWithoutLayout(rightObj1, rightObj2)
+	content := container.NewWithoutLayout(leftCol, rightCol)
+	content.Move(fyne.NewPos(17, 42))
+	leftCol.Move(fyne.NewPos(300, 400))
+	leftObj1.Move(fyne.NewPos(1, 2))
+	leftObj2.Move(fyne.NewPos(20, 30))
+	rightObj1.Move(fyne.NewPos(500, 600))
+	rightObj2.Move(fyne.NewPos(60, 70))
+	rightCol.Move(fyne.NewPos(7, 8))
+
+	tree := &renderCacheTree{root: &driver.RenderCacheNode{Obj: content}}
+	c := &glCanvas{}
+	c.Initialize(nil, func() {})
+	c.SetContentTreeAndFocusMgr(&canvas.Rectangle{FillColor: theme.Color(theme.ColorNameBackground)})
+
+	type nodeInfo struct {
+		obj                                     fyne.CanvasObject
+		lastBeforeCallIndex, lastAfterCallIndex int
+	}
+	updateInfoBefore := func(node *driver.RenderCacheNode, index int) {
+		pd, _ := node.PainterData.(nodeInfo)
+		if (pd != nodeInfo{}) && pd.obj != node.Obj {
+			panic("node cache does not match node obj - nodes should not be reused for different objects")
+		}
+		pd.obj = node.Obj
+		pd.lastBeforeCallIndex = index
+		node.PainterData = pd
+	}
+	updateInfoAfter := func(node *driver.RenderCacheNode, index int) {
+		pd := node.PainterData.(nodeInfo)
+		if pd.obj != node.Obj {
+			panic("node cache does not match node obj - nodes should not be reused for different objects")
+		}
+		pd.lastAfterCallIndex = index
+		node.PainterData = pd
+	}
+
+	//
+	// test that first walk calls the hooks correctly
+	//
+	type beforeCall struct {
+		obj    fyne.CanvasObject
+		parent fyne.CanvasObject
+		pos    fyne.Position
+	}
+	var beforeCalls []beforeCall
+	type afterCall struct {
+		obj    fyne.CanvasObject
+		parent fyne.CanvasObject
+	}
+	var afterCalls []afterCall
+
+	var i int
+	c.walkTree(tree, func(node *driver.RenderCacheNode, pos fyne.Position) {
+		var parent fyne.CanvasObject
+		if node.Parent != nil {
+			parent = node.Parent.Obj
+		}
+		i++
+		updateInfoBefore(node, i)
+		beforeCalls = append(beforeCalls, beforeCall{obj: node.Obj, parent: parent, pos: pos})
+	}, func(node *driver.RenderCacheNode, _ fyne.Position) {
+		var parent fyne.CanvasObject
+		if node.Parent != nil {
+			parent = node.Parent.Obj
+		}
+		i++
+		updateInfoAfter(node, i)
+		node.MinSize.Height = node.Obj.Position().Y
+		afterCalls = append(afterCalls, afterCall{obj: node.Obj, parent: parent})
+	})
+
+	assert.Equal(t, []beforeCall{
+		{obj: content, pos: fyne.NewPos(17, 42)},
+		{obj: leftCol, parent: content, pos: fyne.NewPos(317, 442)},
+		{obj: leftObj1, parent: leftCol, pos: fyne.NewPos(318, 444)},
+		{obj: leftObj2, parent: leftCol, pos: fyne.NewPos(337, 472)},
+		{obj: rightCol, parent: content, pos: fyne.NewPos(24, 50)},
+		{obj: rightObj1, parent: rightCol, pos: fyne.NewPos(524, 650)},
+		{obj: rightObj2, parent: rightCol, pos: fyne.NewPos(84, 120)},
+	}, beforeCalls, "calls before children hook with the correct node and position")
+	assert.Equal(t, []afterCall{
+		{obj: leftObj1, parent: leftCol},
+		{obj: leftObj2, parent: leftCol},
+		{obj: leftCol, parent: content},
+		{obj: rightObj1, parent: rightCol},
+		{obj: rightObj2, parent: rightCol},
+		{obj: rightCol, parent: content},
+		{obj: content},
+	}, afterCalls, "calls after children hook with the correct node")
+
+	//
+	// test that second walk gives access to the cache
+	//
+	var secondRunBeforePainterData []nodeInfo
+	var secondRunAfterPainterData []nodeInfo
+	var nodes []*driver.RenderCacheNode
+
+	c.walkTree(tree, func(node *driver.RenderCacheNode, pos fyne.Position) {
+		secondRunBeforePainterData = append(secondRunBeforePainterData, node.PainterData.(nodeInfo))
+		nodes = append(nodes, node)
+	}, func(node *driver.RenderCacheNode, _ fyne.Position) {
+		secondRunAfterPainterData = append(secondRunAfterPainterData, node.PainterData.(nodeInfo))
+	})
+
+	assert.Equal(t, []nodeInfo{
+		{obj: content, lastBeforeCallIndex: 1, lastAfterCallIndex: 14},
+		{obj: leftCol, lastBeforeCallIndex: 2, lastAfterCallIndex: 7},
+		{obj: leftObj1, lastBeforeCallIndex: 3, lastAfterCallIndex: 4},
+		{obj: leftObj2, lastBeforeCallIndex: 5, lastAfterCallIndex: 6},
+		{obj: rightCol, lastBeforeCallIndex: 8, lastAfterCallIndex: 13},
+		{obj: rightObj1, lastBeforeCallIndex: 9, lastAfterCallIndex: 10},
+		{obj: rightObj2, lastBeforeCallIndex: 11, lastAfterCallIndex: 12},
+	}, secondRunBeforePainterData, "second run uses cached nodes")
+	assert.Equal(t, []nodeInfo{
+		{obj: leftObj1, lastBeforeCallIndex: 3, lastAfterCallIndex: 4},
+		{obj: leftObj2, lastBeforeCallIndex: 5, lastAfterCallIndex: 6},
+		{obj: leftCol, lastBeforeCallIndex: 2, lastAfterCallIndex: 7},
+		{obj: rightObj1, lastBeforeCallIndex: 9, lastAfterCallIndex: 10},
+		{obj: rightObj2, lastBeforeCallIndex: 11, lastAfterCallIndex: 12},
+		{obj: rightCol, lastBeforeCallIndex: 8, lastAfterCallIndex: 13},
+		{obj: content, lastBeforeCallIndex: 1, lastAfterCallIndex: 14},
+	}, secondRunAfterPainterData, "second run uses cached nodes")
+	leftObj1Node := nodes[2]
+	leftObj2Node := nodes[3]
+	assert.Equal(t, leftObj2Node, leftObj1Node.NextSibling, "correct sibling relation")
+	assert.Nil(t, leftObj2Node.NextSibling, "no surplus nodes")
+	rightObj1Node := nodes[5]
+	rightObj2Node := nodes[6]
+	assert.Equal(t, rightObj2Node, rightObj1Node.NextSibling, "correct sibling relation")
+	rightColNode := nodes[4]
+	assert.Nil(t, rightColNode.NextSibling, "no surplus nodes")
+
+	//
+	// test that removal, replacement and adding at the end of a children list works
+	//
+	deleteAt(leftCol, 1)
+	leftNewObj2 := canvas.NewRectangle(color.Gray16{Y: 3})
+	leftCol.Add(leftNewObj2)
+	deleteAt(rightCol, 1)
+	thirdCol := container.NewVBox()
+	content.Add(thirdCol)
+	var thirdRunBeforePainterData []nodeInfo
+	var thirdRunAfterPainterData []nodeInfo
+
+	i = 0
+	c.walkTree(tree, func(node *driver.RenderCacheNode, pos fyne.Position) {
+		i++
+		updateInfoBefore(node, i)
+		thirdRunBeforePainterData = append(thirdRunBeforePainterData, node.PainterData.(nodeInfo))
+	}, func(node *driver.RenderCacheNode, _ fyne.Position) {
+		i++
+		updateInfoAfter(node, i)
+		thirdRunAfterPainterData = append(thirdRunAfterPainterData, node.PainterData.(nodeInfo))
+	})
+
+	assert.Equal(t, []nodeInfo{
+		{obj: content, lastBeforeCallIndex: 1, lastAfterCallIndex: 14},
+		{obj: leftCol, lastBeforeCallIndex: 2, lastAfterCallIndex: 7},
+		{obj: leftObj1, lastBeforeCallIndex: 3, lastAfterCallIndex: 4},
+		{obj: leftNewObj2, lastBeforeCallIndex: 5, lastAfterCallIndex: 0}, // new node for replaced obj
+		{obj: rightCol, lastBeforeCallIndex: 8, lastAfterCallIndex: 13},
+		{obj: rightObj1, lastBeforeCallIndex: 9, lastAfterCallIndex: 10},
+		{obj: thirdCol, lastBeforeCallIndex: 12, lastAfterCallIndex: 0}, // new node for third column
+	}, thirdRunBeforePainterData, "third run uses cached nodes if possible")
+	assert.Equal(t, []nodeInfo{
+		{obj: leftObj1, lastBeforeCallIndex: 3, lastAfterCallIndex: 4},
+		{obj: leftNewObj2, lastBeforeCallIndex: 5, lastAfterCallIndex: 6}, // new node for replaced obj
+		{obj: leftCol, lastBeforeCallIndex: 2, lastAfterCallIndex: 7},
+		{obj: rightObj1, lastBeforeCallIndex: 9, lastAfterCallIndex: 10},
+		{obj: rightCol, lastBeforeCallIndex: 8, lastAfterCallIndex: 11},
+		{obj: thirdCol, lastBeforeCallIndex: 12, lastAfterCallIndex: 13}, // new node for third column
+		{obj: content, lastBeforeCallIndex: 1, lastAfterCallIndex: 14},
+	}, thirdRunAfterPainterData, "third run uses cached nodes if possible")
+	assert.NotEqual(t, leftObj2Node, leftObj1Node.NextSibling, "new node for replaced object")
+	assert.Nil(t, rightObj1Node.NextSibling, "node for removed object has been removed, too")
+	assert.NotNil(t, rightColNode.NextSibling, "new node for new object")
+
+	//
+	// test that insertion at the beginnning or in the middle of a children list
+	// removes all following siblings and their subtrees
+	//
+	leftNewObj2a := canvas.NewRectangle(color.Gray16{Y: 4})
+	insert(leftCol, leftNewObj2a, 1)
+	rightNewObj0 := canvas.NewRectangle(color.Gray16{Y: 30})
+	Prepend(rightCol, rightNewObj0)
+	var fourthRunBeforePainterData []nodeInfo
+	var fourthRunAfterPainterData []nodeInfo
+	nodes = []*driver.RenderCacheNode{}
+
+	i = 0
+	c.walkTree(tree, func(node *driver.RenderCacheNode, pos fyne.Position) {
+		i++
+		updateInfoBefore(node, i)
+		fourthRunBeforePainterData = append(fourthRunBeforePainterData, node.PainterData.(nodeInfo))
+		nodes = append(nodes, node)
+	}, func(node *driver.RenderCacheNode, _ fyne.Position) {
+		i++
+		updateInfoAfter(node, i)
+		fourthRunAfterPainterData = append(fourthRunAfterPainterData, node.PainterData.(nodeInfo))
+	})
+
+	assert.Equal(t, []nodeInfo{
+		{obj: content, lastBeforeCallIndex: 1, lastAfterCallIndex: 14},
+		{obj: leftCol, lastBeforeCallIndex: 2, lastAfterCallIndex: 7},
+		{obj: leftObj1, lastBeforeCallIndex: 3, lastAfterCallIndex: 4},
+		{obj: leftNewObj2a, lastBeforeCallIndex: 5, lastAfterCallIndex: 0}, // new node for inserted obj
+		{obj: leftNewObj2, lastBeforeCallIndex: 7, lastAfterCallIndex: 0},  // new node because of tail cut
+		{obj: rightCol, lastBeforeCallIndex: 10, lastAfterCallIndex: 11},
+		{obj: rightNewObj0, lastBeforeCallIndex: 11, lastAfterCallIndex: 0}, // new node for inserted obj
+		{obj: rightObj1, lastBeforeCallIndex: 13, lastAfterCallIndex: 0},    // new node because of tail cut
+		{obj: thirdCol, lastBeforeCallIndex: 16, lastAfterCallIndex: 13},
+	}, fourthRunBeforePainterData, "fourth run uses cached nodes if possible")
+	assert.Equal(t, []nodeInfo{
+		{obj: leftObj1, lastBeforeCallIndex: 3, lastAfterCallIndex: 4},
+		{obj: leftNewObj2a, lastBeforeCallIndex: 5, lastAfterCallIndex: 6},
+		{obj: leftNewObj2, lastBeforeCallIndex: 7, lastAfterCallIndex: 8},
+		{obj: leftCol, lastBeforeCallIndex: 2, lastAfterCallIndex: 9},
+		{obj: rightNewObj0, lastBeforeCallIndex: 11, lastAfterCallIndex: 12},
+		{obj: rightObj1, lastBeforeCallIndex: 13, lastAfterCallIndex: 14},
+		{obj: rightCol, lastBeforeCallIndex: 10, lastAfterCallIndex: 15},
+		{obj: thirdCol, lastBeforeCallIndex: 16, lastAfterCallIndex: 17},
+		{obj: content, lastBeforeCallIndex: 1, lastAfterCallIndex: 18},
+	}, fourthRunAfterPainterData, "fourth run uses cached nodes if possible")
+	// check cache tree integrity
+	// content node
+	assert.Equal(t, content, nodes[0].Obj)
+	assert.Equal(t, leftCol, nodes[0].FirstChild.Obj)
+	assert.Nil(t, nodes[0].NextSibling)
+	// leftCol node
+	assert.Equal(t, leftCol, nodes[1].Obj)
+	assert.Equal(t, leftObj1, nodes[1].FirstChild.Obj)
+	assert.Equal(t, rightCol, nodes[1].NextSibling.Obj)
+	// leftObj1 node
+	assert.Equal(t, leftObj1, nodes[2].Obj)
+	assert.Nil(t, nodes[2].FirstChild)
+	assert.Equal(t, leftNewObj2a, nodes[2].NextSibling.Obj)
+	// leftNewObj2a node
+	assert.Equal(t, leftNewObj2a, nodes[3].Obj)
+	assert.Nil(t, nodes[3].FirstChild)
+	assert.Equal(t, leftNewObj2, nodes[3].NextSibling.Obj)
+	// leftNewObj2 node
+	assert.Equal(t, leftNewObj2, nodes[4].Obj)
+	assert.Nil(t, nodes[4].FirstChild)
+	assert.Nil(t, nodes[4].NextSibling)
+	// rightCol node
+	assert.Equal(t, rightCol, nodes[5].Obj)
+	assert.Equal(t, rightNewObj0, nodes[5].FirstChild.Obj)
+	assert.Equal(t, thirdCol, nodes[5].NextSibling.Obj)
+	// rightNewObj0 node
+	assert.Equal(t, rightNewObj0, nodes[6].Obj)
+	assert.Nil(t, nodes[6].FirstChild)
+	assert.Equal(t, rightObj1, nodes[6].NextSibling.Obj)
+	// rightObj1 node
+	assert.Equal(t, rightObj1, nodes[7].Obj)
+	assert.Nil(t, nodes[7].FirstChild)
+	assert.Nil(t, nodes[7].NextSibling)
+	// thirdCol node
+	assert.Equal(t, thirdCol, nodes[8].Obj)
+	assert.Nil(t, nodes[8].FirstChild)
+	assert.Nil(t, nodes[8].NextSibling)
+
+	//
+	// test that removal at the beginning or in the middle of a children list
+	// removes all following siblings and their subtrees
+	//
+	deleteAt(leftCol, 1)
+	deleteAt(rightCol, 0)
+	var fifthRunBeforePainterData []nodeInfo
+	var fifthRunAfterPainterData []nodeInfo
+	nodes = []*driver.RenderCacheNode{}
+
+	i = 0
+	c.walkTree(tree, func(node *driver.RenderCacheNode, pos fyne.Position) {
+		i++
+		updateInfoBefore(node, i)
+		fifthRunBeforePainterData = append(fifthRunBeforePainterData, node.PainterData.(nodeInfo))
+		nodes = append(nodes, node)
+	}, func(node *driver.RenderCacheNode, _ fyne.Position) {
+		i++
+		updateInfoAfter(node, i)
+		fifthRunAfterPainterData = append(fifthRunAfterPainterData, node.PainterData.(nodeInfo))
+	})
+
+	assert.Equal(t, []nodeInfo{
+		{obj: content, lastBeforeCallIndex: 1, lastAfterCallIndex: 18},
+		{obj: leftCol, lastBeforeCallIndex: 2, lastAfterCallIndex: 9},
+		{obj: leftObj1, lastBeforeCallIndex: 3, lastAfterCallIndex: 4},
+		{obj: leftNewObj2, lastBeforeCallIndex: 5, lastAfterCallIndex: 0}, // new node because of tail cut
+		{obj: rightCol, lastBeforeCallIndex: 8, lastAfterCallIndex: 15},
+		{obj: rightObj1, lastBeforeCallIndex: 9, lastAfterCallIndex: 0}, // new node because of tail cut
+		{obj: thirdCol, lastBeforeCallIndex: 12, lastAfterCallIndex: 17},
+	}, fifthRunBeforePainterData, "fifth run uses cached nodes if possible")
+	assert.Equal(t, []nodeInfo{
+		{obj: leftObj1, lastBeforeCallIndex: 3, lastAfterCallIndex: 4},
+		{obj: leftNewObj2, lastBeforeCallIndex: 5, lastAfterCallIndex: 6},
+		{obj: leftCol, lastBeforeCallIndex: 2, lastAfterCallIndex: 7},
+		{obj: rightObj1, lastBeforeCallIndex: 9, lastAfterCallIndex: 10},
+		{obj: rightCol, lastBeforeCallIndex: 8, lastAfterCallIndex: 11},
+		{obj: thirdCol, lastBeforeCallIndex: 12, lastAfterCallIndex: 13},
+		{obj: content, lastBeforeCallIndex: 1, lastAfterCallIndex: 14},
+	}, fifthRunAfterPainterData, "fifth run uses cached nodes if possible")
+	// check cache tree integrity
+	// content node
+	assert.Equal(t, content, nodes[0].Obj)
+	assert.Equal(t, leftCol, nodes[0].FirstChild.Obj)
+	assert.Nil(t, nodes[0].NextSibling)
+	// leftCol node
+	assert.Equal(t, leftCol, nodes[1].Obj)
+	assert.Equal(t, leftObj1, nodes[1].FirstChild.Obj)
+	assert.Equal(t, rightCol, nodes[1].NextSibling.Obj)
+	// leftObj1 node
+	assert.Equal(t, leftObj1, nodes[2].Obj)
+	assert.Nil(t, nodes[2].FirstChild)
+	assert.Equal(t, leftNewObj2, nodes[2].NextSibling.Obj)
+	// leftNewObj2 node
+	assert.Equal(t, leftNewObj2, nodes[3].Obj)
+	assert.Nil(t, nodes[3].FirstChild)
+	assert.Nil(t, nodes[3].NextSibling)
+	// rightCol node
+	assert.Equal(t, rightCol, nodes[4].Obj)
+	assert.Equal(t, rightObj1, nodes[4].FirstChild.Obj)
+	assert.Equal(t, thirdCol, nodes[4].NextSibling.Obj)
+	// rightObj1 node
+	assert.Equal(t, rightObj1, nodes[5].Obj)
+	assert.Nil(t, nodes[5].FirstChild)
+	assert.Nil(t, nodes[5].NextSibling)
+	// thirdCol node
+	assert.Equal(t, thirdCol, nodes[6].Obj)
+	assert.Nil(t, nodes[6].FirstChild)
+	assert.Nil(t, nodes[6].NextSibling)
+}
+
+func TestCanvas_OverlayStack(t *testing.T) {
+	o := &overlayStack{}
+	a := canvas.NewRectangle(color.Black)
+	b := canvas.NewCircle(color.Black)
+	c := canvas.NewRectangle(color.White)
+	o.Add(a)
+	o.Add(b)
+	o.Add(c)
+	assert.Equal(t, 3, len(o.List()))
+	o.Remove(c)
+	assert.Equal(t, 2, len(o.List()))
+	o.Remove(a)
+	assert.Equal(t, 0, len(o.List()))
+}
+
+func deleteAt(c *fyne.Container, index int) {
+	if index < len(c.Objects)-1 {
+		c.Objects = append(c.Objects[:index], c.Objects[index+1:]...)
+	} else {
+		c.Objects = c.Objects[:index]
+	}
+	c.Refresh()
+}
+
+func insert(c *fyne.Container, object fyne.CanvasObject, index int) {
+	tail := append([]fyne.CanvasObject{object}, c.Objects[index:]...)
+	c.Objects = append(c.Objects[:index], tail...)
+	c.Refresh()
+}
+
+func Prepend(c *fyne.Container, object fyne.CanvasObject) {
+	c.Objects = append([]fyne.CanvasObject{object}, c.Objects...)
+	c.Refresh()
+}
+
+func TestRefreshCount(t *testing.T) { // Issue 2548.
+	var (
+		c              = &glCanvas{}
+		errCh          = make(chan error)
+		freed   uint64 = 0
+		refresh uint64 = 1000
+	)
+	c.Initialize(nil, func() {})
+	for i := uint64(0); i < refresh; i++ {
+		c.Refresh(canvas.NewRectangle(color.Gray16{Y: 1}))
+	}
+
+	go func() {
+		freed = c.FreeDirtyTextures()
+		if freed == 0 {
+			errCh <- errors.New("expected to free dirty textures but actually not freed")
+			return
+		}
+		errCh <- nil
+	}()
+	err := <-errCh
+	if err != nil {
+		t.Fatal(err)
+	}
+	if freed != refresh {
+		t.Fatalf("FreeDirtyTextures left refresh tasks behind in a frame, got %v, want %v", freed, refresh)
+	}
+}
+
+func BenchmarkRefresh(b *testing.B) {
+	c := &glCanvas{}
+	c.Initialize(nil, func() {})
+
+	for i := uint64(1); i < 1<<15; i *= 2 {
+		b.Run(fmt.Sprintf("#%d", i), func(b *testing.B) {
+			b.ReportAllocs()
+
+			for j := 0; j < b.N; j++ {
+				for n := uint64(0); n < i; n++ {
+					c.Refresh(canvas.NewRectangle(color.Black))
+				}
+				c.FreeDirtyTextures()
+			}
+		})
+	}
 }

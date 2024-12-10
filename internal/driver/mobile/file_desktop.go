@@ -30,6 +30,6 @@ func nativeFileSave(*fileSave) (io.WriteCloser, error) {
 	return nil, nil
 }
 
-func registerRepository(d *driver) {
+func registerRepository(d *mobileDriver) {
 	repository.Register("file", intRepo.NewFileRepository())
 }
