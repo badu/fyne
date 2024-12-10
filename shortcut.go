@@ -1,34 +1,44 @@
 package fyne
 
-import (
-	"sync"
-)
+import "sync"
 
 // ShortcutHandler is a default implementation of the shortcut handler
 // for [CanvasObject].
 type ShortcutHandler struct {
-	entry sync.Map // map[string]func(Shortcut)
+	entry map[string]func(Shortcut)
+	mu    sync.RWMutex
 }
 
 // TypedShortcut handle the registered shortcut
 func (sh *ShortcutHandler) TypedShortcut(shortcut Shortcut) {
-	val, ok := sh.entry.Load(shortcut.ShortcutName())
-	if !ok {
+	sh.mu.RLock()
+	fn, has := sh.entry[shortcut.ShortcutName()]
+	sh.mu.RUnlock()
+	if !has {
 		return
 	}
-
-	f := val.(func(Shortcut))
-	f(shortcut)
+	fn(shortcut)
 }
 
 // AddShortcut register a handler to be executed when the shortcut action is triggered
 func (sh *ShortcutHandler) AddShortcut(shortcut Shortcut, handler func(shortcut Shortcut)) {
-	sh.entry.Store(shortcut.ShortcutName(), handler)
+	if sh.entry == nil {
+		sh.entry = make(map[string]func(Shortcut))
+	}
+
+	sh.mu.RLock()
+	sh.entry[shortcut.ShortcutName()] = handler
+	sh.mu.RUnlock()
 }
 
 // RemoveShortcut removes a registered shortcut
 func (sh *ShortcutHandler) RemoveShortcut(shortcut Shortcut) {
-	sh.entry.Delete(shortcut.ShortcutName())
+	sh.mu.Lock()
+	_, has := sh.entry[shortcut.ShortcutName()]
+	if has {
+		delete(sh.entry, shortcut.ShortcutName())
+	}
+	sh.mu.Unlock()
 }
 
 // Shortcut is the interface used to describe a shortcut action

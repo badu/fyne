@@ -8,8 +8,13 @@ import (
 	"fyne.io/fyne/v2"
 )
 
+type overridesMap struct {
+	m  map[fyne.CanvasObject]*overrideScope
+	mu sync.RWMutex
+}
+
 var (
-	overrides     = &sync.Map{} // map[fyne.Widget]*overrideScope
+	overrides     = overridesMap{m: make(map[fyne.CanvasObject]*overrideScope)}
 	overrideCount = atomic.Uint32{}
 )
 
@@ -30,32 +35,40 @@ func OverrideTheme(o fyne.CanvasObject, th fyne.Theme) {
 }
 
 func OverrideThemeMatchingScope(o, parent fyne.CanvasObject) bool {
-	data, ok := overrides.Load(parent)
-	if !ok { // not overridden in parent
+	overrides.mu.RLock()
+	scope, has := overrides.m[parent]
+	overrides.mu.RUnlock()
+	if !has { // not overridden in parent
 		return false
 	}
 
-	scope := data.(*overrideScope)
 	overrideTheme(o, scope)
 	return true
 }
 
 func WidgetScopeID(o fyne.CanvasObject) string {
-	data, ok := overrides.Load(o)
-	if !ok {
+	overrides.mu.RLock()
+	scope, has := overrides.m[o]
+	overrides.mu.RUnlock()
+	if !has {
 		return ""
 	}
 
-	return data.(*overrideScope).cacheID
+	return scope.cacheID
 }
 
 func WidgetTheme(o fyne.CanvasObject) fyne.Theme {
-	data, ok := overrides.Load(o)
-	if !ok {
+	if o == nil {
 		return nil
 	}
 
-	return data.(*overrideScope).th
+	overrides.mu.RLock()
+	scope, has := overrides.m[o]
+	overrides.mu.RUnlock()
+	if !has { // not overridden in parent
+		return nil
+	}
+	return scope.th
 }
 
 func overrideContainer(c *fyne.Container, s *overrideScope) {
@@ -71,13 +84,18 @@ func overrideTheme(o fyne.CanvasObject, s *overrideScope) {
 	case *fyne.Container:
 		overrideContainer(c, s)
 	default:
-		overrides.Store(c, s)
+		overrides.mu.Lock()
+		overrides.m[c] = s
+		overrides.mu.Unlock()
 	}
 }
 
 func overrideWidget(w fyne.Widget, s *overrideScope) {
 	ResetThemeCaches()
-	overrides.Store(w, s)
+
+	overrides.mu.Lock()
+	overrides.m[w] = s
+	overrides.mu.Unlock()
 
 	r := Renderer(w)
 	if r == nil {

@@ -594,7 +594,7 @@ func TestCanvas_walkTree(t *testing.T) {
 
 	tree := &renderCacheTree{root: &driver.RenderCacheNode{Obj: content}}
 	c := &glCanvas{}
-	c.Initialize(nil, func() {})
+	c.Initialize()
 	c.SetContentTreeAndFocusMgr(&canvas.Rectangle{FillColor: theme.Color(theme.ColorNameBackground)})
 
 	type nodeInfo struct {
@@ -957,7 +957,7 @@ func TestRefreshCount(t *testing.T) { // Issue 2548.
 		freed   uint64 = 0
 		refresh uint64 = 1000
 	)
-	c.Initialize(nil, func() {})
+	c.Initialize()
 	for i := uint64(0); i < refresh; i++ {
 		c.Refresh(canvas.NewRectangle(color.Gray16{Y: 1}))
 	}
@@ -981,7 +981,7 @@ func TestRefreshCount(t *testing.T) { // Issue 2548.
 
 func BenchmarkRefresh(b *testing.B) {
 	c := &glCanvas{}
-	c.Initialize(nil, func() {})
+	c.Initialize()
 
 	for i := uint64(1); i < 1<<15; i *= 2 {
 		b.Run(fmt.Sprintf("#%d", i), func(b *testing.B) {

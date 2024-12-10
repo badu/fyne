@@ -146,9 +146,9 @@ func newAppWithDriver(d fyne.Driver, id string) fyne.App {
 		}
 	})
 	newApp.settings = loadSettings()
-	store := &store{a: newApp}
-	store.Docs = makeStoreDocs(id, store)
-	newApp.storage = store
+	sto := &store{a: newApp}
+	sto.Docs = makeStoreDocs(id, sto)
+	newApp.storage = sto
 
 	if !d.Device().IsMobile() {
 		newApp.settings.watchSettings()

@@ -1,47 +1,38 @@
 package fyne
 
 import (
-	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func syncMapLen(m *sync.Map) (n int) {
-	m.Range(func(_, _ any) bool {
-		n++
-		return true
-	})
-	return
-}
-
 func TestShortcutHandler_AddShortcut(t *testing.T) {
-	handle := &ShortcutHandler{}
+	handle := &ShortcutHandler{entry: make(map[string]func(Shortcut))}
 
 	handle.AddShortcut(&ShortcutCopy{}, func(shortcut Shortcut) {})
 	handle.AddShortcut(&ShortcutPaste{}, func(shortcut Shortcut) {})
 
-	assert.Equal(t, 2, syncMapLen(&handle.entry))
+	assert.Equal(t, 2, len(handle.entry))
 }
 
 func TestShortcutHandler_RemoveShortcut(t *testing.T) {
-	handler := &ShortcutHandler{}
+	handler := &ShortcutHandler{entry: make(map[string]func(Shortcut))}
 	handler.AddShortcut(&ShortcutCopy{}, func(shortcut Shortcut) {})
 	handler.AddShortcut(&ShortcutPaste{}, func(shortcut Shortcut) {})
 
-	assert.Equal(t, 2, syncMapLen(&handler.entry))
+	assert.Equal(t, 2, len(handler.entry))
 
 	handler.RemoveShortcut(&ShortcutCopy{})
 
-	assert.Equal(t, 1, syncMapLen(&handler.entry))
+	assert.Equal(t, 1, len(handler.entry))
 
 	handler.RemoveShortcut(&ShortcutPaste{})
 
-	assert.Equal(t, 0, syncMapLen(&handler.entry))
+	assert.Equal(t, 0, len(handler.entry))
 }
 
 func TestShortcutHandler_HandleShortcut(t *testing.T) {
-	handle := &ShortcutHandler{}
+	handle := &ShortcutHandler{entry: make(map[string]func(Shortcut))}
 	cutCalled, copyCalled, pasteCalled := false, false, false
 
 	handle.AddShortcut(&ShortcutCut{}, func(shortcut Shortcut) {

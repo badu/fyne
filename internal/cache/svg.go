@@ -56,11 +56,15 @@ func destroyExpiredSvgs(now time.Time) {
 }
 
 func overriddenName(name string, o fyne.CanvasObject) string {
-	if o != nil { // for overridden themes get the cache key right
-		if over, ok := overrides.Load(o); ok {
-			return over.(*overrideScope).cacheID + name
-		}
+	if o == nil { // for overridden themes get the cache key right
+		return name
 	}
 
+	overrides.mu.RLock()
+	scope, has := overrides.m[o]
+	overrides.mu.RUnlock()
+	if has { // not overridden in parent
+		return scope.cacheID + name
+	}
 	return name
 }

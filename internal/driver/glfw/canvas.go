@@ -139,8 +139,6 @@ type glCanvas struct {
 	OnFocus   func(obj fyne.Focusable)
 	OnUnfocus func()
 
-	impl SizeableCanvas // TODO : @Badu - really weird pattern
-
 	contentFocusMgr *app.FocusManager
 	menuFocusMgr    *app.FocusManager
 	overlays        *overlayStack
@@ -211,12 +209,12 @@ func (c *glCanvas) DrawDebugOverlay(obj fyne.CanvasObject, pos fyne.Position, si
 //
 // This function uses lock.
 func (c *glCanvas) EnsureMinSize() bool {
-	if c.impl.Content() == nil {
+	if c.Content() == nil {
 		return false
 	}
 	windowNeedsMinSizeUpdate := false
-	csize := c.impl.Size()
-	min := c.impl.MinSize()
+	csize := c.Size()
+	min := c.MinSize()
 
 	c.Mu.RLock()
 	defer c.Mu.RUnlock()
@@ -225,7 +223,7 @@ func (c *glCanvas) EnsureMinSize() bool {
 
 	ensureMinSize := func(node *internalDriver.RenderCacheNode, pos fyne.Position) {
 		obj := node.Obj
-		cache.SetCanvasForObject(obj, c.impl, func() {
+		cache.SetCanvasForObject(obj, c, func() {
 			if img, ok := obj.(*canvas.Image); ok {
 				c.Mu.RUnlock()
 				img.Refresh() // this may now have a different texScale
@@ -272,7 +270,7 @@ func (c *glCanvas) EnsureMinSize() bool {
 	shouldResize := windowNeedsMinSizeUpdate && (csize.Width < min.Width || csize.Height < min.Height)
 	if shouldResize {
 		c.Mu.RUnlock()
-		c.impl.Resize(csize.Max(min))
+		c.Resize(csize.Max(min))
 		c.Mu.RLock()
 	}
 	return windowNeedsMinSizeUpdate
@@ -411,19 +409,18 @@ func (c *glCanvas) FreeDirtyTextures() (freed uint64) {
 	}
 
 	if c.painter != nil {
-		cache.RangeExpiredTexturesFor(c.impl, c.painter.Free)
+		cache.RangeExpiredTexturesFor(c, c.painter.Free)
 	}
 	return
 }
 
 // Initialize initializes the canvas.
-func (c *glCanvas) Initialize(impl SizeableCanvas, onOverlayChanged func()) {
-	c.impl = impl
+func (c *glCanvas) Initialize() {
 	c.refreshQueue = async.NewCanvasObjectQueue()
 	c.overlays = &overlayStack{
 		OverlayStack: internal.OverlayStack{
-			OnChange: onOverlayChanged,
-			Canvas:   impl,
+			OnChange: c.overlayChanged,
+			Canvas:   c,
 		},
 	}
 }
@@ -974,7 +971,7 @@ func (c *glCanvas) applyThemeOutOfTreeObjects() {
 
 func newCanvas() *glCanvas {
 	c := &glCanvas{scale: 1.0, texScale: 1.0, padded: true}
-	c.Initialize(c, c.overlayChanged)
+	c.Initialize()
 	c.setContent(&canvas.Rectangle{FillColor: theme.Color(theme.ColorNameBackground)})
 	return c
 }
