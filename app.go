@@ -81,6 +81,20 @@ type App interface {
 	SetCloudProvider(CloudProvider) // configure cloud for this app
 }
 
+// Lifecycle represents the various phases that an app can transition through.
+//
+// Since: 2.1
+type Lifecycle interface {
+	// SetOnEnteredForeground hooks into the app becoming foreground and gaining focus.
+	SetOnEnteredForeground(func())
+	// SetOnExitedForeground hooks into the app losing input focus and going into the background.
+	SetOnExitedForeground(func())
+	// SetOnStarted hooks into an event that says the app is now running.
+	SetOnStarted(func())
+	// SetOnStopped hooks into an event that says the app is no longer running.
+	SetOnStopped(func())
+}
+
 var app atomic.Pointer[App]
 
 // SetCurrentApp is an internal function to set the app instance currently running.
@@ -96,6 +110,22 @@ func CurrentApp() App {
 		return nil
 	}
 	return *val
+}
+
+func CurrentDriver() Driver {
+	val := app.Load()
+	if val == nil {
+		LogError("Attempt to access current Fyne app when none is started", nil)
+		return nil
+	}
+
+	result := (*val).Driver()
+	if result == nil {
+		LogError("attempt to access current Fyne driver when none is set", nil)
+		return nil
+	}
+
+	return result
 }
 
 // AppMetadata captures the build metadata for an application.
@@ -118,18 +148,4 @@ type AppMetadata struct {
 	// Custom contain the custom metadata defined either in FyneApp.toml or on the compile command line
 	// Since 2.3
 	Custom map[string]string
-}
-
-// Lifecycle represents the various phases that an app can transition through.
-//
-// Since: 2.1
-type Lifecycle interface {
-	// SetOnEnteredForeground hooks into the app becoming foreground and gaining focus.
-	SetOnEnteredForeground(func())
-	// SetOnExitedForeground hooks into the app losing input focus and going into the background.
-	SetOnExitedForeground(func())
-	// SetOnStarted hooks into an event that says the app is now running.
-	SetOnStarted(func())
-	// SetOnStopped hooks into an event that says the app is no longer running.
-	SetOnStopped(func())
 }

@@ -99,8 +99,8 @@ func (s *stringFromBool) Set(str string) error {
 }
 
 func (s *stringFromBool) DataChanged() {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
+	s.propertiesLock.RLock()
+	defer s.propertiesLock.RUnlock()
 	s.trigger()
 }
 
@@ -186,8 +186,8 @@ func (s *stringFromFloat) Set(str string) error {
 }
 
 func (s *stringFromFloat) DataChanged() {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
+	s.propertiesLock.RLock()
+	defer s.propertiesLock.RUnlock()
 	s.trigger()
 }
 
@@ -234,8 +234,8 @@ func (s *intToFloat) Set(val float64) error {
 }
 
 func (s *intToFloat) DataChanged() {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
+	s.propertiesLock.RLock()
+	defer s.propertiesLock.RUnlock()
 	s.trigger()
 }
 
@@ -283,8 +283,8 @@ func (s *intFromFloat) Set(v int) error {
 }
 
 func (s *intFromFloat) DataChanged() {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
+	s.propertiesLock.RLock()
+	defer s.propertiesLock.RUnlock()
 	s.trigger()
 }
 
@@ -370,8 +370,8 @@ func (s *stringFromInt) Set(str string) error {
 }
 
 func (s *stringFromInt) DataChanged() {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
+	s.propertiesLock.RLock()
+	defer s.propertiesLock.RUnlock()
 	s.trigger()
 }
 
@@ -423,8 +423,8 @@ func (s *stringFromURI) Set(str string) error {
 }
 
 func (s *stringFromURI) DataChanged() {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
+	s.propertiesLock.RLock()
+	defer s.propertiesLock.RUnlock()
 	s.trigger()
 }
 
@@ -511,8 +511,8 @@ func (s *stringToBool) Set(val bool) error {
 }
 
 func (s *stringToBool) DataChanged() {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
+	s.propertiesLock.RLock()
+	defer s.propertiesLock.RUnlock()
 	s.trigger()
 }
 
@@ -599,8 +599,8 @@ func (s *stringToFloat) Set(val float64) error {
 }
 
 func (s *stringToFloat) DataChanged() {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
+	s.propertiesLock.RLock()
+	defer s.propertiesLock.RUnlock()
 	s.trigger()
 }
 
@@ -687,8 +687,8 @@ func (s *stringToInt) Set(val int) error {
 }
 
 func (s *stringToInt) DataChanged() {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
+	s.propertiesLock.RLock()
+	defer s.propertiesLock.RUnlock()
 	s.trigger()
 }
 
@@ -737,7 +737,7 @@ func (s *stringToURI) Set(val fyne.URI) error {
 }
 
 func (s *stringToURI) DataChanged() {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
+	s.propertiesLock.RLock()
+	defer s.propertiesLock.RUnlock()
 	s.trigger()
 }

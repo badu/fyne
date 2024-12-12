@@ -6,20 +6,26 @@ import (
 	"fyne.io/fyne/v2"
 )
 
-var textures = sync.Map{} // map[fyne.CanvasObject]*textureInfo
+var (
+	textures     = make(map[fyne.CanvasObject]*textureInfo)
+	texturesLock sync.RWMutex
+)
 
 // DeleteTexture deletes the texture from the cache map.
 func DeleteTexture(obj fyne.CanvasObject) {
-	textures.Delete(obj)
+	texturesLock.Lock()
+	delete(textures, obj)
+	texturesLock.Unlock()
 }
 
 // GetTexture gets cached texture.
 func GetTexture(obj fyne.CanvasObject) (TextureType, bool) {
-	t, ok := textures.Load(obj)
-	if t == nil || !ok {
+	texturesLock.RLock()
+	texInfo, has := textures[obj]
+	texturesLock.RUnlock()
+	if !has {
 		return NoTexture, false
 	}
-	texInfo := t.(*textureInfo)
 	texInfo.setAlive()
 	return texInfo.texture, true
 }
@@ -30,13 +36,13 @@ func GetTexture(obj fyne.CanvasObject) (TextureType, bool) {
 // gl context to ensure textures are deleted from gl.
 func RangeExpiredTexturesFor(canvas fyne.Canvas, f func(fyne.CanvasObject)) {
 	now := timeNow()
-	textures.Range(func(key, value any) bool {
-		obj, tinfo := key.(fyne.CanvasObject), value.(*textureInfo)
-		if tinfo.isExpired(now) && tinfo.canvas == canvas {
-			f(obj)
+	texturesLock.Lock()
+	for key, texInfo := range textures {
+		if texInfo.isExpired(now) && texInfo.canvas == canvas {
+			f(key.(fyne.CanvasObject))
 		}
-		return true
-	})
+	}
+	texturesLock.Unlock()
 }
 
 // RangeTexturesFor range over the textures for the specified canvas.
@@ -44,13 +50,13 @@ func RangeExpiredTexturesFor(canvas fyne.Canvas, f func(fyne.CanvasObject)) {
 // Note: If this is used to free textures, then it should be called inside a current
 // gl context to ensure textures are deleted from gl.
 func RangeTexturesFor(canvas fyne.Canvas, f func(fyne.CanvasObject)) {
-	textures.Range(func(key, value any) bool {
-		obj, tinfo := key.(fyne.CanvasObject), value.(*textureInfo)
-		if tinfo.canvas == canvas {
-			f(obj)
+	texturesLock.Lock()
+	for key, texInfo := range textures {
+		if texInfo.canvas == canvas {
+			f(key.(fyne.CanvasObject))
 		}
-		return true
-	})
+	}
+	texturesLock.Unlock()
 }
 
 // SetTexture sets cached texture.
@@ -58,7 +64,9 @@ func SetTexture(obj fyne.CanvasObject, texture TextureType, canvas fyne.Canvas) 
 	texInfo := &textureInfo{texture: texture}
 	texInfo.canvas = canvas
 	texInfo.setAlive()
-	textures.Store(obj, texInfo)
+	texturesLock.Lock()
+	textures[obj] = texInfo
+	texturesLock.Unlock()
 }
 
 // textureCacheBase defines base texture cache object.

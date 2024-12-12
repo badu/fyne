@@ -98,8 +98,8 @@ type boundBoolTree struct {
 }
 
 func (t *boundBoolTree) Append(parent, id string, val bool) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -113,15 +113,15 @@ func (t *boundBoolTree) Append(parent, id string, val bool) error {
 }
 
 func (t *boundBoolTree) Get() (map[string][]string, map[string]bool, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	return t.ids, *t.val, nil
 }
 
 func (t *boundBoolTree) GetValue(id string) (bool, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	if item, ok := (*t.val)[id]; ok {
 		return item, nil
@@ -131,8 +131,8 @@ func (t *boundBoolTree) GetValue(id string) (bool, error) {
 }
 
 func (t *boundBoolTree) Prepend(parent, id string, val bool) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -150,8 +150,8 @@ func (t *boundBoolTree) Prepend(parent, id string, val bool) error {
 //
 // Since: 2.5
 func (t *boundBoolTree) Remove(id string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	t.removeChildren(id)
 	delete(t.ids, id)
@@ -172,15 +172,15 @@ func (t *boundBoolTree) removeChildren(id string) {
 }
 
 func (t *boundBoolTree) Reload() error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doReload()
 }
 
 func (t *boundBoolTree) Set(ids map[string][]string, v map[string]bool) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	t.ids = ids
 	*t.val = v
 
@@ -230,13 +230,13 @@ func (t *boundBoolTree) doReload() (retErr error) {
 	for id, item := range t.items {
 		var err error
 		if t.updateExternal {
-			item.(*boundExternalBoolTreeItem).lock.Lock()
+			item.(*boundExternalBoolTreeItem).propertiesLock.Lock()
 			err = item.(*boundExternalBoolTreeItem).setIfChanged((*t.val)[id])
-			item.(*boundExternalBoolTreeItem).lock.Unlock()
+			item.(*boundExternalBoolTreeItem).propertiesLock.Unlock()
 		} else {
-			item.(*boundBoolTreeItem).lock.Lock()
+			item.(*boundBoolTreeItem).propertiesLock.Lock()
 			err = item.(*boundBoolTreeItem).doSet((*t.val)[id])
-			item.(*boundBoolTreeItem).lock.Unlock()
+			item.(*boundBoolTreeItem).propertiesLock.Unlock()
 		}
 		if err != nil {
 			retErr = err
@@ -246,9 +246,9 @@ func (t *boundBoolTree) doReload() (retErr error) {
 }
 
 func (t *boundBoolTree) SetValue(id string, v bool) error {
-	t.lock.Lock()
+	t.propertiesLock.Lock()
 	(*t.val)[id] = v
-	t.lock.Unlock()
+	t.propertiesLock.Unlock()
 
 	item, err := t.GetItem(id)
 	if err != nil {
@@ -276,8 +276,8 @@ type boundBoolTreeItem struct {
 }
 
 func (t *boundBoolTreeItem) Get() (bool, error) {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	v := *t.val
 	if item, ok := v[t.id]; ok {
@@ -288,8 +288,8 @@ func (t *boundBoolTreeItem) Get() (bool, error) {
 }
 
 func (t *boundBoolTreeItem) Set(val bool) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doSet(val)
 }
@@ -407,8 +407,8 @@ type boundBytesTree struct {
 }
 
 func (t *boundBytesTree) Append(parent, id string, val []byte) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -422,15 +422,15 @@ func (t *boundBytesTree) Append(parent, id string, val []byte) error {
 }
 
 func (t *boundBytesTree) Get() (map[string][]string, map[string][]byte, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	return t.ids, *t.val, nil
 }
 
 func (t *boundBytesTree) GetValue(id string) ([]byte, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	if item, ok := (*t.val)[id]; ok {
 		return item, nil
@@ -440,8 +440,8 @@ func (t *boundBytesTree) GetValue(id string) ([]byte, error) {
 }
 
 func (t *boundBytesTree) Prepend(parent, id string, val []byte) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -459,8 +459,8 @@ func (t *boundBytesTree) Prepend(parent, id string, val []byte) error {
 //
 // Since: 2.5
 func (t *boundBytesTree) Remove(id string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	t.removeChildren(id)
 	delete(t.ids, id)
@@ -481,15 +481,15 @@ func (t *boundBytesTree) removeChildren(id string) {
 }
 
 func (t *boundBytesTree) Reload() error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doReload()
 }
 
 func (t *boundBytesTree) Set(ids map[string][]string, v map[string][]byte) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	t.ids = ids
 	*t.val = v
 
@@ -539,13 +539,13 @@ func (t *boundBytesTree) doReload() (retErr error) {
 	for id, item := range t.items {
 		var err error
 		if t.updateExternal {
-			item.(*boundExternalBytesTreeItem).lock.Lock()
+			item.(*boundExternalBytesTreeItem).propertiesLock.Lock()
 			err = item.(*boundExternalBytesTreeItem).setIfChanged((*t.val)[id])
-			item.(*boundExternalBytesTreeItem).lock.Unlock()
+			item.(*boundExternalBytesTreeItem).propertiesLock.Unlock()
 		} else {
-			item.(*boundBytesTreeItem).lock.Lock()
+			item.(*boundBytesTreeItem).propertiesLock.Lock()
 			err = item.(*boundBytesTreeItem).doSet((*t.val)[id])
-			item.(*boundBytesTreeItem).lock.Unlock()
+			item.(*boundBytesTreeItem).propertiesLock.Unlock()
 		}
 		if err != nil {
 			retErr = err
@@ -555,9 +555,9 @@ func (t *boundBytesTree) doReload() (retErr error) {
 }
 
 func (t *boundBytesTree) SetValue(id string, v []byte) error {
-	t.lock.Lock()
+	t.propertiesLock.Lock()
 	(*t.val)[id] = v
-	t.lock.Unlock()
+	t.propertiesLock.Unlock()
 
 	item, err := t.GetItem(id)
 	if err != nil {
@@ -585,8 +585,8 @@ type boundBytesTreeItem struct {
 }
 
 func (t *boundBytesTreeItem) Get() ([]byte, error) {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	v := *t.val
 	if item, ok := v[t.id]; ok {
@@ -597,8 +597,8 @@ func (t *boundBytesTreeItem) Get() ([]byte, error) {
 }
 
 func (t *boundBytesTreeItem) Set(val []byte) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doSet(val)
 }
@@ -716,8 +716,8 @@ type boundFloatTree struct {
 }
 
 func (t *boundFloatTree) Append(parent, id string, val float64) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -731,15 +731,15 @@ func (t *boundFloatTree) Append(parent, id string, val float64) error {
 }
 
 func (t *boundFloatTree) Get() (map[string][]string, map[string]float64, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	return t.ids, *t.val, nil
 }
 
 func (t *boundFloatTree) GetValue(id string) (float64, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	if item, ok := (*t.val)[id]; ok {
 		return item, nil
@@ -749,8 +749,8 @@ func (t *boundFloatTree) GetValue(id string) (float64, error) {
 }
 
 func (t *boundFloatTree) Prepend(parent, id string, val float64) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -768,8 +768,8 @@ func (t *boundFloatTree) Prepend(parent, id string, val float64) error {
 //
 // Since: 2.5
 func (t *boundFloatTree) Remove(id string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	t.removeChildren(id)
 	delete(t.ids, id)
@@ -790,15 +790,15 @@ func (t *boundFloatTree) removeChildren(id string) {
 }
 
 func (t *boundFloatTree) Reload() error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doReload()
 }
 
 func (t *boundFloatTree) Set(ids map[string][]string, v map[string]float64) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	t.ids = ids
 	*t.val = v
 
@@ -848,13 +848,13 @@ func (t *boundFloatTree) doReload() (retErr error) {
 	for id, item := range t.items {
 		var err error
 		if t.updateExternal {
-			item.(*boundExternalFloatTreeItem).lock.Lock()
+			item.(*boundExternalFloatTreeItem).propertiesLock.Lock()
 			err = item.(*boundExternalFloatTreeItem).setIfChanged((*t.val)[id])
-			item.(*boundExternalFloatTreeItem).lock.Unlock()
+			item.(*boundExternalFloatTreeItem).propertiesLock.Unlock()
 		} else {
-			item.(*boundFloatTreeItem).lock.Lock()
+			item.(*boundFloatTreeItem).propertiesLock.Lock()
 			err = item.(*boundFloatTreeItem).doSet((*t.val)[id])
-			item.(*boundFloatTreeItem).lock.Unlock()
+			item.(*boundFloatTreeItem).propertiesLock.Unlock()
 		}
 		if err != nil {
 			retErr = err
@@ -864,9 +864,9 @@ func (t *boundFloatTree) doReload() (retErr error) {
 }
 
 func (t *boundFloatTree) SetValue(id string, v float64) error {
-	t.lock.Lock()
+	t.propertiesLock.Lock()
 	(*t.val)[id] = v
-	t.lock.Unlock()
+	t.propertiesLock.Unlock()
 
 	item, err := t.GetItem(id)
 	if err != nil {
@@ -894,8 +894,8 @@ type boundFloatTreeItem struct {
 }
 
 func (t *boundFloatTreeItem) Get() (float64, error) {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	v := *t.val
 	if item, ok := v[t.id]; ok {
@@ -906,8 +906,8 @@ func (t *boundFloatTreeItem) Get() (float64, error) {
 }
 
 func (t *boundFloatTreeItem) Set(val float64) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doSet(val)
 }
@@ -1025,8 +1025,8 @@ type boundIntTree struct {
 }
 
 func (t *boundIntTree) Append(parent, id string, val int) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -1040,15 +1040,15 @@ func (t *boundIntTree) Append(parent, id string, val int) error {
 }
 
 func (t *boundIntTree) Get() (map[string][]string, map[string]int, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	return t.ids, *t.val, nil
 }
 
 func (t *boundIntTree) GetValue(id string) (int, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	if item, ok := (*t.val)[id]; ok {
 		return item, nil
@@ -1058,8 +1058,8 @@ func (t *boundIntTree) GetValue(id string) (int, error) {
 }
 
 func (t *boundIntTree) Prepend(parent, id string, val int) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -1077,8 +1077,8 @@ func (t *boundIntTree) Prepend(parent, id string, val int) error {
 //
 // Since: 2.5
 func (t *boundIntTree) Remove(id string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	t.removeChildren(id)
 	delete(t.ids, id)
@@ -1099,15 +1099,15 @@ func (t *boundIntTree) removeChildren(id string) {
 }
 
 func (t *boundIntTree) Reload() error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doReload()
 }
 
 func (t *boundIntTree) Set(ids map[string][]string, v map[string]int) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	t.ids = ids
 	*t.val = v
 
@@ -1157,13 +1157,13 @@ func (t *boundIntTree) doReload() (retErr error) {
 	for id, item := range t.items {
 		var err error
 		if t.updateExternal {
-			item.(*boundExternalIntTreeItem).lock.Lock()
+			item.(*boundExternalIntTreeItem).propertiesLock.Lock()
 			err = item.(*boundExternalIntTreeItem).setIfChanged((*t.val)[id])
-			item.(*boundExternalIntTreeItem).lock.Unlock()
+			item.(*boundExternalIntTreeItem).propertiesLock.Unlock()
 		} else {
-			item.(*boundIntTreeItem).lock.Lock()
+			item.(*boundIntTreeItem).propertiesLock.Lock()
 			err = item.(*boundIntTreeItem).doSet((*t.val)[id])
-			item.(*boundIntTreeItem).lock.Unlock()
+			item.(*boundIntTreeItem).propertiesLock.Unlock()
 		}
 		if err != nil {
 			retErr = err
@@ -1173,9 +1173,9 @@ func (t *boundIntTree) doReload() (retErr error) {
 }
 
 func (t *boundIntTree) SetValue(id string, v int) error {
-	t.lock.Lock()
+	t.propertiesLock.Lock()
 	(*t.val)[id] = v
-	t.lock.Unlock()
+	t.propertiesLock.Unlock()
 
 	item, err := t.GetItem(id)
 	if err != nil {
@@ -1203,8 +1203,8 @@ type boundIntTreeItem struct {
 }
 
 func (t *boundIntTreeItem) Get() (int, error) {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	v := *t.val
 	if item, ok := v[t.id]; ok {
@@ -1215,8 +1215,8 @@ func (t *boundIntTreeItem) Get() (int, error) {
 }
 
 func (t *boundIntTreeItem) Set(val int) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doSet(val)
 }
@@ -1334,8 +1334,8 @@ type boundRuneTree struct {
 }
 
 func (t *boundRuneTree) Append(parent, id string, val rune) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -1349,15 +1349,15 @@ func (t *boundRuneTree) Append(parent, id string, val rune) error {
 }
 
 func (t *boundRuneTree) Get() (map[string][]string, map[string]rune, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	return t.ids, *t.val, nil
 }
 
 func (t *boundRuneTree) GetValue(id string) (rune, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	if item, ok := (*t.val)[id]; ok {
 		return item, nil
@@ -1367,8 +1367,8 @@ func (t *boundRuneTree) GetValue(id string) (rune, error) {
 }
 
 func (t *boundRuneTree) Prepend(parent, id string, val rune) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -1386,8 +1386,8 @@ func (t *boundRuneTree) Prepend(parent, id string, val rune) error {
 //
 // Since: 2.5
 func (t *boundRuneTree) Remove(id string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	t.removeChildren(id)
 	delete(t.ids, id)
@@ -1408,15 +1408,15 @@ func (t *boundRuneTree) removeChildren(id string) {
 }
 
 func (t *boundRuneTree) Reload() error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doReload()
 }
 
 func (t *boundRuneTree) Set(ids map[string][]string, v map[string]rune) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	t.ids = ids
 	*t.val = v
 
@@ -1466,13 +1466,13 @@ func (t *boundRuneTree) doReload() (retErr error) {
 	for id, item := range t.items {
 		var err error
 		if t.updateExternal {
-			item.(*boundExternalRuneTreeItem).lock.Lock()
+			item.(*boundExternalRuneTreeItem).propertiesLock.Lock()
 			err = item.(*boundExternalRuneTreeItem).setIfChanged((*t.val)[id])
-			item.(*boundExternalRuneTreeItem).lock.Unlock()
+			item.(*boundExternalRuneTreeItem).propertiesLock.Unlock()
 		} else {
-			item.(*boundRuneTreeItem).lock.Lock()
+			item.(*boundRuneTreeItem).propertiesLock.Lock()
 			err = item.(*boundRuneTreeItem).doSet((*t.val)[id])
-			item.(*boundRuneTreeItem).lock.Unlock()
+			item.(*boundRuneTreeItem).propertiesLock.Unlock()
 		}
 		if err != nil {
 			retErr = err
@@ -1482,9 +1482,9 @@ func (t *boundRuneTree) doReload() (retErr error) {
 }
 
 func (t *boundRuneTree) SetValue(id string, v rune) error {
-	t.lock.Lock()
+	t.propertiesLock.Lock()
 	(*t.val)[id] = v
-	t.lock.Unlock()
+	t.propertiesLock.Unlock()
 
 	item, err := t.GetItem(id)
 	if err != nil {
@@ -1512,8 +1512,8 @@ type boundRuneTreeItem struct {
 }
 
 func (t *boundRuneTreeItem) Get() (rune, error) {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	v := *t.val
 	if item, ok := v[t.id]; ok {
@@ -1524,8 +1524,8 @@ func (t *boundRuneTreeItem) Get() (rune, error) {
 }
 
 func (t *boundRuneTreeItem) Set(val rune) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doSet(val)
 }
@@ -1643,8 +1643,8 @@ type boundStringTree struct {
 }
 
 func (t *boundStringTree) Append(parent, id string, val string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -1658,15 +1658,15 @@ func (t *boundStringTree) Append(parent, id string, val string) error {
 }
 
 func (t *boundStringTree) Get() (map[string][]string, map[string]string, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	return t.ids, *t.val, nil
 }
 
 func (t *boundStringTree) GetValue(id string) (string, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	if item, ok := (*t.val)[id]; ok {
 		return item, nil
@@ -1676,8 +1676,8 @@ func (t *boundStringTree) GetValue(id string) (string, error) {
 }
 
 func (t *boundStringTree) Prepend(parent, id string, val string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -1695,8 +1695,8 @@ func (t *boundStringTree) Prepend(parent, id string, val string) error {
 //
 // Since: 2.5
 func (t *boundStringTree) Remove(id string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	t.removeChildren(id)
 	delete(t.ids, id)
@@ -1717,15 +1717,15 @@ func (t *boundStringTree) removeChildren(id string) {
 }
 
 func (t *boundStringTree) Reload() error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doReload()
 }
 
 func (t *boundStringTree) Set(ids map[string][]string, v map[string]string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	t.ids = ids
 	*t.val = v
 
@@ -1775,13 +1775,13 @@ func (t *boundStringTree) doReload() (retErr error) {
 	for id, item := range t.items {
 		var err error
 		if t.updateExternal {
-			item.(*boundExternalStringTreeItem).lock.Lock()
+			item.(*boundExternalStringTreeItem).propertiesLock.Lock()
 			err = item.(*boundExternalStringTreeItem).setIfChanged((*t.val)[id])
-			item.(*boundExternalStringTreeItem).lock.Unlock()
+			item.(*boundExternalStringTreeItem).propertiesLock.Unlock()
 		} else {
-			item.(*boundStringTreeItem).lock.Lock()
+			item.(*boundStringTreeItem).propertiesLock.Lock()
 			err = item.(*boundStringTreeItem).doSet((*t.val)[id])
-			item.(*boundStringTreeItem).lock.Unlock()
+			item.(*boundStringTreeItem).propertiesLock.Unlock()
 		}
 		if err != nil {
 			retErr = err
@@ -1791,9 +1791,9 @@ func (t *boundStringTree) doReload() (retErr error) {
 }
 
 func (t *boundStringTree) SetValue(id string, v string) error {
-	t.lock.Lock()
+	t.propertiesLock.Lock()
 	(*t.val)[id] = v
-	t.lock.Unlock()
+	t.propertiesLock.Unlock()
 
 	item, err := t.GetItem(id)
 	if err != nil {
@@ -1821,8 +1821,8 @@ type boundStringTreeItem struct {
 }
 
 func (t *boundStringTreeItem) Get() (string, error) {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	v := *t.val
 	if item, ok := v[t.id]; ok {
@@ -1833,8 +1833,8 @@ func (t *boundStringTreeItem) Get() (string, error) {
 }
 
 func (t *boundStringTreeItem) Set(val string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doSet(val)
 }
@@ -1952,8 +1952,8 @@ type boundUntypedTree struct {
 }
 
 func (t *boundUntypedTree) Append(parent, id string, val any) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -1967,15 +1967,15 @@ func (t *boundUntypedTree) Append(parent, id string, val any) error {
 }
 
 func (t *boundUntypedTree) Get() (map[string][]string, map[string]any, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	return t.ids, *t.val, nil
 }
 
 func (t *boundUntypedTree) GetValue(id string) (any, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	if item, ok := (*t.val)[id]; ok {
 		return item, nil
@@ -1985,8 +1985,8 @@ func (t *boundUntypedTree) GetValue(id string) (any, error) {
 }
 
 func (t *boundUntypedTree) Prepend(parent, id string, val any) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -2004,8 +2004,8 @@ func (t *boundUntypedTree) Prepend(parent, id string, val any) error {
 //
 // Since: 2.5
 func (t *boundUntypedTree) Remove(id string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	t.removeChildren(id)
 	delete(t.ids, id)
@@ -2026,15 +2026,15 @@ func (t *boundUntypedTree) removeChildren(id string) {
 }
 
 func (t *boundUntypedTree) Reload() error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doReload()
 }
 
 func (t *boundUntypedTree) Set(ids map[string][]string, v map[string]any) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	t.ids = ids
 	*t.val = v
 
@@ -2084,13 +2084,13 @@ func (t *boundUntypedTree) doReload() (retErr error) {
 	for id, item := range t.items {
 		var err error
 		if t.updateExternal {
-			item.(*boundExternalUntypedTreeItem).lock.Lock()
+			item.(*boundExternalUntypedTreeItem).propertiesLock.Lock()
 			err = item.(*boundExternalUntypedTreeItem).setIfChanged((*t.val)[id])
-			item.(*boundExternalUntypedTreeItem).lock.Unlock()
+			item.(*boundExternalUntypedTreeItem).propertiesLock.Unlock()
 		} else {
-			item.(*boundUntypedTreeItem).lock.Lock()
+			item.(*boundUntypedTreeItem).propertiesLock.Lock()
 			err = item.(*boundUntypedTreeItem).doSet((*t.val)[id])
-			item.(*boundUntypedTreeItem).lock.Unlock()
+			item.(*boundUntypedTreeItem).propertiesLock.Unlock()
 		}
 		if err != nil {
 			retErr = err
@@ -2100,9 +2100,9 @@ func (t *boundUntypedTree) doReload() (retErr error) {
 }
 
 func (t *boundUntypedTree) SetValue(id string, v any) error {
-	t.lock.Lock()
+	t.propertiesLock.Lock()
 	(*t.val)[id] = v
-	t.lock.Unlock()
+	t.propertiesLock.Unlock()
 
 	item, err := t.GetItem(id)
 	if err != nil {
@@ -2130,8 +2130,8 @@ type boundUntypedTreeItem struct {
 }
 
 func (t *boundUntypedTreeItem) Get() (any, error) {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	v := *t.val
 	if item, ok := v[t.id]; ok {
@@ -2142,8 +2142,8 @@ func (t *boundUntypedTreeItem) Get() (any, error) {
 }
 
 func (t *boundUntypedTreeItem) Set(val any) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doSet(val)
 }
@@ -2261,8 +2261,8 @@ type boundURITree struct {
 }
 
 func (t *boundURITree) Append(parent, id string, val fyne.URI) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -2276,15 +2276,15 @@ func (t *boundURITree) Append(parent, id string, val fyne.URI) error {
 }
 
 func (t *boundURITree) Get() (map[string][]string, map[string]fyne.URI, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	return t.ids, *t.val, nil
 }
 
 func (t *boundURITree) GetValue(id string) (fyne.URI, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	if item, ok := (*t.val)[id]; ok {
 		return item, nil
@@ -2294,8 +2294,8 @@ func (t *boundURITree) GetValue(id string) (fyne.URI, error) {
 }
 
 func (t *boundURITree) Prepend(parent, id string, val fyne.URI) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	ids, ok := t.ids[parent]
 	if !ok {
 		ids = make([]string, 0)
@@ -2313,8 +2313,8 @@ func (t *boundURITree) Prepend(parent, id string, val fyne.URI) error {
 //
 // Since: 2.5
 func (t *boundURITree) Remove(id string) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	t.removeChildren(id)
 	delete(t.ids, id)
@@ -2335,15 +2335,15 @@ func (t *boundURITree) removeChildren(id string) {
 }
 
 func (t *boundURITree) Reload() error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doReload()
 }
 
 func (t *boundURITree) Set(ids map[string][]string, v map[string]fyne.URI) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 	t.ids = ids
 	*t.val = v
 
@@ -2393,13 +2393,13 @@ func (t *boundURITree) doReload() (retErr error) {
 	for id, item := range t.items {
 		var err error
 		if t.updateExternal {
-			item.(*boundExternalURITreeItem).lock.Lock()
+			item.(*boundExternalURITreeItem).propertiesLock.Lock()
 			err = item.(*boundExternalURITreeItem).setIfChanged((*t.val)[id])
-			item.(*boundExternalURITreeItem).lock.Unlock()
+			item.(*boundExternalURITreeItem).propertiesLock.Unlock()
 		} else {
-			item.(*boundURITreeItem).lock.Lock()
+			item.(*boundURITreeItem).propertiesLock.Lock()
 			err = item.(*boundURITreeItem).doSet((*t.val)[id])
-			item.(*boundURITreeItem).lock.Unlock()
+			item.(*boundURITreeItem).propertiesLock.Unlock()
 		}
 		if err != nil {
 			retErr = err
@@ -2409,9 +2409,9 @@ func (t *boundURITree) doReload() (retErr error) {
 }
 
 func (t *boundURITree) SetValue(id string, v fyne.URI) error {
-	t.lock.Lock()
+	t.propertiesLock.Lock()
 	(*t.val)[id] = v
-	t.lock.Unlock()
+	t.propertiesLock.Unlock()
 
 	item, err := t.GetItem(id)
 	if err != nil {
@@ -2439,8 +2439,8 @@ type boundURITreeItem struct {
 }
 
 func (t *boundURITreeItem) Get() (fyne.URI, error) {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	v := *t.val
 	if item, ok := v[t.id]; ok {
@@ -2451,8 +2451,8 @@ func (t *boundURITreeItem) Get() (fyne.URI, error) {
 }
 
 func (t *boundURITreeItem) Set(val fyne.URI) error {
-	t.lock.Lock()
-	defer t.lock.Unlock()
+	t.propertiesLock.Lock()
+	defer t.propertiesLock.Unlock()
 
 	return t.doSet(val)
 }

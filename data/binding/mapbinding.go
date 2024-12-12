@@ -163,8 +163,8 @@ type mapBase struct {
 }
 
 func (b *mapBase) GetItem(key string) (DataItem, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if v, ok := b.items[key]; ok {
 		return v, nil
@@ -174,8 +174,8 @@ func (b *mapBase) GetItem(key string) (DataItem, error) {
 }
 
 func (b *mapBase) Keys() []string {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 
 	ret := make([]string, len(b.items))
 	i := 0
@@ -188,8 +188,8 @@ func (b *mapBase) Keys() []string {
 }
 
 func (b *mapBase) Delete(key string) {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 
 	delete(b.items, key)
 
@@ -197,8 +197,8 @@ func (b *mapBase) Delete(key string) {
 }
 
 func (b *mapBase) Get() (map[string]any, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if b.val == nil {
 		return map[string]any{}, nil
@@ -208,8 +208,8 @@ func (b *mapBase) Get() (map[string]any, error) {
 }
 
 func (b *mapBase) GetValue(key string) (any, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if i, ok := b.items[key]; ok {
 		return i.get()
@@ -219,15 +219,15 @@ func (b *mapBase) GetValue(key string) (any, error) {
 }
 
 func (b *mapBase) Reload() error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 
 	return b.doReload()
 }
 
 func (b *mapBase) Set(v map[string]any) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 
 	if b.val == nil { // was not initialized with a blank value, recover
 		b.val = &v
@@ -240,8 +240,8 @@ func (b *mapBase) Set(v map[string]any) error {
 }
 
 func (b *mapBase) SetValue(key string, d any) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 
 	if i, ok := b.items[key]; ok {
 		return i.set(d)
@@ -305,8 +305,8 @@ type boundStruct struct {
 }
 
 func (b *boundStruct) Reload() (retErr error) {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 
 	v := reflect.ValueOf(b.orig).Elem()
 	t := v.Type()

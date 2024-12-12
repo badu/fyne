@@ -99,8 +99,11 @@ func lookupFaces(theme, fallback, emoji fyne.Resource, family string, style fyne
 
 // CachedFontFace returns a Font face held in memory. These are loaded from the current theme.
 func CachedFontFace(style fyne.TextStyle, source fyne.Resource, o fyne.CanvasObject) *FontCacheItem {
+	fontsCache.mu.Lock()
+	defer fontsCache.mu.Unlock()
+
 	if source != nil {
-		val, ok := fontCustomCache.Load(source)
+		val, ok := fontsCache.fontCustomCache[source]
 		if !ok {
 			face := loadMeasureFont(source)
 			if face == nil {
@@ -109,9 +112,9 @@ func CachedFontFace(style fyne.TextStyle, source fyne.Resource, o fyne.CanvasObj
 			faces := &dynamicFontMap{family: source.Name(), faces: []*font.Face{face}}
 
 			val = &FontCacheItem{Fonts: faces}
-			fontCustomCache.Store(source, val)
+			fontsCache.fontCustomCache[source] = val
 		}
-		return val.(*FontCacheItem)
+		return val
 	}
 
 	scope := ""
@@ -119,7 +122,7 @@ func CachedFontFace(style fyne.TextStyle, source fyne.Resource, o fyne.CanvasObj
 		scope = cache.WidgetScopeID(o)
 	}
 
-	val, ok := fontCache.Load(cacheID{style: style, scope: scope})
+	val, ok := fontsCache.fontCache[cacheID{style: style, scope: scope}]
 	if !ok {
 		var faces *dynamicFontMap
 
@@ -154,16 +157,16 @@ func CachedFontFace(style fyne.TextStyle, source fyne.Resource, o fyne.CanvasObj
 		}
 
 		val = &FontCacheItem{Fonts: faces}
-		fontCache.Store(cacheID{style: style, scope: scope}, val)
+		fontsCache.fontCache[cacheID{style: style, scope: scope}] = val
 	}
 
-	return val.(*FontCacheItem)
+	return val
 }
 
 // ClearFontCache is used to remove cached fonts in the case that we wish to re-load Font faces
 func ClearFontCache() {
-	fontCache = &sync.Map{}
-	fontCustomCache = &sync.Map{}
+	fontsCache.fontCache = make(map[cacheID]*FontCacheItem)
+	fontsCache.fontCustomCache = make(map[fyne.Resource]*FontCacheItem)
 }
 
 // DrawString draws a string into an image.
@@ -344,8 +347,16 @@ type cacheID struct {
 	scope string
 }
 
-var fontCache = &sync.Map{}       // map[cacheID]*FontCacheItem
-var fontCustomCache = &sync.Map{} // map[string]*FontCacheItem for custom resources
+type fc struct {
+	mu              sync.Mutex
+	fontCache       map[cacheID]*FontCacheItem
+	fontCustomCache map[fyne.Resource]*FontCacheItem // for custom resources
+}
+
+var fontsCache = fc{
+	fontCache:       make(map[cacheID]*FontCacheItem),
+	fontCustomCache: make(map[fyne.Resource]*FontCacheItem),
+}
 
 type noopLogger struct{}
 

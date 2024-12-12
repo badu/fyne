@@ -8,14 +8,14 @@ import (
 
 func TestTreeBase_AddListener(t *testing.T) {
 	data := newSimpleTree()
-	assert.Equal(t, 0, syncMapLen(&data.listeners))
+	assert.Equal(t, 0, len(data.listeners))
 
 	called := false
 	fn := NewDataListener(func() {
 		called = true
 	})
 	data.AddListener(fn)
-	assert.Equal(t, 1, syncMapLen(&data.listeners))
+	assert.Equal(t, 1, len(data.listeners))
 
 	data.trigger()
 	waitForItems()
@@ -53,11 +53,11 @@ func TestTreeBase_RemoveListener(t *testing.T) {
 		called = true
 	})
 	data := newSimpleTree()
-	data.listeners.Store(fn, true)
+	data.listeners[fn] = struct{}{}
 
-	assert.Equal(t, 1, syncMapLen(&data.listeners))
+	assert.Equal(t, 1, len(data.listeners))
 	data.RemoveListener(fn)
-	assert.Equal(t, 0, syncMapLen(&data.listeners))
+	assert.Equal(t, 0, len(data.listeners))
 
 	data.trigger()
 	waitForItems()
@@ -70,6 +70,7 @@ type simpleTree struct {
 
 func newSimpleTree() *simpleTree {
 	t := &simpleTree{}
+	t.listeners = make(map[DataListener]struct{})
 	t.ids = map[string][]string{}
 	t.items = map[string]DataItem{}
 

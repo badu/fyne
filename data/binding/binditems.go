@@ -70,8 +70,8 @@ type boundBool struct {
 }
 
 func (b *boundBool) Get() (bool, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if b.val == nil {
 		return false, nil
@@ -80,8 +80,8 @@ func (b *boundBool) Get() (bool, error) {
 }
 
 func (b *boundBool) Set(val bool) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if *b.val == val {
 		return nil
 	}
@@ -98,8 +98,8 @@ type boundExternalBool struct {
 }
 
 func (b *boundExternalBool) Set(val bool) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if b.old == val {
 		return nil
 	}
@@ -175,8 +175,8 @@ type boundBytes struct {
 }
 
 func (b *boundBytes) Get() ([]byte, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if b.val == nil {
 		return nil, nil
@@ -185,8 +185,8 @@ func (b *boundBytes) Get() ([]byte, error) {
 }
 
 func (b *boundBytes) Set(val []byte) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if bytes.Equal(*b.val, val) {
 		return nil
 	}
@@ -203,8 +203,8 @@ type boundExternalBytes struct {
 }
 
 func (b *boundExternalBytes) Set(val []byte) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if bytes.Equal(b.old, val) {
 		return nil
 	}
@@ -280,8 +280,8 @@ type boundFloat struct {
 }
 
 func (b *boundFloat) Get() (float64, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if b.val == nil {
 		return 0.0, nil
@@ -290,8 +290,8 @@ func (b *boundFloat) Get() (float64, error) {
 }
 
 func (b *boundFloat) Set(val float64) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if *b.val == val {
 		return nil
 	}
@@ -308,8 +308,8 @@ type boundExternalFloat struct {
 }
 
 func (b *boundExternalFloat) Set(val float64) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if b.old == val {
 		return nil
 	}
@@ -385,8 +385,8 @@ type boundInt struct {
 }
 
 func (b *boundInt) Get() (int, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if b.val == nil {
 		return 0, nil
@@ -395,8 +395,8 @@ func (b *boundInt) Get() (int, error) {
 }
 
 func (b *boundInt) Set(val int) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if *b.val == val {
 		return nil
 	}
@@ -413,8 +413,8 @@ type boundExternalInt struct {
 }
 
 func (b *boundExternalInt) Set(val int) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if b.old == val {
 		return nil
 	}
@@ -490,8 +490,8 @@ type boundRune struct {
 }
 
 func (b *boundRune) Get() (rune, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if b.val == nil {
 		return rune(0), nil
@@ -500,8 +500,8 @@ func (b *boundRune) Get() (rune, error) {
 }
 
 func (b *boundRune) Set(val rune) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if *b.val == val {
 		return nil
 	}
@@ -518,8 +518,8 @@ type boundExternalRune struct {
 }
 
 func (b *boundExternalRune) Set(val rune) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if b.old == val {
 		return nil
 	}
@@ -595,8 +595,8 @@ type boundString struct {
 }
 
 func (b *boundString) Get() (string, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if b.val == nil {
 		return "", nil
@@ -605,8 +605,8 @@ func (b *boundString) Get() (string, error) {
 }
 
 func (b *boundString) Set(val string) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if *b.val == val {
 		return nil
 	}
@@ -623,8 +623,8 @@ type boundExternalString struct {
 }
 
 func (b *boundExternalString) Set(val string) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if b.old == val {
 		return nil
 	}
@@ -700,8 +700,8 @@ type boundURI struct {
 }
 
 func (b *boundURI) Get() (fyne.URI, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if b.val == nil {
 		return fyne.URI(nil), nil
@@ -710,8 +710,8 @@ func (b *boundURI) Get() (fyne.URI, error) {
 }
 
 func (b *boundURI) Set(val fyne.URI) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if compareURI(*b.val, val) {
 		return nil
 	}
@@ -728,8 +728,8 @@ type boundExternalURI struct {
 }
 
 func (b *boundExternalURI) Set(val fyne.URI) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if compareURI(b.old, val) {
 		return nil
 	}

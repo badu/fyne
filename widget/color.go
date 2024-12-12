@@ -1,6 +1,8 @@
 package widget
 
-import "image/color"
+import (
+	"image/color"
+)
 
 type modifiedColorMode uint
 

@@ -27,8 +27,8 @@ type treeBase struct {
 
 // GetItem returns the DataItem at the specified id.
 func (t *treeBase) GetItem(id string) (DataItem, error) {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	if item, ok := t.items[id]; ok {
 		return item, nil
@@ -39,8 +39,8 @@ func (t *treeBase) GetItem(id string) (DataItem, error) {
 
 // ChildIDs returns the ordered IDs of items in this data tree that are children of the specified ID.
 func (t *treeBase) ChildIDs(id string) []string {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
+	t.propertiesLock.RLock()
+	defer t.propertiesLock.RUnlock()
 
 	if ids, ok := t.ids[id]; ok {
 		return ids

@@ -22,8 +22,8 @@ type listBase struct {
 
 // GetItem returns the DataItem at the specified index.
 func (b *listBase) GetItem(i int) (DataItem, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	if i < 0 || i >= len(b.items) {
 		return nil, errOutOfBounds
@@ -34,8 +34,8 @@ func (b *listBase) GetItem(i int) (DataItem, error) {
 
 // Length returns the number of items in this data list.
 func (b *listBase) Length() int {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	return len(b.items)
 }

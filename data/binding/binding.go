@@ -57,27 +57,37 @@ func (l *listener) DataChanged() {
 }
 
 type base struct {
-	listeners sync.Map // map[DataListener]bool
-
-	lock sync.RWMutex
+	listeners      map[DataListener]struct{}
+	propertiesLock sync.RWMutex
 }
 
 // AddListener allows a data listener to be informed of changes to this item.
 func (b *base) AddListener(l DataListener) {
-	b.listeners.Store(l, true)
+	if b.listeners == nil {
+		b.listeners = make(map[DataListener]struct{})
+	}
+
+	b.propertiesLock.Lock()
+	b.listeners[l] = struct{}{}
+	b.propertiesLock.Unlock()
+
 	queueItem(l.DataChanged)
 }
 
 // RemoveListener should be called if the listener is no longer interested in being informed of data change events.
 func (b *base) RemoveListener(l DataListener) {
-	b.listeners.Delete(l)
+	b.propertiesLock.Lock()
+	_, has := b.listeners[l]
+	if has {
+		delete(b.listeners, l)
+	}
+	b.propertiesLock.Unlock()
 }
 
 func (b *base) trigger() {
-	b.listeners.Range(func(key, _ any) bool {
-		queueItem(key.(DataListener).DataChanged)
-		return true
-	})
+	for key := range b.listeners {
+		queueItem(key.DataChanged)
+	}
 }
 
 // Untyped supports binding a any value.
@@ -111,15 +121,15 @@ type boundUntyped struct {
 }
 
 func (b *boundUntyped) Get() (any, error) {
-	b.lock.RLock()
-	defer b.lock.RUnlock()
+	b.propertiesLock.RLock()
+	defer b.propertiesLock.RUnlock()
 
 	return b.val.Interface(), nil
 }
 
 func (b *boundUntyped) Set(val any) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if b.val.Interface() == val {
 		return nil
 	}
@@ -179,8 +189,8 @@ type boundExternalUntyped struct {
 }
 
 func (b *boundExternalUntyped) Set(val any) error {
-	b.lock.Lock()
-	defer b.lock.Unlock()
+	b.propertiesLock.Lock()
+	defer b.propertiesLock.Unlock()
 	if b.old == val {
 		return nil
 	}

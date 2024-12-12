@@ -15,48 +15,63 @@ type providerReplacer interface {
 }
 
 type preferenceBindings struct {
-	items sync.Map // map[string]preferenceItem
+	//mu    sync.RWMutex
+	items map[string]preferenceItem
 }
 
 func (b *preferenceBindings) getItem(key string) preferenceItem {
-	val, loaded := b.items.Load(key)
-	if !loaded {
+	//b.mu.RLock()
+	val, has := b.items[key]
+	if !has {
 		return nil
 	}
-	return val.(preferenceItem)
+	//b.mu.RUnlock()
+	return val
 }
 
 func (b *preferenceBindings) list() []preferenceItem {
-	var ret []preferenceItem
-	b.items.Range(func(_, val any) bool {
-		ret = append(ret, val.(preferenceItem))
-		return true
-	})
+	//b.mu.Lock()
+	ret := make([]preferenceItem, 0, len(b.items))
+	for _, val := range b.items {
+		ret = append(ret, val)
+	}
+	//b.mu.Unlock()
 	return ret
 }
 
 func (b *preferenceBindings) setItem(key string, item preferenceItem) {
-	b.items.Store(key, item)
+	//b.mu.Lock()
+	b.items[key] = item
+	//b.mu.Unlock()
 }
 
 type preferencesMap struct {
-	prefs sync.Map // map[fyne.Preferences]*preferenceBindings
+	mu    sync.RWMutex
+	prefs map[fyne.Preferences]*preferenceBindings
 
 	appPrefs fyne.Preferences // the main application prefs, to check if it changed...
 }
 
 func newPreferencesMap() *preferencesMap {
-	return &preferencesMap{}
+	return &preferencesMap{prefs: make(map[fyne.Preferences]*preferenceBindings)}
 }
 
 func (m *preferencesMap) ensurePreferencesAttached(p fyne.Preferences) *preferenceBindings {
-	binds, loaded := m.prefs.LoadOrStore(p, &preferenceBindings{})
-	if loaded {
-		return binds.(*preferenceBindings)
+	m.mu.RLock()
+	binds, has := m.prefs[p]
+	m.mu.RUnlock()
+	if has {
+		return binds
 	}
 
+	binds = &preferenceBindings{items: make(map[string]preferenceItem)}
+
+	m.mu.Lock()
+	m.prefs[p] = binds
+	m.mu.Unlock()
+
 	p.AddChangeListener(func() { m.preferencesChanged(fyne.CurrentApp().Preferences()) })
-	return binds.(*preferenceBindings)
+	return binds
 }
 
 func (m *preferencesMap) getBindings(p fyne.Preferences) *preferenceBindings {
@@ -67,11 +82,15 @@ func (m *preferencesMap) getBindings(p fyne.Preferences) *preferenceBindings {
 			m.migratePreferences(m.appPrefs, p)
 		}
 	}
-	binds, loaded := m.prefs.Load(p)
-	if !loaded {
+
+	m.mu.RLock()
+	binds, has := m.prefs[p]
+	m.mu.RUnlock()
+
+	if !has {
 		return nil
 	}
-	return binds.(*preferenceBindings)
+	return binds
 }
 
 func (m *preferencesMap) preferencesChanged(p fyne.Preferences) {
@@ -85,13 +104,18 @@ func (m *preferencesMap) preferencesChanged(p fyne.Preferences) {
 }
 
 func (m *preferencesMap) migratePreferences(src, dst fyne.Preferences) {
-	old, loaded := m.prefs.Load(src)
-	if !loaded {
+	m.mu.RLock()
+	old, hasOld := m.prefs[src]
+	m.mu.RUnlock()
+	if !hasOld {
 		return
 	}
 
-	m.prefs.Store(dst, old)
-	m.prefs.Delete(src)
+	m.mu.Lock()
+	m.prefs[dst] = old
+	delete(m.prefs, src)
+	m.mu.Unlock()
+
 	m.appPrefs = dst
 
 	binds := m.getBindings(dst)
