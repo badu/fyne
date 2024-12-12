@@ -60,7 +60,7 @@ func welcomeScreen(_ fyne.Window) fyne.CanvasObject {
 	footerBG := canvas.NewRectangle(shadowColor)
 
 	listen := make(chan fyne.Settings)
-	fyne.CurrentApp().Settings().AddChangeListener(listen)
+	fyne.CurrentSettings().AddChangeListener(listen)
 	go func() {
 		for range listen {
 			bgColor = withAlpha(theme.Color(theme.ColorNameBackground), 0xe0)

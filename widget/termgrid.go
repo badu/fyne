@@ -262,8 +262,8 @@ func (t *termGridRenderer) MinSize() fyne.Size {
 
 func (t *termGridRenderer) Refresh() {
 	// we may be on a new canvas, so just update it to be sure
-	if fyne.CurrentApp() != nil && fyne.CurrentApp().Driver() != nil {
-		t.current = fyne.CurrentApp().Driver().CanvasForObject(t.text)
+	if fyne.CurrentApp() != nil && fyne.CurrentDriver() != nil {
+		t.current = fyne.CurrentDriver().CanvasForObject(t.text)
 	}
 
 	// theme could change text size
@@ -286,9 +286,9 @@ func (t *termGridRenderer) Destroy() {
 
 func (t *termGridRenderer) refresh(obj fyne.CanvasObject) {
 	if t.current == nil {
-		if fyne.CurrentApp() != nil && fyne.CurrentApp().Driver() != nil {
+		if fyne.CurrentApp() != nil && fyne.CurrentDriver() != nil {
 			// cache canvas for this widget, so we don't look it up many times for every cell/row refresh!
-			t.current = fyne.CurrentApp().Driver().CanvasForObject(t.text)
+			t.current = fyne.CurrentDriver().CanvasForObject(t.text)
 		}
 
 		if t.current == nil {

@@ -64,29 +64,29 @@ func Test_DefaultTheme_ShadowColor(t *testing.T) {
 }
 
 func TestEmptyTheme(t *testing.T) {
-	fyne.CurrentApp().Settings().SetTheme(&emptyTheme{})
+	fyne.CurrentSettings().SetTheme(&emptyTheme{})
 	assert.NotNil(t, theme.ForegroundColor())
 	assert.NotNil(t, theme.TextFont())
 	assert.NotNil(t, theme.HelpIcon())
-	fyne.CurrentApp().Settings().SetTheme(theme.DarkTheme())
+	fyne.CurrentSettings().SetTheme(theme.DarkTheme())
 }
 
 func TestThemeChange(t *testing.T) {
-	fyne.CurrentApp().Settings().SetTheme(theme.DarkTheme())
+	fyne.CurrentSettings().SetTheme(theme.DarkTheme())
 	bg := theme.BackgroundColor()
 
-	fyne.CurrentApp().Settings().SetTheme(theme.LightTheme())
+	fyne.CurrentSettings().SetTheme(theme.LightTheme())
 	assert.NotEqual(t, bg, theme.BackgroundColor())
 }
 
 func TestTheme_Bootstrapping(t *testing.T) {
-	current := fyne.CurrentApp().Settings().Theme()
-	fyne.CurrentApp().Settings().SetTheme(nil)
+	current := fyne.CurrentSettings().Theme()
+	fyne.CurrentSettings().SetTheme(nil)
 
 	// this should not crash
 	theme.BackgroundColor()
 
-	fyne.CurrentApp().Settings().SetTheme(current)
+	fyne.CurrentSettings().SetTheme(current)
 }
 
 type emptyTheme struct {

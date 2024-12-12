@@ -11,7 +11,7 @@ import (
 	"fyne.io/fyne/v2"
 )
 
-func (a *fyneApp) SendNotification(n *fyne.Notification) {
+func (a *FyneApp) SendNotification(n *fyne.Notification) {
 	window := js.Global().Get("window")
 	if window.IsUndefined() {
 		fyne.LogError("Current browser does not support notifications.", nil)
@@ -56,7 +56,7 @@ func rootConfigDir() string {
 
 var themeChanged = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 	if len(args) > 0 && args[0].Type() == js.TypeObject {
-		fyne.CurrentApp().Settings().(*settings).setupTheme()
+		fyne.CurrentSettings().(*settings).setupTheme()
 	}
 	return nil
 })

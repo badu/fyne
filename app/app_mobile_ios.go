@@ -24,7 +24,7 @@ func rootConfigDir() string {
 	return filepath.Join(C.GoString(root), "fyne")
 }
 
-func (a *fyneApp) OpenURL(url *url.URL) error {
+func (a *FyneApp) OpenURL(url *url.URL) error {
 	urlStr := C.CString(url.String())
 	C.openURL(urlStr)
 	C.free(unsafe.Pointer(urlStr))

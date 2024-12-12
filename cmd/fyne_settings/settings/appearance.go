@@ -53,7 +53,7 @@ func (s *Settings) AppearanceIcon() fyne.Resource {
 
 // LoadAppearanceScreen creates a new settings screen to handle appearance configuration
 func (s *Settings) LoadAppearanceScreen(w fyne.Window) fyne.CanvasObject {
-	fallback := fyne.CurrentApp().Settings().Theme()
+	fallback := fyne.CurrentSettings().Theme()
 	if fallback == nil {
 		fallback = theme.DefaultTheme()
 	}

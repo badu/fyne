@@ -97,7 +97,7 @@ func (e *SelectEntry) SetOptions(options []string) {
 }
 
 func (e *SelectEntry) popUpPos() fyne.Position {
-	entryPos := fyne.CurrentApp().Driver().AbsolutePositionForObject(e.super())
+	entryPos := fyne.CurrentDriver().AbsolutePositionForObject(e.super())
 	return entryPos.Add(fyne.NewPos(0, e.Size().Height-e.Theme().Size(theme.SizeNameInputBorder)))
 }
 
@@ -105,7 +105,7 @@ func (e *SelectEntry) setupDropDown() *Button {
 	dropDownButton := NewButton(
 		ButtonWithCallback(
 			func() {
-				c := fyne.CurrentApp().Driver().CanvasForObject(e.super())
+				c := fyne.CurrentDriver().CanvasForObject(e.super())
 
 				e.popUp = NewPopUpMenu(e.dropDown, c)
 				e.popUp.ShowAtPosition(e.popUpPos())

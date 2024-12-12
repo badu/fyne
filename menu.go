@@ -61,7 +61,7 @@ func NewMenu(label string, items ...*MenuItem) *Menu {
 //
 // Since: 2.2
 func (m *Menu) Refresh() {
-	for _, w := range CurrentApp().Driver().AllWindows() {
+	for _, w := range CurrentDriver().AllWindows() {
 		main := w.MainMenu()
 		if main != nil {
 			for _, menu := range main.Items {
@@ -73,7 +73,7 @@ func (m *Menu) Refresh() {
 		}
 	}
 
-	if d, ok := CurrentApp().Driver().(systemTrayDriver); ok {
+	if d, ok := CurrentDriver().(systemTrayDriver); ok {
 		if m == d.SystemTrayMenu() {
 			d.SetSystemTrayMenu(m)
 		}
@@ -123,7 +123,7 @@ func NewMainMenu(items ...*Menu) *MainMenu {
 //
 // Since: 2.2
 func (m *MainMenu) Refresh() {
-	for _, w := range CurrentApp().Driver().AllWindows() {
+	for _, w := range CurrentDriver().AllWindows() {
 		menu := w.MainMenu()
 		if menu != nil && menu == m {
 			w.SetMainMenu(m)

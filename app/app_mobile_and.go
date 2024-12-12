@@ -22,7 +22,7 @@ import (
 	"fyne.io/fyne/v2/internal/driver/mobile/app"
 )
 
-func (a *fyneApp) OpenURL(url *url.URL) error {
+func (a *FyneApp) OpenURL(url *url.URL) error {
 	urlStr := C.CString(url.String())
 	defer C.free(unsafe.Pointer(urlStr))
 
@@ -33,7 +33,7 @@ func (a *fyneApp) OpenURL(url *url.URL) error {
 	return nil
 }
 
-func (a *fyneApp) SendNotification(n *fyne.Notification) {
+func (a *FyneApp) SendNotification(n *fyne.Notification) {
 	titleStr := C.CString(n.Title)
 	defer C.free(unsafe.Pointer(titleStr))
 	contentStr := C.CString(n.Content)

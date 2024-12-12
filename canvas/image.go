@@ -314,7 +314,7 @@ func (i *Image) updateReader() (io.ReadCloser, error) {
 		if res, ok := i.Resource.(fyne.ThemedResource); i.isSVG && ok {
 			th := cache.WidgetTheme(i)
 			if th != nil {
-				col := th.Color(res.ThemeColorName(), fyne.CurrentApp().Settings().ThemeVariant())
+				col := th.Color(res.ThemeColorName(), fyne.CurrentSettings().ThemeVariant())
 				content = svg.Colorize(content, col)
 			}
 		}
@@ -388,7 +388,7 @@ func (i *Image) imageDetailsFromReader(source io.Reader) (reader io.Reader, widt
 }
 
 func (i *Image) renderSVG(width, height float32) (image.Image, error) {
-	c := fyne.CurrentApp().Driver().CanvasForObject(i)
+	c := fyne.CurrentDriver().CanvasForObject(i)
 	screenWidth, screenHeight := int(width), int(height)
 	if c != nil {
 		// We want real output pixel count not just the screen coordinate space (i.e. macOS Retina)

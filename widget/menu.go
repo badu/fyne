@@ -236,8 +236,8 @@ func (r *menuRenderer) Layout(s fyne.Size) {
 		boxSize = minSize
 	}
 	scrollSize := boxSize
-	if c := fyne.CurrentApp().Driver().CanvasForObject(r.m.super()); c != nil {
-		ap := fyne.CurrentApp().Driver().AbsolutePositionForObject(r.m.super())
+	if c := fyne.CurrentDriver().CanvasForObject(r.m.super()); c != nil {
+		ap := fyne.CurrentDriver().AbsolutePositionForObject(r.m.super())
 		_, areaSize := c.InteractiveArea()
 		if ah := areaSize.Height - ap.Y; ah < boxSize.Height {
 			scrollSize = fyne.NewSize(boxSize.Width, ah)
@@ -284,7 +284,7 @@ func (r *menuRenderer) layoutActiveChild() {
 
 	itemSize := item.Size()
 	cp := fyne.NewPos(itemSize.Width, item.Position().Y)
-	d := fyne.CurrentApp().Driver()
+	d := fyne.CurrentDriver()
 	c := d.CanvasForObject(item)
 	if c != nil {
 		absPos := d.AbsolutePositionForObject(item)
@@ -319,7 +319,7 @@ func newMenuBox(items []fyne.CanvasObject) *menuBox {
 
 func (b *menuBox) CreateRenderer() fyne.WidgetRenderer {
 	th := b.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	background := canvas.NewRectangle(th.Color(theme.ColorNameMenuBackground, v))
 	cont := &fyne.Container{Layout: layout.NewVBoxLayout(), Objects: b.items}
@@ -350,7 +350,7 @@ func (r *menuBoxRenderer) MinSize() fyne.Size {
 
 func (r *menuBoxRenderer) Refresh() {
 	th := r.b.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	r.background.FillColor = th.Color(theme.ColorNameMenuBackground, v)
 	r.background.Refresh()

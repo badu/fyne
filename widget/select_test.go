@@ -33,7 +33,7 @@ func TestSelect_Align(t *testing.T) {
 	w := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{sel}})
 	defer w.Close()
 	w.Resize(fyne.NewSize(200, 150))
-	c := fyne.CurrentApp().Driver().CanvasForObject(sel)
+	c := fyne.CurrentDriver().CanvasForObject(sel)
 
 	test.Tap(sel)
 	assertRendersToPlatformMarkup(t, "select/%s/center.xml", c)
@@ -110,7 +110,7 @@ func TestSelect_Disable(t *testing.T) {
 	w := test.NewWindow(&fyne.Container{Layout: layout.NewCenterLayout(), Objects: []fyne.CanvasObject{sel}})
 	defer w.Close()
 	w.Resize(fyne.NewSize(200, 150))
-	c := fyne.CurrentApp().Driver().CanvasForObject(sel)
+	c := fyne.CurrentDriver().CanvasForObject(sel)
 
 	sel.Disable()
 	test.AssertRendersToMarkup(t, "select/disabled.xml", c)
@@ -143,7 +143,7 @@ func TestSelect_Enable(t *testing.T) {
 
 	sel.Enable()
 	test.Tap(sel)
-	c := fyne.CurrentApp().Driver().CanvasForObject(sel)
+	c := fyne.CurrentDriver().CanvasForObject(sel)
 	ovl := c.Overlays().Top()
 	if assert.NotNil(t, ovl, "pop-up for enabled Select") {
 		test.TapCanvas(c, ovl.Position().Add(fyne.NewPos(theme.InnerPadding(), theme.InnerPadding())))
@@ -450,7 +450,7 @@ func TestSelect_Tapped(t *testing.T) {
 	combo.Resize(combo.MinSize())
 
 	test.Tap(combo)
-	canvas := fyne.CurrentApp().Driver().CanvasForObject(combo)
+	canvas := fyne.CurrentDriver().CanvasForObject(combo)
 	assert.Equal(t, 1, len(canvas.Overlays().List()))
 	assertRendersToPlatformMarkup(t, "select/%s/tapped.xml", w.Canvas())
 }

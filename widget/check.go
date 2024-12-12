@@ -97,7 +97,7 @@ func (c *Check) Hide() {
 		c.FocusLost()
 		impl := c.super()
 
-		if c := fyne.CurrentApp().Driver().CanvasForObject(impl); c != nil {
+		if c := fyne.CurrentDriver().CanvasForObject(impl); c != nil {
 			c.Focus(nil)
 		}
 	}
@@ -163,7 +163,7 @@ func (c *Check) MinSize() fyne.Size {
 // CreateRenderer is a private method to Fyne which links this widget to its renderer
 func (c *Check) CreateRenderer() fyne.WidgetRenderer {
 	th := c.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	c.ExtendBaseWidget(c)
 	bg := canvas.NewImageFromResource(th.Icon(theme.IconNameCheckButtonFill))
@@ -336,7 +336,7 @@ func (c *checkRenderer) applyTheme(th fyne.Theme, v fyne.ThemeVariant) {
 
 func (c *checkRenderer) Refresh() {
 	th := c.check.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	c.check.propertyLock.RLock()
 	c.applyTheme(th, v)
@@ -390,7 +390,7 @@ func (c *checkRenderer) updateFocusIndicator(th fyne.Theme, v fyne.ThemeVariant)
 
 func focusIfNotMobile(w fyne.Widget) {
 	if !fyne.CurrentDevice().IsMobile() {
-		if c := fyne.CurrentApp().Driver().CanvasForObject(w); c != nil {
+		if c := fyne.CurrentDriver().CanvasForObject(w); c != nil {
 			c.Focus(w.(fyne.Focusable))
 		}
 	}

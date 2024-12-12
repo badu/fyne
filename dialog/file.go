@@ -206,7 +206,7 @@ func (f *fileDialog) makeUI() fyne.CanvasObject {
 		title = label + " " + lang.L("Folder")
 	}
 
-	view := ViewLayout(fyne.CurrentApp().Preferences().Int(viewLayoutKey))
+	view := ViewLayout(fyne.CurrentPreferences().Int(viewLayoutKey))
 
 	// handle invalid values
 	if view != GridView && view != ListView {
@@ -264,7 +264,7 @@ func (f *fileDialog) makeUI() fyne.CanvasObject {
 		widget.ButtonWithIcon(theme.SettingsIcon()),
 		widget.ButtonWithCallback(
 			func() {
-				f.optionsMenu(fyne.CurrentApp().Driver().AbsolutePositionForObject(optionsButton), optionsButton.Size())
+				f.optionsMenu(fyne.CurrentDriver().AbsolutePositionForObject(optionsButton), optionsButton.Size())
 			},
 		),
 	)
@@ -633,7 +633,7 @@ func (f *fileDialog) setSelected(file fyne.URI, id int) {
 
 func (f *fileDialog) setView(view ViewLayout) {
 	f.view = view
-	fyne.CurrentApp().Preferences().SetInt(viewLayoutKey, int(view))
+	fyne.CurrentPreferences().SetInt(viewLayoutKey, int(view))
 	var selectF func(id int)
 	choose := func(id int) {
 		if file, ok := f.getDataItem(id); ok {

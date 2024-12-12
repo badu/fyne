@@ -95,7 +95,7 @@ func windowScreen(_ fyne.Window) fyne.CanvasObject {
 		),
 	)
 
-	drv := fyne.CurrentApp().Driver()
+	drv := fyne.CurrentDriver()
 	if drv, ok := drv.(desktop.Driver); ok {
 		windowGroup.Objects = append(windowGroup.Objects,
 			widget.NewButton(

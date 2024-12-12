@@ -113,7 +113,7 @@ func (s *settings) apply() {
 		select {
 		case listener <- s:
 		default:
-			// TODO : by Badu - this being what? Poor man "we call you later" ?
+			// TODO : by Badu - this being what? Poor man "we'll call you later" ?
 			l := listener
 			go func() { l <- s }()
 		}

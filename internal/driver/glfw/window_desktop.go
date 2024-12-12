@@ -5,7 +5,6 @@ package glfw
 import (
 	"bytes"
 	"context"
-	"fyne.io/fyne/v2/internal/async"
 	"image"
 	_ "image/png" // for the icon
 	"runtime"
@@ -15,6 +14,7 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
+	"fyne.io/fyne/v2/internal/async"
 	"fyne.io/fyne/v2/internal/build"
 	"fyne.io/fyne/v2/internal/painter"
 	"fyne.io/fyne/v2/internal/painter/gl"
@@ -76,7 +76,7 @@ type window struct {
 	cursor       desktop.Cursor
 	customCursor *glfw.Cursor
 	canvas       *glCanvas
-	driver       *gLDriver
+	driver       *GLDriver
 	title        string
 	icon         fyne.Resource
 	mainmenu     *fyne.MainMenu
@@ -851,6 +851,6 @@ func (w *window) view() *glfw.Window {
 }
 
 // wrapInnerWindow is a no-op to match what the web driver provides
-func wrapInnerWindow(*container.InnerWindow, fyne.Window, *gLDriver) fyne.Window {
+func wrapInnerWindow(*container.InnerWindow, fyne.Window, *GLDriver) fyne.Window {
 	return nil
 }

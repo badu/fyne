@@ -10,17 +10,17 @@ import (
 
 const webDefaultDoubleTapDelay = 300 * time.Millisecond
 
-func (d *gLDriver) SetSystemTrayMenu(m *fyne.Menu) {
+func (d *GLDriver) SetSystemTrayMenu(m *fyne.Menu) {
 	// no-op for mobile apps using this driver
 }
 
-func (d *gLDriver) catchTerm() {
+func (d *GLDriver) catchTerm() {
 }
 
 func setDisableScreenBlank(disable bool) {
 	// awaiting complete support for WakeLock
 }
 
-func (g *gLDriver) DoubleTapDelay() time.Duration {
+func (g *GLDriver) DoubleTapDelay() time.Duration {
 	return webDefaultDoubleTapDelay
 }

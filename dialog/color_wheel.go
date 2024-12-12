@@ -128,7 +128,7 @@ func (a *colorWheel) colorAt(x, y, w, h int) color.Color {
 }
 
 func (a *colorWheel) locationForPosition(pos fyne.Position) (x, y int) {
-	can := fyne.CurrentApp().Driver().CanvasForObject(a)
+	can := fyne.CurrentDriver().CanvasForObject(a)
 	x, y = int(pos.X), int(pos.Y)
 	if can != nil {
 		x, y = can.PixelCoordinateForPosition(pos)

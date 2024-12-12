@@ -137,7 +137,7 @@ func (d *mobileDriver) Run() {
 	app.Main(func(a app.App) {
 		d.app = a
 		settingsChange := make(chan fyne.Settings)
-		fyne.CurrentApp().Settings().AddChangeListener(settingsChange)
+		fyne.CurrentSettings().AddChangeListener(settingsChange)
 		draw := time.NewTicker(time.Second / 60)
 		defer func() {
 			l := fyne.CurrentApp().Lifecycle().(*intapp.Lifecycle)

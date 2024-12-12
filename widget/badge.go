@@ -79,7 +79,7 @@ func (r *badgeRenderer) Objects() []fyne.CanvasObject {
 
 func (r *badgeRenderer) updateBadge() {
 	th := r.badge.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	switch r.badge.Importance {
 	default:
 		r.background.FillColor = th.Color(theme.ColorNameInputBackground, v)

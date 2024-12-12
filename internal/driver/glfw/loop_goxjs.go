@@ -9,7 +9,7 @@ import (
 	"github.com/fyne-io/glfw-js"
 )
 
-func (d *gLDriver) initGLFW() {
+func (d *GLDriver) initGLFW() {
 	initOnce.Do(func() {
 		err := glfw.Init(gl.ContextWatcher)
 		if err != nil {
@@ -21,10 +21,10 @@ func (d *gLDriver) initGLFW() {
 	})
 }
 
-func (d *gLDriver) pollEvents() {
+func (d *GLDriver) pollEvents() {
 	glfw.PollEvents() // This call blocks while window is being resized, which prevents freeDirtyTextures from being called
 }
 
-func (d *gLDriver) Terminate() {
+func (d *GLDriver) Terminate() {
 	glfw.Terminate()
 }

@@ -523,7 +523,7 @@ func newListItem(child fyne.CanvasObject, tapped func()) *listItem {
 func (li *listItem) CreateRenderer() fyne.WidgetRenderer {
 	li.ExtendBaseWidget(li)
 	th := li.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	li.background = canvas.NewRectangle(th.Color(theme.ColorNameHover, v))
 	li.background.CornerRadius = th.Size(theme.SizeNameSelectionRadius)
@@ -585,7 +585,7 @@ func (li *listItemRenderer) Layout(size fyne.Size) {
 
 func (li *listItemRenderer) Refresh() {
 	th := li.item.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	li.item.background.CornerRadius = th.Size(theme.SizeNameSelectionRadius)
 	if li.item.selected {
@@ -677,7 +677,7 @@ func (l *listLayout) setupListItem(li *listItem, id ListItemID, focus bool) {
 	}
 	li.onTapped = func() {
 		if !fyne.CurrentDevice().IsMobile() {
-			canvas := fyne.CurrentApp().Driver().CanvasForObject(l.list)
+			canvas := fyne.CurrentDriver().CanvasForObject(l.list)
 			if canvas != nil {
 				canvas.Focus(l.list)
 			}

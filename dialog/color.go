@@ -202,7 +202,7 @@ func newCheckeredBackground(radial bool) *canvas.Raster {
 }
 
 func readRecentColors() (recents []string) {
-	for _, r := range strings.Split(fyne.CurrentApp().Preferences().String(preferenceRecents), ",") {
+	for _, r := range strings.Split(fyne.CurrentPreferences().String(preferenceRecents), ",") {
 		if r != "" {
 			recents = append(recents, r)
 		}
@@ -221,7 +221,7 @@ func writeRecentColor(color string) {
 	if len(recents) > preferenceMaxRecents {
 		recents = recents[:preferenceMaxRecents]
 	}
-	fyne.CurrentApp().Preferences().SetString(preferenceRecents, strings.Join(recents, ","))
+	fyne.CurrentPreferences().SetString(preferenceRecents, strings.Join(recents, ","))
 }
 
 func colorToString(c color.Color) string {

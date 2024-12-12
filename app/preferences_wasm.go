@@ -11,7 +11,7 @@ import (
 
 const preferencesLocalStorageKey = "fyne-preferences.json"
 
-func (a *fyneApp) storageRoot() string {
+func (a *FyneApp) storageRoot() string {
 	return "" // no storage root for web driver yet
 }
 

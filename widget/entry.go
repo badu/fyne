@@ -161,7 +161,7 @@ func (e *Entry) Bind(data binding.String) {
 // Implements: fyne.Widget
 func (e *Entry) CreateRenderer() fyne.WidgetRenderer {
 	th := e.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	e.ExtendBaseWidget(e)
 
 	// initialise
@@ -582,7 +582,7 @@ func (e *Entry) TappedSecondary(pe *fyne.PointEvent) {
 	}
 
 	e.requestFocus()
-	clipboard := fyne.CurrentApp().Driver().AllWindows()[0].Clipboard()
+	clipboard := fyne.CurrentDriver().AllWindows()[0].Clipboard()
 	super := e.super()
 
 	undoItem := fyne.NewMenuItem(lang.L("Undo"), e.Undo)
@@ -598,9 +598,9 @@ func (e *Entry) TappedSecondary(pe *fyne.PointEvent) {
 	})
 	selectAllItem := fyne.NewMenuItem(lang.L("Select all"), e.selectAll)
 
-	entryPos := fyne.CurrentApp().Driver().AbsolutePositionForObject(super)
+	entryPos := fyne.CurrentDriver().AbsolutePositionForObject(super)
 	popUpPos := entryPos.Add(fyne.NewPos(pe.Position.X, pe.Position.Y))
-	c := fyne.CurrentApp().Driver().CanvasForObject(super)
+	c := fyne.CurrentDriver().CanvasForObject(super)
 
 	var menu *fyne.Menu
 	if e.Disabled() {
@@ -901,7 +901,7 @@ func (e *Entry) deleteWord(right bool) {
 }
 
 func (e *Entry) typedKeyTab() {
-	if dd, ok := fyne.CurrentApp().Driver().(desktop.Driver); ok {
+	if dd, ok := fyne.CurrentDriver().(desktop.Driver); ok {
 		if dd.CurrentKeyModifiers()&fyne.KeyModifierShift != 0 {
 			return // don't insert a tab when Shift+Tab typed
 		}
@@ -1245,7 +1245,7 @@ func (e *Entry) registerShortcut() {
 
 func (e *Entry) requestFocus() {
 	impl := e.super()
-	if c := fyne.CurrentApp().Driver().CanvasForObject(impl); c != nil {
+	if c := fyne.CurrentDriver().CanvasForObject(impl); c != nil {
 		c.Focus(impl.(fyne.Focusable))
 	}
 }
@@ -1805,7 +1805,7 @@ func (r *entryRenderer) Refresh() {
 	r.entry.placeholder.Refresh()
 
 	th := r.entry.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	inputBorder := th.Size(theme.SizeNameInputBorder)
 
 	// correct our scroll wrappers if the wrap mode changed
@@ -1981,9 +1981,9 @@ func (r *entryContentRenderer) Refresh() {
 	}
 
 	th := r.content.entry.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	if focusedAppearance {
-		if fyne.CurrentApp().Settings().ShowAnimations() {
+		if fyne.CurrentSettings().ShowAnimations() {
 			r.content.entry.cursorAnim.start()
 		} else {
 			r.cursor.FillColor = th.Color(theme.ColorNamePrimary, v)
@@ -2014,7 +2014,7 @@ func (r *entryContentRenderer) Refresh() {
 // all rectangles to comply with the occurrence order as stated above.
 func (r *entryContentRenderer) buildSelection() {
 	th := r.content.entry.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	textSize := th.Size(theme.SizeNameText)
 
 	r.content.entry.propertyLock.RLock()

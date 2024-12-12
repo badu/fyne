@@ -16,7 +16,7 @@ import (
 	"fyne.io/fyne/v2/internal/async"
 	"fyne.io/fyne/v2/internal/build"
 	"fyne.io/fyne/v2/internal/cache"
-	internalDriver "fyne.io/fyne/v2/internal/driver"
+	"fyne.io/fyne/v2/internal/driver"
 	"fyne.io/fyne/v2/internal/painter/gl"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -109,7 +109,7 @@ func (o *overlayStack) Remove(overlay fyne.CanvasObject) {
 }
 
 func (o *overlayStack) add(overlay fyne.CanvasObject) {
-	o.renderCaches = append(o.renderCaches, &renderCacheTree{root: &internalDriver.RenderCacheNode{Obj: overlay}})
+	o.renderCaches = append(o.renderCaches, &renderCacheTree{root: &driver.RenderCacheNode{Obj: overlay}})
 	o.OverlayStack.Add(overlay)
 }
 
@@ -122,7 +122,7 @@ func (o *overlayStack) remove(overlay fyne.CanvasObject) {
 
 type renderCacheTree struct {
 	sync.RWMutex
-	root *internalDriver.RenderCacheNode
+	root *driver.RenderCacheNode
 }
 
 // WithContext allows drivers to execute within another context.
@@ -219,9 +219,9 @@ func (c *glCanvas) EnsureMinSize() bool {
 	c.Mu.RLock()
 	defer c.Mu.RUnlock()
 
-	var parentNeedingUpdate *internalDriver.RenderCacheNode
+	var parentNeedingUpdate *driver.RenderCacheNode
 
-	ensureMinSize := func(node *internalDriver.RenderCacheNode, pos fyne.Position) {
+	ensureMinSize := func(node *driver.RenderCacheNode, pos fyne.Position) {
 		obj := node.Obj
 		cache.SetCanvasForObject(obj, c, func() {
 			if img, ok := obj.(*canvas.Image); ok {
@@ -375,7 +375,7 @@ func (c *glCanvas) FreeDirtyTextures() (freed uint64) {
 				c.painter.Free(img)
 			}
 		} else {
-			internalDriver.WalkCompleteObjectTree(object, freeWalked, nil)
+			driver.WalkCompleteObjectTree(object, freeWalked, nil)
 		}
 	}
 
@@ -469,7 +469,7 @@ func (c *glCanvas) Refresh(obj fyne.CanvasObject) {
 	}
 
 	if walkNeeded {
-		internalDriver.WalkCompleteObjectTree(obj, func(co fyne.CanvasObject, p1, p2 fyne.Position, s fyne.Size) bool {
+		driver.WalkCompleteObjectTree(obj, func(co fyne.CanvasObject, p1, p2 fyne.Position, s fyne.Size) bool {
 			if i, ok := co.(*canvas.Image); ok {
 				i.Refresh()
 			}
@@ -490,7 +490,7 @@ func (c *glCanvas) RemoveShortcut(shortcut fyne.Shortcut) {
 //
 // This function does not use the canvas lock.
 func (c *glCanvas) SetContentTreeAndFocusMgr(content fyne.CanvasObject) {
-	c.contentTree = &renderCacheTree{root: &internalDriver.RenderCacheNode{Obj: content}}
+	c.contentTree = &renderCacheTree{root: &driver.RenderCacheNode{Obj: content}}
 	var focused fyne.Focusable
 	if c.contentFocusMgr != nil {
 		focused = c.contentFocusMgr.Focused() // keep old focus if possible
@@ -516,7 +516,7 @@ func (c *glCanvas) SetDirty() {
 //
 // This function does not use the canvas lock.
 func (c *glCanvas) SetMenuTreeAndFocusMgr(menu fyne.CanvasObject) {
-	c.menuTree = &renderCacheTree{root: &internalDriver.RenderCacheNode{Obj: menu}}
+	c.menuTree = &renderCacheTree{root: &driver.RenderCacheNode{Obj: menu}}
 	if menu != nil {
 		c.menuFocusMgr = app.NewFocusManager(menu)
 	} else {
@@ -528,7 +528,7 @@ func (c *glCanvas) SetMenuTreeAndFocusMgr(menu fyne.CanvasObject) {
 //
 // This function does not use the canvas lock.
 func (c *glCanvas) SetMobileWindowHeadTree(head fyne.CanvasObject) {
-	c.mWindowHeadTree = &renderCacheTree{root: &internalDriver.RenderCacheNode{Obj: head}}
+	c.mWindowHeadTree = &renderCacheTree{root: &driver.RenderCacheNode{Obj: head}}
 }
 
 // SetPainter sets the canvas painter.
@@ -554,8 +554,8 @@ func (c *glCanvas) Unfocus() {
 
 // WalkTrees walks over the trees.
 func (c *glCanvas) WalkTrees(
-	beforeChildren func(*internalDriver.RenderCacheNode, fyne.Position),
-	afterChildren func(*internalDriver.RenderCacheNode, fyne.Position),
+	beforeChildren func(*driver.RenderCacheNode, fyne.Position),
+	afterChildren func(*driver.RenderCacheNode, fyne.Position),
 ) {
 	c.walkTree(c.contentTree, beforeChildren, afterChildren)
 	if c.mWindowHeadTree != nil && c.mWindowHeadTree.root.Obj != nil {
@@ -596,12 +596,12 @@ func (c *glCanvas) isMenuActive() bool {
 
 func (c *glCanvas) walkTree(
 	tree *renderCacheTree,
-	beforeChildren func(*internalDriver.RenderCacheNode, fyne.Position),
-	afterChildren func(*internalDriver.RenderCacheNode, fyne.Position),
+	beforeChildren func(*driver.RenderCacheNode, fyne.Position),
+	afterChildren func(*driver.RenderCacheNode, fyne.Position),
 ) {
 	tree.Lock()
 	defer tree.Unlock()
-	var node, parent, prev *internalDriver.RenderCacheNode
+	var node, parent, prev *driver.RenderCacheNode
 	node = tree.root
 
 	bc := func(obj fyne.CanvasObject, pos fyne.Position, _ fyne.Position, _ fyne.Size) bool {
@@ -612,7 +612,7 @@ func (c *glCanvas) walkTree(
 			node = nil
 		}
 		if node == nil {
-			node = &internalDriver.RenderCacheNode{Parent: parent, Obj: obj}
+			node = &driver.RenderCacheNode{Parent: parent, Obj: obj}
 			if parent.FirstChild == nil {
 				parent.FirstChild = node
 			} else {
@@ -645,7 +645,7 @@ func (c *glCanvas) walkTree(
 		prev = node
 		node = node.NextSibling
 	}
-	internalDriver.WalkVisibleObjectTree(tree.root.Obj, bc, ac)
+	driver.WalkVisibleObjectTree(tree.root.Obj, bc, ac)
 }
 
 func (c *glCanvas) updateLayout(objToLayout fyne.CanvasObject) {
@@ -911,7 +911,7 @@ func (c *glCanvas) paint(size fyne.Size) {
 	}
 	c.Painter().Clear()
 
-	paint := func(node *internalDriver.RenderCacheNode, pos fyne.Position) {
+	paint := func(node *driver.RenderCacheNode, pos fyne.Position) {
 		obj := node.Obj
 		if _, ok := obj.(Scrollable); ok {
 			inner := clips.Push(pos, obj.Size())
@@ -922,7 +922,7 @@ func (c *glCanvas) paint(size fyne.Size) {
 		}
 		c.Painter().Paint(obj, pos, size)
 	}
-	afterPaint := func(node *internalDriver.RenderCacheNode, pos fyne.Position) {
+	afterPaint := func(node *driver.RenderCacheNode, pos fyne.Position) {
 		if _, ok := node.Obj.(Scrollable); ok {
 			clips.Pop()
 			if top := clips.Top(); top != nil {

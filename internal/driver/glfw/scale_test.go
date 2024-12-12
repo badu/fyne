@@ -58,7 +58,7 @@ func TestUserScale(t *testing.T) {
 	defer os.Setenv(scaleEnvKey, envVal)
 
 	_ = os.Setenv(scaleEnvKey, "auto")
-	set := fyne.CurrentApp().Settings().Scale()
+	set := fyne.CurrentSettings().Scale()
 	if set == float32(0.0) { // no config set
 		assert.Equal(t, float32(1.0), userScale())
 	} else {

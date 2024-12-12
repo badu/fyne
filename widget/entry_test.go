@@ -448,7 +448,7 @@ func TestEntry_FocusWithPopUp(t *testing.T) {
 func TestEntry_HidePopUpOnEntry(t *testing.T) {
 	entry := widget.NewEntry()
 	tapPos := fyne.NewPos(1, 1)
-	c := fyne.CurrentApp().Driver().CanvasForObject(entry)
+	c := fyne.CurrentDriver().CanvasForObject(entry)
 
 	assert.Nil(t, c.Overlays().Top())
 

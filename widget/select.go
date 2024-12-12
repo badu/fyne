@@ -73,7 +73,7 @@ func (s *Select) ClearSelected() {
 func (s *Select) CreateRenderer() fyne.WidgetRenderer {
 	s.ExtendBaseWidget(s)
 	th := s.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	s.propertyLock.RLock()
 	icon := NewIcon(th.Icon(theme.IconNameArrowDropDown))
@@ -255,7 +255,7 @@ func (s *Select) TypedRune(_ rune) {
 }
 
 func (s *Select) popUpPos() fyne.Position {
-	buttonPos := fyne.CurrentApp().Driver().AbsolutePositionForObject(s.super())
+	buttonPos := fyne.CurrentDriver().AbsolutePositionForObject(s.super())
 	return buttonPos.Add(fyne.NewPos(0, s.Size().Height-s.Theme().Size(theme.SizeNameInputBorder)))
 }
 
@@ -269,7 +269,7 @@ func (s *Select) showPopUp() {
 		})
 	}
 
-	c := fyne.CurrentApp().Driver().CanvasForObject(s.super())
+	c := fyne.CurrentDriver().CanvasForObject(s.super())
 	pop := NewPopUpMenu(fyne.NewMenu("", items...), c)
 	pop.alignment = s.Alignment
 	pop.ShowAtPosition(s.popUpPos())
@@ -289,7 +289,7 @@ func (s *Select) tapAnimation() {
 	}
 	s.tapAnim.Stop()
 
-	if fyne.CurrentApp().Settings().ShowAnimations() {
+	if fyne.CurrentSettings().ShowAnimations() {
 		s.tapAnim.Start()
 	}
 }
@@ -356,7 +356,7 @@ func (s *selectRenderer) MinSize() fyne.Size {
 
 func (s *selectRenderer) Refresh() {
 	th := s.combo.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	s.combo.propertyLock.RLock()
 	s.updateLabel()

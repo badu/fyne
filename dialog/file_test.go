@@ -510,7 +510,7 @@ func TestView(t *testing.T) {
 func TestSetView(t *testing.T) {
 	win := test.NewTempWindow(t, widget.NewLabel(widget.LabelWithStaticText("Content")))
 
-	fyne.CurrentApp().Preferences().SetInt(viewLayoutKey, int(defaultView))
+	fyne.CurrentPreferences().SetInt(viewLayoutKey, int(defaultView))
 
 	dlg := NewFileOpen(func(reader fyne.URIReadCloser, err error) {
 		assert.Nil(t, err)
@@ -560,7 +560,7 @@ func TestSetView(t *testing.T) {
 func TestSetViewPreferences(t *testing.T) {
 	win := test.NewTempWindow(t, widget.NewLabel(widget.LabelWithStaticText("Content")))
 
-	prefs := fyne.CurrentApp().Preferences()
+	prefs := fyne.CurrentPreferences()
 
 	// set user-saved viewLayout to GridView
 	prefs.SetInt(viewLayoutKey, int(GridView))
@@ -594,7 +594,7 @@ func TestSetViewPreferences(t *testing.T) {
 func TestViewPreferences(t *testing.T) {
 	win := test.NewTempWindow(t, widget.NewLabel(widget.LabelWithStaticText("Content")))
 
-	prefs := fyne.CurrentApp().Preferences()
+	prefs := fyne.CurrentPreferences()
 
 	// set viewLayout to an invalid value to verify that this situation is handled properly
 	prefs.SetInt(viewLayoutKey, -1)

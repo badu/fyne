@@ -593,7 +593,7 @@ func (t *Table) Tapped(e *fyne.PointEvent) {
 
 	if !fyne.CurrentDevice().IsMobile() {
 		t.RefreshItem(t.currentFocus)
-		canvas := fyne.CurrentApp().Driver().CanvasForObject(t)
+		canvas := fyne.CurrentDriver().CanvasForObject(t)
 		if canvas != nil {
 			canvas.Focus(t)
 		}
@@ -1156,7 +1156,7 @@ func newTableCells(t *Table) *tableCells {
 
 func (c *tableCells) CreateRenderer() fyne.WidgetRenderer {
 	th := c.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	marker := canvas.NewRectangle(th.Color(theme.ColorNameSelection, v))
 	marker.CornerRadius = th.Size(theme.SizeNameSelectionRadius)
 	hover := canvas.NewRectangle(th.Color(theme.ColorNameHover, v))
@@ -1248,7 +1248,7 @@ func (r *tableCellsRenderer) Refresh() {
 
 func (r *tableCellsRenderer) refreshForID(toDraw TableCellID) {
 	th := r.cells.t.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	r.cells.propertyLock.Lock()
 	separatorThickness := th.Size(theme.SizeNamePadding)

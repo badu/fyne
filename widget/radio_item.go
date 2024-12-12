@@ -175,7 +175,7 @@ func (r *radioItemRenderer) Refresh() {
 
 func (r *radioItemRenderer) update() {
 	th := r.item.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	r.label.Text = r.item.Label
 	r.label.TextSize = th.Size(theme.SizeNameText)

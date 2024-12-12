@@ -328,7 +328,7 @@ func findTappable(c fyne.Canvas, pos fyne.Position) (o fyne.CanvasObject, p fyne
 }
 
 func prepareTap(obj any, pos fyne.Position) (*fyne.PointEvent, fyne.Canvas) {
-	d := fyne.CurrentApp().Driver()
+	d := fyne.CurrentDriver()
 	ev := &fyne.PointEvent{Position: pos}
 	var c fyne.Canvas
 	if co, ok := obj.(fyne.CanvasObject); ok {

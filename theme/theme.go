@@ -101,7 +101,7 @@ func (t *builtinTheme) Color(n fyne.ThemeColorName, v fyne.ThemeVariant) color.C
 		v = t.variant
 	}
 
-	primary := fyne.CurrentApp().Settings().PrimaryColor()
+	primary := fyne.CurrentSettings().PrimaryColor()
 	if n == ColorNamePrimary || n == ColorNameHyperlink {
 		return internaltheme.PrimaryColorNamed(primary)
 	} else if n == ColorNameForegroundOnPrimary {
@@ -211,7 +211,7 @@ func currentVariant() fyne.ThemeVariant {
 		}
 	}
 
-	return fyne.CurrentApp().Settings().ThemeVariant()
+	return fyne.CurrentSettings().ThemeVariant()
 }
 
 func darkPaletteColorNamed(name fyne.ThemeColorName) color.Color {

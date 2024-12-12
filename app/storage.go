@@ -10,7 +10,7 @@ import (
 
 type store struct {
 	*internal.Docs
-	a *fyneApp
+	a *FyneApp
 }
 
 func (s *store) RootURI() fyne.URI {

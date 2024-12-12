@@ -351,7 +351,7 @@ func TestEntry_PasteFromClipboard(t *testing.T) {
 
 	testContent := "test"
 
-	clipboard := fyne.CurrentApp().Driver().AllWindows()[0].Clipboard()
+	clipboard := fyne.CurrentDriver().AllWindows()[0].Clipboard()
 	clipboard.SetContent(testContent)
 
 	entry.pasteFromClipboard(clipboard)
@@ -372,7 +372,7 @@ func TestEntry_PasteFromClipboard_MultilineWrapping(t *testing.T) {
 	assert.Equal(t, 0, entry.CursorRow)
 	assert.Equal(t, 1, entry.CursorColumn)
 
-	clipboard := fyne.CurrentApp().Driver().AllWindows()[0].Clipboard()
+	clipboard := fyne.CurrentDriver().AllWindows()[0].Clipboard()
 	clipboard.SetContent("esting entry")
 
 	entry.pasteFromClipboard(clipboard)
@@ -403,7 +403,7 @@ func TestEntry_PasteFromClipboardValidation(t *testing.T) {
 
 	testContent := "test"
 
-	clipboard := fyne.CurrentApp().Driver().AllWindows()[0].Clipboard()
+	clipboard := fyne.CurrentDriver().AllWindows()[0].Clipboard()
 	clipboard.SetContent(testContent)
 
 	entry.pasteFromClipboard(clipboard)

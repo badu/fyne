@@ -14,7 +14,7 @@ type termTheme struct {
 }
 
 func newTermTheme() *termTheme {
-	return &termTheme{Theme: fyne.CurrentApp().Settings().Theme(), fontSize: 12}
+	return &termTheme{Theme: fyne.CurrentSettings().Theme(), fontSize: 12}
 }
 
 // Color fixes a bug < 2.1 where theme.DarkTheme() would not override user preference.

@@ -57,7 +57,7 @@ type window struct {
 
 	cursor   desktop.Cursor
 	canvas   *glCanvas
-	driver   *gLDriver
+	driver   *GLDriver
 	title    string
 	icon     fyne.Resource
 	mainmenu *fyne.MainMenu
@@ -604,13 +604,13 @@ func (w *window) view() *glfw.Window {
 type wrapInner struct {
 	fyne.Window
 	inner *container.InnerWindow
-	d     *gLDriver
+	d     *GLDriver
 
 	centered bool
 	onClosed func()
 }
 
-func wrapInnerWindow(w *container.InnerWindow, root fyne.Window, d *gLDriver) fyne.Window {
+func wrapInnerWindow(w *container.InnerWindow, root fyne.Window, d *GLDriver) fyne.Window {
 	wrapped := &wrapInner{inner: w, d: d}
 	wrapped.Window = root
 	w.CloseIntercept = wrapped.doClose

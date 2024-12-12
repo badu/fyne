@@ -74,7 +74,7 @@ func (t *Text) Hide() {
 // This is normally determined by the render implementation.
 func (t *Text) MinSize() fyne.Size {
 	// TODO : @Badu - this might be expensive too
-	s, _ := fyne.CurrentApp().Driver().RenderedTextSize(t.Text, t.TextSize, t.TextStyle, t.FontSource)
+	s, _ := fyne.CurrentDriver().RenderedTextSize(t.Text, t.TextSize, t.TextStyle, t.FontSource)
 	return s
 }
 

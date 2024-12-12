@@ -86,7 +86,7 @@ func advancedScreen(win fyne.Window) fyne.CanvasObject {
 				widget.ButtonWithLabel("Custom Theme"),
 				widget.ButtonWithCallback(
 					func() {
-						fyne.CurrentApp().Settings().SetTheme(newCustomTheme())
+						fyne.CurrentSettings().SetTheme(newCustomTheme())
 					},
 				),
 			),

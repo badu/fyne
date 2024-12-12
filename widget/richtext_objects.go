@@ -482,7 +482,7 @@ func (r *richImage) CreateRenderer() fyne.WidgetRenderer {
 
 func (r *richImage) MinSize() fyne.Size {
 	orig := r.img.MinSize()
-	c := fyne.CurrentApp().Driver().CanvasForObject(r)
+	c := fyne.CurrentDriver().CanvasForObject(r)
 	if c == nil {
 		return r.oldMin // not yet rendered
 	}

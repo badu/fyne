@@ -9,7 +9,7 @@ import (
 )
 
 func loadPreferences(id string) *preferences {
-	p := newPreferences(&fyneApp{uniqueID: id})
+	p := newPreferences(&FyneApp{uniqueID: id})
 	p.load()
 
 	return p

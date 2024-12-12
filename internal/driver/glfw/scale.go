@@ -52,7 +52,7 @@ func userScale() float32 {
 	}
 
 	if env != "auto" {
-		if setting := fyne.CurrentApp().Settings().Scale(); setting > 0 {
+		if setting := fyne.CurrentSettings().Scale(); setting > 0 {
 			return setting
 		}
 	}

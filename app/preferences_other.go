@@ -10,7 +10,7 @@ func (p *preferences) storagePath() string {
 }
 
 // storageRoot returns the location of the app storage
-func (a *fyneApp) storageRoot() string {
+func (a *FyneApp) storageRoot() string {
 	return filepath.Join(rootConfigDir(), a.UniqueID())
 }
 

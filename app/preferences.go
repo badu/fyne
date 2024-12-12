@@ -19,7 +19,7 @@ type preferences struct {
 	savedRecently       bool
 	changedDuringSaving bool
 
-	app                 *fyneApp
+	app                 *FyneApp
 	needsSaveBeforeExit bool
 }
 
@@ -126,7 +126,7 @@ func (p *preferences) loadFromStorage(storage io.ReadCloser) (err error) {
 	return err
 }
 
-func newPreferences(app *fyneApp) *preferences {
+func newPreferences(app *FyneApp) *preferences {
 	p := &preferences{}
 	p.app = app
 	p.InMemoryPreferences = internal.NewInMemoryPreferences()

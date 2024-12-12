@@ -72,7 +72,7 @@ func (i *fileDialogItem) Tapped(*fyne.PointEvent) {
 		i.choose(i.id)
 	}
 	now := time.Now()
-	if !i.dir && now.Sub(i.lastClick) < fyne.CurrentApp().Driver().DoubleTapDelay() && i.open != nil {
+	if !i.dir && now.Sub(i.lastClick) < fyne.CurrentDriver().DoubleTapDelay() && i.open != nil {
 		// It is a double click, so we ask the dialog to open
 		i.open()
 	}

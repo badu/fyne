@@ -45,6 +45,6 @@ func setDisableScreenBlank(disable bool) {
 	}
 }
 
-func (g *gLDriver) DoubleTapDelay() time.Duration {
+func (g *GLDriver) DoubleTapDelay() time.Duration {
 	return desktopDefaultDoubleTapDelay
 }

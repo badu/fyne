@@ -15,7 +15,7 @@ import (
 	"fyne.io/fyne/v2/storage/repository"
 )
 
-type fyneApp struct {
+type FyneApp struct {
 	driver   fyne.Driver
 	icon     fyne.Resource
 	uniqueID string
@@ -27,11 +27,11 @@ type fyneApp struct {
 	prefs     fyne.Preferences
 }
 
-func (a *fyneApp) CloudProvider() fyne.CloudProvider {
+func (a *FyneApp) CloudProvider() fyne.CloudProvider {
 	return a.cloud
 }
 
-func (a *fyneApp) Icon() fyne.Resource {
+func (a *FyneApp) Icon() fyne.Resource {
 	if a.icon != nil {
 		return a.icon
 	}
@@ -39,11 +39,11 @@ func (a *fyneApp) Icon() fyne.Resource {
 	return a.Metadata().Icon
 }
 
-func (a *fyneApp) SetIcon(icon fyne.Resource) {
+func (a *FyneApp) SetIcon(icon fyne.Resource) {
 	a.icon = icon
 }
 
-func (a *fyneApp) UniqueID() string {
+func (a *FyneApp) UniqueID() string {
 	if a.uniqueID != "" {
 		return a.uniqueID
 	}
@@ -56,16 +56,16 @@ func (a *fyneApp) UniqueID() string {
 	return a.uniqueID
 }
 
-func (a *fyneApp) NewWindow(title string) fyne.Window {
+func (a *FyneApp) NewWindow(title string) fyne.Window {
 	return a.driver.CreateWindow(title)
 }
 
-func (a *fyneApp) Run() {
+func (a *FyneApp) Run() {
 	go a.lifecycle.RunEventQueue()
 	a.driver.Run()
 }
 
-func (a *fyneApp) Quit() {
+func (a *FyneApp) Quit() {
 	for _, window := range a.driver.AllWindows() {
 		window.Close()
 	}
@@ -74,31 +74,31 @@ func (a *fyneApp) Quit() {
 	a.settings.stopWatching()
 }
 
-func (a *fyneApp) Driver() fyne.Driver {
+func (a *FyneApp) Driver() fyne.Driver {
 	return a.driver
 }
 
 // Settings returns the application settings currently configured.
-func (a *fyneApp) Settings() fyne.Settings {
+func (a *FyneApp) Settings() fyne.Settings {
 	return a.settings
 }
 
-func (a *fyneApp) Storage() fyne.Storage {
+func (a *FyneApp) Storage() fyne.Storage {
 	return a.storage
 }
 
-func (a *fyneApp) Preferences() fyne.Preferences {
+func (a *FyneApp) Preferences() fyne.Preferences {
 	if a.UniqueID() == "" {
 		fyne.LogError("Preferences API requires a unique ID, use app.NewWithID() or the FyneApp.toml ID field", nil)
 	}
 	return a.prefs
 }
 
-func (a *fyneApp) Lifecycle() fyne.Lifecycle {
+func (a *FyneApp) Lifecycle() fyne.Lifecycle {
 	return &a.lifecycle
 }
 
-func (a *fyneApp) newDefaultPreferences() *preferences {
+func (a *FyneApp) newDefaultPreferences() *preferences {
 	p := newPreferences(a)
 	if a.uniqueID != "" {
 		p.load()
@@ -135,7 +135,7 @@ func makeStoreDocs(id string, s *store) *internal.Docs {
 }
 
 func newAppWithDriver(d fyne.Driver, id string) fyne.App {
-	newApp := &fyneApp{uniqueID: id, driver: d}
+	newApp := &FyneApp{uniqueID: id, driver: d}
 	fyne.SetCurrentApp(newApp)
 
 	newApp.prefs = newApp.newDefaultPreferences()

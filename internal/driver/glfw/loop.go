@@ -74,7 +74,7 @@ func runOnDraw(w *window, f func()) {
 // need periodic shrinking.
 var refreshingCanvases []fyne.Canvas
 
-func (d *gLDriver) drawSingleFrame() {
+func (d *GLDriver) drawSingleFrame() {
 	for _, win := range d.windowList() {
 		w := win.(*window)
 		w.viewLock.RLock()
@@ -103,7 +103,7 @@ func (d *gLDriver) drawSingleFrame() {
 	refreshingCanvases = refreshingCanvases[:0]
 }
 
-func (d *gLDriver) runGL() {
+func (d *GLDriver) runGL() {
 	if !running.CompareAndSwap(false, true) {
 		return // Run was called twice.
 	}
@@ -113,24 +113,30 @@ func (d *gLDriver) runGL() {
 	if d.trayStart != nil {
 		d.trayStart()
 	}
+
 	if f := fyne.CurrentApp().Lifecycle().(*app.Lifecycle).OnStarted(); f != nil {
 		go f() // don't block main, we don't have window event queue
 	}
+
 	eventTick := time.NewTicker(time.Second / 60)
 	for {
 		select {
 		case <-d.done:
 			eventTick.Stop()
-			d.drawDone <- struct{}{} // wait for draw thread to stop
+
+			d.drawDone <- struct{}{} // signal draw thread to stop
+
 			d.Terminate()
 			l := fyne.CurrentApp().Lifecycle().(*app.Lifecycle)
 			if f := l.OnStopped(); f != nil {
 				l.QueueEvent(f)
 			}
 			return
+
 		case f := <-funcQueue:
 			f.f()
 			f.done <- struct{}{}
+
 		case <-eventTick.C:
 			d.pollEvents()
 			windowsToRemove := 0
@@ -203,7 +209,7 @@ func (d *gLDriver) runGL() {
 	}
 }
 
-func (d *gLDriver) repaintWindow(w *window) {
+func (d *GLDriver) repaintWindow(w *window) {
 	canvas := w.canvas
 	w.RunWithContext(func() {
 		if canvas.EnsureMinSize() {
@@ -227,9 +233,9 @@ func (d *gLDriver) repaintWindow(w *window) {
 	})
 }
 
-func (d *gLDriver) startDrawThread() {
+func (d *GLDriver) startDrawThread() {
 	settingsChange := make(chan fyne.Settings)
-	fyne.CurrentApp().Settings().AddChangeListener(settingsChange)
+	fyne.CurrentSettings().AddChangeListener(settingsChange)
 	var drawCh <-chan time.Time
 	if drawOnMainThread {
 		drawCh = make(chan time.Time) // don't tick when on M1

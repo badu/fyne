@@ -142,7 +142,7 @@ func tabsAdjustedLocation(l TabLocation) TabLocation {
 }
 
 func buildPopUpMenu(t baseTabs, button *widget.Button, items []*fyne.MenuItem) *widget.PopUpMenu {
-	d := fyne.CurrentApp().Driver()
+	d := fyne.CurrentDriver()
 	c := d.CanvasForObject(button)
 	popUpMenu := widget.NewPopUpMenu(fyne.NewMenu("", items...), c)
 	buttonPos := d.AbsolutePositionForObject(button)
@@ -336,7 +336,7 @@ func (r *baseTabsRenderer) applyTheme(t baseTabs) {
 		r.action.SetIcon(moreIcon(t))
 	}
 	th := theme.CurrentForWidget(t)
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	r.divider.FillColor = th.Color(theme.ColorNameShadow, v)
 	r.indicator.FillColor = th.Color(theme.ColorNamePrimary, v)
@@ -461,7 +461,7 @@ func (r *baseTabsRenderer) moveIndicator(pos fyne.Position, siz fyne.Size, th fy
 		r.sizeAnimation = nil
 	}
 
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	r.indicator.FillColor = th.Color(theme.ColorNamePrimary, v)
 	if r.indicator.Position().IsZero() {
 		r.indicator.Move(pos)
@@ -476,7 +476,7 @@ func (r *baseTabsRenderer) moveIndicator(pos fyne.Position, siz fyne.Size, th fy
 	r.lastIndicatorHidden = r.indicator.Hidden
 	r.lastIndicatorMutex.Unlock()
 
-	if animate && fyne.CurrentApp().Settings().ShowAnimations() {
+	if animate && fyne.CurrentSettings().ShowAnimations() {
 		r.positionAnimation = canvas.NewPositionAnimation(r.indicator.Position(), pos, canvas.DurationShort, func(p fyne.Position) {
 			r.indicator.Move(p)
 			r.indicator.Refresh()
@@ -541,7 +541,7 @@ type tabButton struct {
 func (b *tabButton) CreateRenderer() fyne.WidgetRenderer {
 	b.ExtendBaseWidget(b)
 	th := b.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	background := canvas.NewRectangle(th.Color(theme.ColorNameHover, v))
 	background.CornerRadius = th.Size(theme.SizeNameSelectionRadius)
@@ -697,7 +697,7 @@ func (r *tabButtonRenderer) Objects() []fyne.CanvasObject {
 
 func (r *tabButtonRenderer) Refresh() {
 	th := r.button.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	if r.button.hovered && !r.button.Disabled() {
 		r.background.FillColor = th.Color(theme.ColorNameHover, v)
@@ -782,7 +782,7 @@ type tabCloseButton struct {
 func (b *tabCloseButton) CreateRenderer() fyne.WidgetRenderer {
 	b.ExtendBaseWidget(b)
 	th := b.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	background := canvas.NewRectangle(th.Color(theme.ColorNameHover, v))
 	background.CornerRadius = th.Size(theme.SizeNameSelectionRadius)
@@ -846,7 +846,7 @@ func (r *tabCloseButtonRenderer) Objects() []fyne.CanvasObject {
 
 func (r *tabCloseButtonRenderer) Refresh() {
 	th := r.button.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	if r.button.hovered {
 		r.background.FillColor = th.Color(theme.ColorNameHover, v)

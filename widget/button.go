@@ -97,7 +97,7 @@ func NewButton(options ...ButtonOption) *Button {
 func (b *Button) CreateRenderer() fyne.WidgetRenderer {
 	b.ExtendBaseWidget(b)
 	th := b.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	b.propertyLock.RLock()
 	defer b.propertyLock.RUnlock()
@@ -218,7 +218,7 @@ func (b *Button) tapAnimation() {
 	}
 	b.tapAnim.Stop()
 
-	if fyne.CurrentApp().Settings().ShowAnimations() {
+	if fyne.CurrentSettings().ShowAnimations() {
 		b.tapAnim.Start()
 	}
 }
@@ -323,7 +323,7 @@ func (r *buttonRenderer) Refresh() {
 // must be called with the button propertyLock RLocked
 func (r *buttonRenderer) applyTheme() {
 	th := r.button.themeWithLock()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	fgColorName, bgColorName, bgBlendName := r.buttonColorNames()
 	if bg := r.background; bg != nil {
 		bgColor := color.Color(color.Transparent)
@@ -454,7 +454,7 @@ func blendColor(under, over color.Color) color.Color {
 }
 
 func newButtonTapAnimation(bg *canvas.Rectangle, w fyne.Widget, th fyne.Theme) *fyne.Animation {
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	return fyne.NewAnimation(canvas.DurationStandard, func(done float32) {
 		mid := w.Size().Width / 2
 		size := mid * done

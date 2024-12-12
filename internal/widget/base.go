@@ -18,7 +18,7 @@ type Base struct {
 	hidden   atomic.Bool
 	position async.Position
 	size     async.Size
-	impl     atomic.Pointer[fyne.Widget]
+	impl     atomic.Pointer[fyne.Widget] // TODO : @Badu - oh God, same pattern again
 }
 
 // ExtendBaseWidget is used by an extending widget to make use of BaseWidget functionality.

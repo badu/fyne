@@ -36,7 +36,7 @@ func rootConfigDir() string {
 	return filepath.Join(desktopConfig, "fyne")
 }
 
-func (a *fyneApp) OpenURL(url *url.URL) error {
+func (a *FyneApp) OpenURL(url *url.URL) error {
 	cmd := exec.Command("rundll32", "url.dll,FileProtocolHandler", url.String())
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = os.Stdin, os.Stdout, os.Stderr
 	return cmd.Run()
@@ -44,7 +44,7 @@ func (a *fyneApp) OpenURL(url *url.URL) error {
 
 var scriptNum = 0
 
-func (a *fyneApp) SendNotification(n *fyne.Notification) {
+func (a *FyneApp) SendNotification(n *fyne.Notification) {
 	title := escapeNotificationString(n.Title)
 	content := escapeNotificationString(n.Content)
 	iconFilePath := a.cachedIconPath()
@@ -59,13 +59,13 @@ func (a *fyneApp) SendNotification(n *fyne.Notification) {
 
 // SetSystemTrayMenu creates a system tray item and attaches the specified menu.
 // By default this will use the application icon.
-func (a *fyneApp) SetSystemTrayMenu(menu *fyne.Menu) {
+func (a *FyneApp) SetSystemTrayMenu(menu *fyne.Menu) {
 	a.Driver().(systrayDriver).SetSystemTrayMenu(menu)
 }
 
 // SetSystemTrayIcon sets a custom image for the system tray icon.
 // You should have previously called `SetSystemTrayMenu` to initialise the menu icon.
-func (a *fyneApp) SetSystemTrayIcon(icon fyne.Resource) {
+func (a *FyneApp) SetSystemTrayIcon(icon fyne.Resource) {
 	a.Driver().(systrayDriver).SetSystemTrayIcon(icon)
 }
 

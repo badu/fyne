@@ -7,7 +7,7 @@ import (
 )
 
 func BenchmarkTheme_current(b *testing.B) {
-	fyne.CurrentApp().Settings().SetTheme(LightTheme())
+	fyne.CurrentSettings().SetTheme(LightTheme())
 
 	for n := 0; n < b.N; n++ {
 		Current()

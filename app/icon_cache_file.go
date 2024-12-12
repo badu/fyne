@@ -10,7 +10,7 @@ import (
 
 var once sync.Once
 
-func (a *fyneApp) cachedIconPath() string {
+func (a *FyneApp) cachedIconPath() string {
 	if a.Icon() == nil {
 		return ""
 	}
@@ -32,7 +32,7 @@ func rootCacheDir() string {
 	return filepath.Join(desktopCache, "fyne")
 }
 
-func (a *fyneApp) saveIconToCache(dirPath, filePath string) error {
+func (a *FyneApp) saveIconToCache(dirPath, filePath string) error {
 	err := os.MkdirAll(dirPath, 0700)
 	if err != nil {
 		fyne.LogError("Unable to create application cache directory", err)

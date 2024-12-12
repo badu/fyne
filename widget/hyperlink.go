@@ -83,7 +83,7 @@ func (hl *Hyperlink) CreateRenderer() fyne.WidgetRenderer {
 	hl.syncSegments()
 
 	th := hl.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	focus := canvas.NewRectangle(color.Transparent)
 	focus.StrokeColor = th.Color(theme.ColorNameFocus, v)
 	focus.StrokeWidth = 2
@@ -352,7 +352,7 @@ func (r *hyperlinkRenderer) Objects() []fyne.CanvasObject {
 func (r *hyperlinkRenderer) Refresh() {
 	r.hl.provider.Refresh()
 	th := r.hl.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	r.hl.propertyLock.RLock()
 	defer r.hl.propertyLock.RUnlock()

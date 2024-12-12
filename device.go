@@ -40,5 +40,5 @@ type Device interface {
 
 // CurrentDevice returns the device information for the current hardware (via the driver)
 func CurrentDevice() Device {
-	return CurrentApp().Driver().Device()
+	return CurrentDriver().Device()
 }

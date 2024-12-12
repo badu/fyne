@@ -21,7 +21,7 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-func (a *fyneApp) OpenURL(url *url.URL) error {
+func (a *FyneApp) OpenURL(url *url.URL) error {
 	if build.IsFlatpak {
 		err := openuri.OpenURI("", url.String(), nil)
 		if err != nil {
@@ -57,7 +57,7 @@ func colorSchemeToThemeVariant(colorScheme appearance.ColorScheme) fyne.ThemeVar
 	return theme.VariantLight
 }
 
-func (a *fyneApp) SendNotification(n *fyne.Notification) {
+func (a *FyneApp) SendNotification(n *fyne.Notification) {
 	if build.IsFlatpak {
 		err := a.sendNotificationThroughPortal(n)
 		if err != nil {
@@ -87,7 +87,7 @@ func (a *fyneApp) SendNotification(n *fyne.Notification) {
 var notificationID atomic.Uint64
 
 // See https://flatpak.github.io/xdg-desktop-portal/docs/#gdbus-org.freedesktop.portal.Notification.
-func (a *fyneApp) sendNotificationThroughPortal(n *fyne.Notification) error {
+func (a *FyneApp) sendNotificationThroughPortal(n *fyne.Notification) error {
 	return notification.Add(
 		uint(notificationID.Add(1)),
 		notification.Content{
@@ -100,7 +100,7 @@ func (a *fyneApp) sendNotificationThroughPortal(n *fyne.Notification) error {
 
 // SetSystemTrayMenu creates a system tray item and attaches the specified menu.
 // By default this will use the application icon.
-func (a *fyneApp) SetSystemTrayMenu(menu *fyne.Menu) {
+func (a *FyneApp) SetSystemTrayMenu(menu *fyne.Menu) {
 	if desk, ok := a.Driver().(systrayDriver); ok { // don't use this on mobile tag
 		desk.SetSystemTrayMenu(menu)
 	}
@@ -108,7 +108,7 @@ func (a *fyneApp) SetSystemTrayMenu(menu *fyne.Menu) {
 
 // SetSystemTrayIcon sets a custom image for the system tray icon.
 // You should have previously called `SetSystemTrayMenu` to initialise the menu icon.
-func (a *fyneApp) SetSystemTrayIcon(icon fyne.Resource) {
+func (a *FyneApp) SetSystemTrayIcon(icon fyne.Resource) {
 	if desk, ok := a.Driver().(systrayDriver); ok { // don't use this on mobile tag
 		desk.SetSystemTrayIcon(icon)
 	}

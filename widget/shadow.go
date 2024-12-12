@@ -115,7 +115,7 @@ func (r *shadowRenderer) Refresh() {
 
 func (r *shadowRenderer) createShadows() {
 	th := theme.CurrentForWidget(r.s)
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	fg := th.Color(theme.ColorNameShadow, v)
 
 	switch r.s.typ {
@@ -154,7 +154,7 @@ func (r *shadowRenderer) createShadows() {
 
 func (r *shadowRenderer) refreshShadows() {
 	th := theme.CurrentForWidget(r.s)
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	fg := th.Color(theme.ColorNameShadow, v)
 
 	updateShadowEnd(r.l, fg)

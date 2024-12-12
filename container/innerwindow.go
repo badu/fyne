@@ -75,7 +75,7 @@ func (w *InnerWindow) CreateRenderer() fyne.WidgetRenderer {
 	title := newDraggableLabel(w.title, w)
 	title.Truncation = fyne.TextTruncateEllipsis
 	th := w.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	bar := NewBorder(nil, nil, buttons, icon, title)
 	bg := canvas.NewRectangle(th.Color(theme.ColorNameOverlayBackground, v))
@@ -156,7 +156,7 @@ func (i *innerWindowRenderer) MinSize() fyne.Size {
 
 func (i *innerWindowRenderer) Refresh() {
 	th := i.win.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	i.bg.FillColor = th.Color(theme.ColorNameOverlayBackground, v)
 	i.bg.Refresh()
 	i.contentBG.FillColor = th.Color(theme.ColorNameBackground, v)
@@ -207,7 +207,7 @@ func newDraggableCorner(w *InnerWindow) *draggableCorner {
 }
 
 func (c *draggableCorner) CreateRenderer() fyne.WidgetRenderer {
-	prop := canvas.NewImageFromResource(fyne.CurrentApp().Settings().Theme().Icon(theme.IconNameDragCornerIndicator))
+	prop := canvas.NewImageFromResource(fyne.CurrentSettings().Theme().Icon(theme.IconNameDragCornerIndicator))
 	prop.SetMinSize(fyne.NewSquareSize(16))
 	return widget.NewSimpleRenderer(prop)
 }

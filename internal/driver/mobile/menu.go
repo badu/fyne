@@ -20,7 +20,7 @@ type menuLabel struct {
 }
 
 func (m *menuLabel) Tapped(*fyne.PointEvent) {
-	pos := fyne.CurrentApp().Driver().AbsolutePositionForObject(m)
+	pos := fyne.CurrentDriver().AbsolutePositionForObject(m)
 	menu := widget.NewPopUpMenu(m.menu, m.canvas)
 	menu.ShowAtPosition(fyne.NewPos(pos.X+m.Size().Width, pos.Y))
 

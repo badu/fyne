@@ -1,12 +1,13 @@
 package glfw
 
 import (
+	publicWidget "fyne.io/fyne/v2/widget"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/internal/widget"
 	"fyne.io/fyne/v2/theme"
-	publicWidget "fyne.io/fyne/v2/widget"
 )
 
 // menuBarItem is a widget for displaying an item for a fyne.Menu in a MenuBar.

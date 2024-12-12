@@ -296,7 +296,7 @@ func (t *TextGrid) CreateRenderer() fyne.WidgetRenderer {
 	render.updateCellSize()
 
 	th := t.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	TextGridStyleDefault = &CustomTextGridStyle{}
 	TextGridStyleWhitespace = &CustomTextGridStyle{FGColor: th.Color(theme.ColorNameDisabled, v)}
 
@@ -352,7 +352,7 @@ type textGridRenderer struct {
 
 func (t *textGridRenderer) appendTextCell(str rune) {
 	th := t.text.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	text := canvas.NewText(string(str), th.Color(theme.ColorNameForeground, v))
 	text.TextStyle.Monospace = true
@@ -383,7 +383,7 @@ func (t *textGridRenderer) setCellRune(str rune, pos int, style, rowStyle TextGr
 	underline := t.objects[pos*3+2].(*canvas.Line)
 
 	th := t.text.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	fg := th.Color(theme.ColorNameForeground, v)
 	text.TextSize = th.Size(theme.SizeNameText)
 
@@ -579,15 +579,15 @@ func (t *textGridRenderer) MinSize() fyne.Size {
 
 func (t *textGridRenderer) Refresh() {
 	// we may be on a new canvas, so just update it to be sure
-	if fyne.CurrentApp() != nil && fyne.CurrentApp().Driver() != nil {
-		t.current = fyne.CurrentApp().Driver().CanvasForObject(t.text)
+	if fyne.CurrentApp() != nil && fyne.CurrentDriver() != nil {
+		t.current = fyne.CurrentDriver().CanvasForObject(t.text)
 	}
 
 	// theme could change text size
 	t.updateCellSize()
 
 	th := t.text.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	TextGridStyleWhitespace = &CustomTextGridStyle{FGColor: th.Color(theme.ColorNameDisabled, v)}
 	t.updateGridSize(t.text.Size())
 	t.refreshGrid()
@@ -605,9 +605,9 @@ func (t *textGridRenderer) Destroy() {
 
 func (t *textGridRenderer) refresh(obj fyne.CanvasObject) {
 	if t.current == nil {
-		if fyne.CurrentApp() != nil && fyne.CurrentApp().Driver() != nil {
+		if fyne.CurrentApp() != nil && fyne.CurrentDriver() != nil {
 			// cache canvas for this widget, so we don't look it up many times for every cell/row refresh!
-			t.current = fyne.CurrentApp().Driver().CanvasForObject(t.text)
+			t.current = fyne.CurrentDriver().CanvasForObject(t.text)
 		}
 
 		if t.current == nil {

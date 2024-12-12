@@ -84,7 +84,7 @@ func (c *Container) Refresh() {
 	}
 
 	// this is basically just canvas.Refresh(c) without the package loop
-	o := CurrentApp().Driver().CanvasForObject(c)
+	o := CurrentDriver().CanvasForObject(c)
 	if o == nil {
 		return
 	}
@@ -164,12 +164,7 @@ func (c *Container) layout() {
 // repaint instructs the containing canvas to redraw, even if nothing changed.
 // This method is a duplicate of what is in `canvas/canvas.go` to avoid a dependency loop or public API.
 func repaint(obj *Container) {
-	app := CurrentApp()
-	if app == nil || app.Driver() == nil {
-		return
-	}
-
-	c := app.Driver().CanvasForObject(obj)
+	c := CurrentDriver().CanvasForObject(obj)
 	if c != nil {
 		if paint, ok := c.(IDirty); ok {
 			paint.SetDirty()

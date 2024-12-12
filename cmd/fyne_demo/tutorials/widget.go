@@ -593,7 +593,7 @@ type contextMenuButton struct {
 }
 
 func (b *contextMenuButton) Tapped(e *fyne.PointEvent) {
-	widget.ShowPopUpMenuAtPosition(b.menu, fyne.CurrentApp().Driver().CanvasForObject(b), e.AbsolutePosition)
+	widget.ShowPopUpMenuAtPosition(b.menu, fyne.CurrentDriver().CanvasForObject(b), e.AbsolutePosition)
 }
 
 func newContextMenuButton(label string, menu *fyne.Menu) *contextMenuButton {

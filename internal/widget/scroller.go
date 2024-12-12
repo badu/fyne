@@ -51,7 +51,7 @@ func (r *scrollBarRenderer) MinSize() fyne.Size {
 
 func (r *scrollBarRenderer) Refresh() {
 	th := theme.CurrentForWidget(r.scrollBar)
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	r.background.FillColor = th.Color(theme.ColorNameScrollBar, v)
 	r.background.CornerRadius = th.Size(theme.SizeNameScrollBarRadius)
@@ -68,7 +68,7 @@ type scrollBar struct {
 
 func (b *scrollBar) CreateRenderer() fyne.WidgetRenderer {
 	th := theme.CurrentForWidget(b)
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	background := canvas.NewRectangle(th.Color(theme.ColorNameScrollBar, v))
 	background.CornerRadius = th.Size(theme.SizeNameScrollBarRadius)

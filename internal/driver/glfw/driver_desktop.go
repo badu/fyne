@@ -38,7 +38,7 @@ func goroutineID() (id uint64) {
 	return id
 }
 
-func (d *gLDriver) SetSystemTrayMenu(m *fyne.Menu) {
+func (d *GLDriver) SetSystemTrayMenu(m *fyne.Menu) {
 	setup.Do(func() {
 		d.trayStart, d.trayStop = systray.RunWithExternalLoop(func() {
 			if systrayIcon != nil {
@@ -134,7 +134,7 @@ func itemForMenuItem(i *fyne.MenuItem, parent *systray.MenuItem) *systray.MenuIt
 	return item
 }
 
-func (d *gLDriver) refreshSystray(m *fyne.Menu) {
+func (d *GLDriver) refreshSystray(m *fyne.Menu) {
 	runOnMain(func() {
 		d.systrayMenu = m
 
@@ -145,7 +145,7 @@ func (d *gLDriver) refreshSystray(m *fyne.Menu) {
 	})
 }
 
-func (d *gLDriver) refreshSystrayMenu(m *fyne.Menu, parent *systray.MenuItem) {
+func (d *GLDriver) refreshSystrayMenu(m *fyne.Menu, parent *systray.MenuItem) {
 	for _, i := range m.Items {
 		item := itemForMenuItem(i, parent)
 		if item == nil {
@@ -166,7 +166,7 @@ func (d *gLDriver) refreshSystrayMenu(m *fyne.Menu, parent *systray.MenuItem) {
 	}
 }
 
-func (d *gLDriver) SetSystemTrayIcon(resource fyne.Resource) {
+func (d *GLDriver) SetSystemTrayIcon(resource fyne.Resource) {
 	systrayIcon = resource // in case we need it later
 
 	img, err := toOSIcon(resource.Content())
@@ -184,15 +184,15 @@ func (d *gLDriver) SetSystemTrayIcon(resource fyne.Resource) {
 	})
 }
 
-func (d *gLDriver) SystemTrayMenu() *fyne.Menu {
+func (d *GLDriver) SystemTrayMenu() *fyne.Menu {
 	return d.systrayMenu
 }
 
-func (d *gLDriver) CurrentKeyModifiers() fyne.KeyModifier {
+func (d *GLDriver) CurrentKeyModifiers() fyne.KeyModifier {
 	return d.currentKeyModifiers
 }
 
-func (d *gLDriver) catchTerm() {
+func (d *GLDriver) catchTerm() {
 	terminateSignal := make(chan os.Signal, 1)
 	signal.Notify(terminateSignal, syscall.SIGINT, syscall.SIGTERM)
 
@@ -200,7 +200,7 @@ func (d *gLDriver) catchTerm() {
 	d.Quit()
 }
 
-func addMissingQuitForMenu(menu *fyne.Menu, d *gLDriver) {
+func addMissingQuitForMenu(menu *fyne.Menu, d *GLDriver) {
 	localQuit := lang.L("Quit")
 	var lastItem *fyne.MenuItem
 	if len(menu.Items) > 0 {

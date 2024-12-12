@@ -70,12 +70,12 @@ func (m *preferencesMap) ensurePreferencesAttached(p fyne.Preferences) *preferen
 	m.prefs[p] = binds
 	m.mu.Unlock()
 
-	p.AddChangeListener(func() { m.preferencesChanged(fyne.CurrentApp().Preferences()) })
+	p.AddChangeListener(func() { m.preferencesChanged(fyne.CurrentPreferences()) })
 	return binds
 }
 
 func (m *preferencesMap) getBindings(p fyne.Preferences) *preferenceBindings {
-	if p == fyne.CurrentApp().Preferences() {
+	if p == fyne.CurrentPreferences() {
 		if m.appPrefs == nil {
 			m.appPrefs = p
 		} else if m.appPrefs != p {

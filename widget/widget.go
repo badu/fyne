@@ -19,7 +19,7 @@ type BaseWidget struct {
 	position async.Position
 	Hidden   bool
 
-	impl         atomic.Pointer[fyne.Widget]
+	impl         atomic.Pointer[fyne.Widget] // TODO : @Badu - oh God, same pattern again
 	propertyLock sync.RWMutex
 	themeCache   fyne.Theme
 }

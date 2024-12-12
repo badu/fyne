@@ -54,7 +54,7 @@ func (t *DocTabs) Append(item *TabItem) {
 func (t *DocTabs) CreateRenderer() fyne.WidgetRenderer {
 	t.ExtendBaseWidget(t)
 	th := t.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	r := &docTabsRenderer{
 		baseTabsRenderer: baseTabsRenderer{
@@ -278,25 +278,28 @@ func (r *docTabsRenderer) Refresh() {
 }
 
 func (r *docTabsRenderer) buildAllTabsButton() (all *widget.Button) {
-	all = &widget.Button{Importance: widget.LowImportance, OnTapped: func() {
-		// Show pop up containing all tabs
+	all = &widget.Button{
+		Importance: widget.LowImportance,
+		OnTapped: func() {
+			// Show pop up containing all tabs
 
-		items := make([]*fyne.MenuItem, len(r.docTabs.Items))
-		for i := 0; i < len(r.docTabs.Items); i++ {
-			index := i // capture
-			// FIXME MenuItem doesn't support icons (#1752)
-			items[i] = fyne.NewMenuItem(r.docTabs.Items[i].Text, func() {
-				r.docTabs.SelectIndex(index)
-				if r.docTabs.popUpMenu != nil {
-					r.docTabs.popUpMenu.Hide()
-					r.docTabs.popUpMenu = nil
-				}
-			})
-			items[i].Checked = index == r.docTabs.current
-		}
+			items := make([]*fyne.MenuItem, len(r.docTabs.Items))
+			for i := 0; i < len(r.docTabs.Items); i++ {
+				index := i // capture
+				// FIXME MenuItem doesn't support icons (#1752)
+				items[i] = fyne.NewMenuItem(r.docTabs.Items[i].Text, func() {
+					r.docTabs.SelectIndex(index)
+					if r.docTabs.popUpMenu != nil {
+						r.docTabs.popUpMenu.Hide()
+						r.docTabs.popUpMenu = nil
+					}
+				})
+				items[i].Checked = index == r.docTabs.current
+			}
 
-		r.docTabs.popUpMenu = buildPopUpMenu(r.docTabs, all, items)
-	}}
+			r.docTabs.popUpMenu = buildPopUpMenu(r.docTabs, all, items)
+		},
+	}
 
 	return all
 }
@@ -407,10 +410,10 @@ func (r *docTabsRenderer) updateIndicator(animate bool) {
 			}
 		}
 	} else {
-		selected := buttons[r.docTabs.current]
-		selectedPos = selected.Position()
-		selectedSize = selected.Size()
-		minSize := selected.MinSize()
+		selectedButton := buttons[r.docTabs.current]
+		selectedPos = selectedButton.Position()
+		selectedSize = selectedButton.Size()
+		minSize := selectedButton.MinSize()
 		if minSize.Width > selectedSize.Width {
 			selectedSize = minSize
 		}

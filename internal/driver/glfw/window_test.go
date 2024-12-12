@@ -11,12 +11,13 @@ import (
 	"testing"
 	"time"
 
+	internalTest "fyne.io/fyne/v2/internal/test"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/internal/scale"
-	internalTest "fyne.io/fyne/v2/internal/test"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/test"
 	"fyne.io/fyne/v2/theme"
@@ -1173,7 +1174,7 @@ func TestWindow_TappedSecondary_OnPrimaryOnlyTarget(t *testing.T) {
 
 func TestWindow_TappedIgnoresScrollerClip(t *testing.T) {
 	w := createWindow("Test").(*window)
-	fyne.CurrentApp().Settings().SetTheme(internalTest.DarkTheme(theme.DefaultTheme()))
+	fyne.CurrentSettings().SetTheme(internalTest.DarkTheme(theme.DefaultTheme()))
 	rect := canvas.NewRectangle(color.White)
 	rect.SetMinSize(fyne.NewSize(100, 100))
 	tapped := false
@@ -1461,7 +1462,7 @@ func TestWindow_SetPadded(t *testing.T) {
 	} else {
 		menuHeight = canvas.NewText("", color.Black).MinSize().Height + theme.Padding()*2
 	}
-	fyne.CurrentApp().Settings().SetTheme(internalTest.DarkTheme(theme.DefaultTheme()))
+	fyne.CurrentSettings().SetTheme(internalTest.DarkTheme(theme.DefaultTheme()))
 	tests := []struct {
 		name               string
 		padding            bool
@@ -1975,7 +1976,7 @@ type focusable struct {
 }
 
 func (f *focusable) Tapped(*fyne.PointEvent) {
-	d.CanvasForObject(f).Focus(f)
+	CanvasForObject(f).Focus(f)
 }
 
 func (f *focusable) TypedRune(rune) {

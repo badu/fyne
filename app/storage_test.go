@@ -8,7 +8,7 @@ import (
 
 func TestStore_RootURI(t *testing.T) {
 	id := "io.fyne.test"
-	a := &fyneApp{uniqueID: id}
+	a := &FyneApp{uniqueID: id}
 	d := makeStoreDocs(id, &store{a: a})
 
 	w, err := d.Create("test")

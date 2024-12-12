@@ -7,6 +7,6 @@ import (
 	"net/url"
 )
 
-func (a *fyneApp) OpenURL(url *url.URL) error {
+func (a *FyneApp) OpenURL(url *url.URL) error {
 	return errors.New("OpenURL is not supported with the test web driver.")
 }

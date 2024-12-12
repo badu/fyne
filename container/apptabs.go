@@ -46,7 +46,7 @@ func NewAppTabs(items ...*TabItem) *AppTabs {
 func (t *AppTabs) CreateRenderer() fyne.WidgetRenderer {
 	t.BaseWidget.ExtendBaseWidget(t)
 	th := t.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	r := &appTabsRenderer{
 		baseTabsRenderer: baseTabsRenderer{

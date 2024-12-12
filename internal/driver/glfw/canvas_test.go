@@ -5,15 +5,16 @@ package glfw
 import (
 	"errors"
 	"fmt"
-	"fyne.io/fyne/v2/internal/driver"
-	"fyne.io/fyne/v2/test"
 	"image/color"
 	"testing"
+
+	internalTest "fyne.io/fyne/v2/internal/test"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	internalTest "fyne.io/fyne/v2/internal/test"
+	"fyne.io/fyne/v2/internal/driver"
+	"fyne.io/fyne/v2/test"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 
@@ -514,7 +515,7 @@ func TestGlCanvas_Scale(t *testing.T) {
 }
 
 func TestGlCanvas_SetContent(t *testing.T) {
-	fyne.CurrentApp().Settings().SetTheme(internalTest.DarkTheme(theme.DefaultTheme()))
+	fyne.CurrentSettings().SetTheme(internalTest.DarkTheme(theme.DefaultTheme()))
 	var menuHeight float32
 	if hasNativeMenu() {
 		menuHeight = 0

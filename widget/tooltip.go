@@ -101,7 +101,7 @@ func (r *toolTipRenderer) MinSize() fyne.Size {
 func (r *toolTipRenderer) Refresh() {
 	r.ShadowingRenderer.RefreshShadow()
 	th := r.toolTip.Theme()
-	variant := fyne.CurrentApp().Settings().ThemeVariant()
+	variant := fyne.CurrentSettings().ThemeVariant()
 	r.backgroundRect.FillColor = th.Color(theme.ColorNameOverlayBackground, variant)
 	r.backgroundRect.StrokeColor = th.Color(theme.ColorNameInputBorder, variant)
 	r.backgroundRect.StrokeWidth = th.Size(theme.SizeNameInputBorder)
@@ -285,7 +285,7 @@ func (t *toolTipContext) setPendingToolTip(wid fyne.CanvasObject, toolTipText st
 			defer t.lock.Unlock()
 			t.cancelToolTip() // don't leak ctx resources
 			pos := t.absoluteMousePos
-			canvas := fyne.CurrentApp().Driver().CanvasForObject(wid)
+			canvas := fyne.CurrentDriver().CanvasForObject(wid)
 			t.toolTipHandle = ShowToolTipAtMousePosition(canvas, pos, toolTipText)
 		}
 	}()
@@ -383,7 +383,7 @@ func ShowToolTipAtMousePosition(canvas fyne.Canvas, pos fyne.Position, text stri
 	if pop, ok := overlay.(*PopUp); ok && pop != nil {
 		zeroPos = pop.Content.Position()
 	} else {
-		zeroPos = fyne.CurrentApp().Driver().AbsolutePositionForObject(&tl.Container)
+		zeroPos = fyne.CurrentDriver().AbsolutePositionForObject(&tl.Container)
 	}
 
 	sizeAndPositionToolTip(zeroPos, pos.Subtract(zeroPos), t, canvas)

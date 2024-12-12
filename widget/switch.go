@@ -97,7 +97,7 @@ func (w *Switch) Tapped(pe *fyne.PointEvent) {
 	}
 	if !w.focused {
 		if !fyne.CurrentDevice().IsMobile() {
-			if c := fyne.CurrentApp().Driver().CanvasForObject(w); c != nil {
+			if c := fyne.CurrentDriver().CanvasForObject(w); c != nil {
 				c.Focus(w)
 			}
 		}
@@ -153,7 +153,7 @@ func (w *Switch) MouseOut() {
 func (w *Switch) CreateRenderer() fyne.WidgetRenderer {
 	w.ExtendBaseWidget(w)
 	th := w.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 	track := canvas.NewRectangle(color.Transparent)
 	track.CornerRadius = 7
 	shadowColor := th.Color(theme.ColorNameShadow, v)
@@ -213,7 +213,7 @@ func (r *switchRenderer) Layout(size fyne.Size) {
 // Should be called with a read lock.
 func (r *switchRenderer) refreshSwitch() {
 	th := r.widget.Theme()
-	v := fyne.CurrentApp().Settings().ThemeVariant()
+	v := fyne.CurrentSettings().ThemeVariant()
 
 	// focus colors and state
 	var focusColor color.Color
@@ -230,7 +230,7 @@ func (r *switchRenderer) refreshSwitch() {
 	// theme dependent parameters
 	var colorModifierMode modifiedColorMode
 	var disabledModifier, trackColorModifier float32
-	isDark := fyne.CurrentApp().Settings().ThemeVariant() == theme.VariantDark
+	isDark := fyne.CurrentSettings().ThemeVariant() == theme.VariantDark
 	if isDark {
 		colorModifierMode = modeDarker
 		trackColorModifier = 0.5

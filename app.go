@@ -128,6 +128,37 @@ func CurrentDriver() Driver {
 	return result
 }
 
+func CurrentSettings() Settings {
+	val := app.Load()
+	if val == nil {
+		LogError("Attempt to access current Fyne app when none is started", nil)
+		return nil
+	}
+
+	result := (*val).Settings()
+	if result == nil {
+		LogError("attempt to access current Fyne settings when none are set", nil)
+		return nil
+	}
+	return result
+}
+
+func CurrentPreferences() Preferences {
+	val := app.Load()
+	if val == nil {
+		LogError("Attempt to access current Fyne app when none is started", nil)
+		return nil
+	}
+
+	result := (*val).Preferences()
+	if result == nil {
+		LogError("attempt to access current Fyne preferences when none are set", nil)
+		return nil
+	}
+
+	return result
+}
+
 // AppMetadata captures the build metadata for an application.
 //
 // Since: 2.2

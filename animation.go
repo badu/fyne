@@ -55,12 +55,12 @@ func NewAnimation(d time.Duration, fn func(float32)) *Animation {
 
 // Start registers the animation with the application run-loop and starts its execution.
 func (a *Animation) Start() {
-	CurrentApp().Driver().StartAnimation(a)
+	CurrentDriver().StartAnimation(a)
 }
 
 // Stop will end this animation and remove it from the run-loop.
 func (a *Animation) Stop() {
-	CurrentApp().Driver().StopAnimation(a)
+	CurrentDriver().StopAnimation(a)
 }
 
 func animationEaseIn(val float32) float32 {

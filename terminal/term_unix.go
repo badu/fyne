@@ -17,7 +17,7 @@ func (t *Terminal) updatePTYSize() {
 		return
 	}
 	scale := float32(1.0)
-	c := fyne.CurrentApp().Driver().CanvasForObject(t)
+	c := fyne.CurrentDriver().CanvasForObject(t)
 	if c != nil {
 		scale = c.Scale()
 	}

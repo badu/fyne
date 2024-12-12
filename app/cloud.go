@@ -2,7 +2,7 @@ package app
 
 import "fyne.io/fyne/v2"
 
-func (a *fyneApp) SetCloudProvider(p fyne.CloudProvider) {
+func (a *FyneApp) SetCloudProvider(p fyne.CloudProvider) {
 	if p == nil {
 		a.cloud = nil
 		return
@@ -11,7 +11,7 @@ func (a *fyneApp) SetCloudProvider(p fyne.CloudProvider) {
 	a.transitionCloud(p)
 }
 
-func (a *fyneApp) transitionCloud(p fyne.CloudProvider) {
+func (a *FyneApp) transitionCloud(p fyne.CloudProvider) {
 	if a.cloud != nil {
 		a.cloud.Cleanup(a)
 	}

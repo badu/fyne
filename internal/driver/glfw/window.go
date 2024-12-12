@@ -275,7 +275,7 @@ func (w *window) processClosed() {
 }
 
 // destroy this window and, if it's the last window quit the app
-func (w *window) destroy(d *gLDriver) {
+func (w *window) destroy(d *GLDriver) {
 	cache.CleanCanvas(w.canvas)
 
 	if w.master {
@@ -945,7 +945,7 @@ func (w *window) runOnMainWhenCreated(fn func()) {
 	w.pending = append(w.pending, fn)
 }
 
-func (d *gLDriver) CreateWindow(title string) fyne.Window {
+func (d *GLDriver) CreateWindow(title string) fyne.Window {
 	if runtime.GOOS != "js" {
 		return d.createWindow(title, true)
 	}
@@ -980,7 +980,7 @@ func (d *gLDriver) CreateWindow(title string) fyne.Window {
 	return wrapInnerWindow(inner, root, d)
 }
 
-func (d *gLDriver) createWindow(title string, decorate bool) fyne.Window {
+func (d *GLDriver) createWindow(title string, decorate bool) fyne.Window {
 	var ret *window
 	if title == "" {
 		title = defaultTitle
@@ -1030,14 +1030,14 @@ func (w *window) isClosing() bool {
 	return closing
 }
 
-func (d *gLDriver) CreateSplashWindow() fyne.Window {
+func (d *GLDriver) CreateSplashWindow() fyne.Window {
 	win := d.createWindow("", false)
 	win.SetPadded(false)
 	win.CenterOnScreen()
 	return win
 }
 
-func (d *gLDriver) AllWindows() []fyne.Window {
+func (d *GLDriver) AllWindows() []fyne.Window {
 	return d.windows
 }
 
