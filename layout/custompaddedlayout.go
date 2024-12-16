@@ -19,7 +19,7 @@ type CustomPaddedLayout struct {
 // with the specified paddings.
 //
 // Since: 2.5
-func NewCustomPaddedLayout(padTop, padBottom, padLeft, padRight float32) fyne.Layout {
+func NewCustomPaddedLayout(padTop, padBottom, padLeft, padRight float32) CustomPaddedLayout {
 	return CustomPaddedLayout{
 		TopPadding:    padTop,
 		BottomPadding: padBottom,

@@ -2,17 +2,17 @@ package layout
 
 import "fyne.io/fyne/v2"
 
-type centerLayout struct {
+type CenterLayout struct {
 }
 
 // NewCenterLayout creates a new CenterLayout instance
-func NewCenterLayout() fyne.Layout {
-	return &centerLayout{}
+func NewCenterLayout() *CenterLayout {
+	return &CenterLayout{}
 }
 
 // Layout is called to pack all child objects into a specified size.
 // For CenterLayout this sets all children to their minimum size, centered within the space.
-func (c *centerLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
+func (c *CenterLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 	for _, child := range objects {
 		childMin := child.MinSize()
 		child.Resize(childMin)
@@ -22,7 +22,7 @@ func (c *centerLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 
 // MinSize finds the smallest size that satisfies all the child objects.
 // For CenterLayout this is determined simply as the MinSize of the largest child.
-func (c *centerLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
+func (c *CenterLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	minSize := fyne.NewSize(0, 0)
 	for _, child := range objects {
 		if !child.Visible() {

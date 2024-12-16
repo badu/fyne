@@ -6,12 +6,19 @@ import (
 	"fyne.io/fyne/v2"
 )
 
-var renderersLock sync.RWMutex
-var renderers = map[fyne.Widget]*rendererInfo{}
+var (
+	renderersLock sync.RWMutex
+	renderers     = map[fyne.Widget]*rendererInfo{}
+)
 
 type isBaseWidget interface {
 	ExtendBaseWidget(fyne.Widget)
 	super() fyne.Widget
+}
+
+type rendererInfo struct {
+	expiringCache
+	renderer fyne.WidgetRenderer
 }
 
 // Renderer looks up the render implementation for a widget
@@ -77,9 +84,4 @@ func IsRendered(wid fyne.Widget) bool {
 	_, found := renderers[wid]
 	renderersLock.RUnlock()
 	return found
-}
-
-type rendererInfo struct {
-	expiringCache
-	renderer fyne.WidgetRenderer
 }

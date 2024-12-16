@@ -47,38 +47,33 @@ func (t *Terminal) handleEscape(code string) {
 	}
 }
 
-func (t *Terminal) clearScreen() {
-	t.moveCursor(0, 0)
-	t.clearScreenFromCursor()
-}
-
-func (t *Terminal) clearScreenFromCursor() {
-	row := t.content.Row(t.cursorRow)
-	from := t.cursorCol
-	if t.cursorCol > len(row.Cells) {
+func clearScreenFromCursor(content *widget.TermGrid, cursorRow, cursorCol int) {
+	row := content.Row(cursorRow)
+	from := cursorCol
+	if cursorCol > len(row.Cells) {
 		from = len(row.Cells)
 	}
 	if from > 0 {
-		t.content.SetRow(t.cursorRow, widget.TextGridRow{Cells: row.Cells[:from]})
+		content.SetRow(cursorRow, widget.TextGridRow{Cells: row.Cells[:from]})
 	} else {
-		t.content.SetRow(t.cursorRow, widget.TextGridRow{})
+		content.SetRow(cursorRow, widget.TextGridRow{})
 	}
 
-	for i := t.cursorRow + 1; i < len(t.content.Rows); i++ {
-		t.content.SetRow(i, widget.TextGridRow{})
+	for i := cursorRow + 1; i < len(content.Rows); i++ {
+		content.SetRow(i, widget.TextGridRow{})
 	}
 }
 
-func (t *Terminal) clearScreenToCursor() {
-	row := t.content.Row(t.cursorRow)
-	cells := make([]widget.TextGridCell, t.cursorCol)
-	if t.cursorCol < len(row.Cells) {
-		cells = append(cells, row.Cells[t.cursorCol:]...)
+func clearScreenToCursor(content *widget.TermGrid, cursorRow, cursorCol int) {
+	row := content.Row(cursorRow)
+	cells := make([]widget.TextGridCell, cursorCol)
+	if cursorCol < len(row.Cells) {
+		cells = append(cells, row.Cells[cursorCol:]...)
 	}
-	t.content.SetRow(t.cursorRow, widget.TextGridRow{Cells: cells})
+	content.SetRow(cursorRow, widget.TextGridRow{Cells: cells})
 
-	for i := 0; i < t.cursorRow-1; i++ {
-		t.content.SetRow(i, widget.TextGridRow{})
+	for i := 0; i < cursorRow-1; i++ {
+		content.SetRow(i, widget.TextGridRow{})
 	}
 }
 
@@ -177,11 +172,12 @@ func escapeEraseInScreen(t *Terminal, msg string) {
 	mode, _ := strconv.Atoi(msg)
 	switch mode {
 	case 0:
-		t.clearScreenFromCursor()
+		clearScreenFromCursor(t.content, t.cursorRow, t.cursorCol)
 	case 1:
-		t.clearScreenToCursor()
+		clearScreenToCursor(t.content, t.cursorRow, t.cursorCol)
 	case 2:
-		t.clearScreen()
+		t.moveCursor(0, 0)
+		clearScreenFromCursor(t.content, t.cursorRow, t.cursorCol)
 	}
 }
 

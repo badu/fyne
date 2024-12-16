@@ -10,18 +10,18 @@ import (
 )
 
 // Painter is a simple software painter that can paint a canvas in memory.
-type Painter struct {
+type PainterImpl struct {
 }
 
 // NewPainter creates a new Painter.
-func NewPainter() *Painter {
-	return &Painter{}
+func NewPainter() *PainterImpl {
+	return &PainterImpl{}
 }
 
 // Paint is the main entry point for a simple software painter.
 // The canvas to be drawn is passed in as a parameter and the return is an
 // image containing the result of rendering.
-func (*Painter) Paint(c fyne.Canvas) image.Image {
+func (*PainterImpl) Paint(c fyne.Canvas) image.Image {
 	bounds := image.Rect(0, 0, scale.ToScreenCoordinate(c, c.Size().Width), scale.ToScreenCoordinate(c, c.Size().Height))
 	base := image.NewNRGBA(bounds)
 

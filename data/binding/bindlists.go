@@ -2019,21 +2019,21 @@ type ExternalURIList interface {
 //
 // Since: 2.1
 func NewURIList() URIList {
-	return &boundURIList{val: &[]fyne.URI{}}
+	return &boundURIList{val: []fyne.URI{}}
 }
 
 // BindURIList returns a bound list of fyne.URI values, based on the contents of the passed slice.
 // If your code changes the content of the slice this refers to you should call Reload() to inform the bindings.
 //
 // Since: 2.1
-func BindURIList(v *[]fyne.URI) ExternalURIList {
+func BindURIList(v []fyne.URI) ExternalURIList {
 	if v == nil {
 		return NewURIList().(ExternalURIList)
 	}
 
 	b := &boundURIList{val: v, updateExternal: true}
 
-	for i := range *v {
+	for i := range v {
 		b.appendItem(bindURIListItem(v, i, b.updateExternal))
 	}
 
@@ -2044,14 +2044,14 @@ type boundURIList struct {
 	listBase
 
 	updateExternal bool
-	val            *[]fyne.URI
+	val            []fyne.URI
 }
 
 func (l *boundURIList) Append(val fyne.URI) error {
 	l.propertiesLock.Lock()
 	defer l.propertiesLock.Unlock()
 
-	*l.val = append(*l.val, val)
+	l.val = append(l.val, val)
 
 	return l.doReload()
 }
@@ -2060,7 +2060,7 @@ func (l *boundURIList) Get() ([]fyne.URI, error) {
 	l.propertiesLock.RLock()
 	defer l.propertiesLock.RUnlock()
 
-	return *l.val, nil
+	return l.val, nil
 }
 
 func (l *boundURIList) GetValue(i int) (fyne.URI, error) {
@@ -2071,13 +2071,13 @@ func (l *boundURIList) GetValue(i int) (fyne.URI, error) {
 		return fyne.URI(nil), errOutOfBounds
 	}
 
-	return (*l.val)[i], nil
+	return (l.val)[i], nil
 }
 
 func (l *boundURIList) Prepend(val fyne.URI) error {
 	l.propertiesLock.Lock()
 	defer l.propertiesLock.Unlock()
-	*l.val = append([]fyne.URI{val}, *l.val...)
+	l.val = append([]fyne.URI{val}, l.val...)
 
 	return l.doReload()
 }
@@ -2096,14 +2096,14 @@ func (l *boundURIList) Remove(val fyne.URI) error {
 	l.propertiesLock.Lock()
 	defer l.propertiesLock.Unlock()
 
-	v := *l.val
+	v := l.val
 	if len(v) == 0 {
 		return nil
 	}
 	if compareURI(v[0], val) {
-		*l.val = v[1:]
+		l.val = v[1:]
 	} else if compareURI(v[len(v)-1], val) {
-		*l.val = v[:len(v)-1]
+		l.val = v[:len(v)-1]
 	} else {
 		id := -1
 		for i, v := range v {
@@ -2116,7 +2116,7 @@ func (l *boundURIList) Remove(val fyne.URI) error {
 		if id == -1 {
 			return nil
 		}
-		*l.val = append(v[:id], v[id+1:]...)
+		l.val = append(v[:id], v[id+1:]...)
 	}
 
 	return l.doReload()
@@ -2125,14 +2125,14 @@ func (l *boundURIList) Remove(val fyne.URI) error {
 func (l *boundURIList) Set(v []fyne.URI) error {
 	l.propertiesLock.Lock()
 	defer l.propertiesLock.Unlock()
-	*l.val = v
+	l.val = v
 
 	return l.doReload()
 }
 
 func (l *boundURIList) doReload() (retErr error) {
 	oldLen := len(l.items)
-	newLen := len(*l.val)
+	newLen := len(l.val)
 	if oldLen > newLen {
 		for i := oldLen - 1; i >= newLen; i-- {
 			l.deleteItem(i)
@@ -2153,11 +2153,11 @@ func (l *boundURIList) doReload() (retErr error) {
 		var err error
 		if l.updateExternal {
 			item.(*boundExternalURIListItem).propertiesLock.Lock()
-			err = item.(*boundExternalURIListItem).setIfChanged((*l.val)[i])
+			err = item.(*boundExternalURIListItem).setIfChanged((l.val)[i])
 			item.(*boundExternalURIListItem).propertiesLock.Unlock()
 		} else {
 			item.(*boundURIListItem).propertiesLock.Lock()
-			err = item.(*boundURIListItem).doSet((*l.val)[i])
+			err = item.(*boundURIListItem).doSet((l.val)[i])
 			item.(*boundURIListItem).propertiesLock.Unlock()
 		}
 		if err != nil {
@@ -2177,7 +2177,7 @@ func (l *boundURIList) SetValue(i int, v fyne.URI) error {
 	}
 
 	l.propertiesLock.Lock()
-	(*l.val)[i] = v
+	(l.val)[i] = v
 	l.propertiesLock.Unlock()
 
 	item, err := l.GetItem(i)
@@ -2187,9 +2187,9 @@ func (l *boundURIList) SetValue(i int, v fyne.URI) error {
 	return item.(URI).Set(v)
 }
 
-func bindURIListItem(v *[]fyne.URI, i int, external bool) URI {
+func bindURIListItem(v []fyne.URI, i int, external bool) URI {
 	if external {
-		ret := &boundExternalURIListItem{old: (*v)[i]}
+		ret := &boundExternalURIListItem{old: v[i]}
 		ret.val = v
 		ret.index = i
 		return ret
@@ -2201,7 +2201,7 @@ func bindURIListItem(v *[]fyne.URI, i int, external bool) URI {
 type boundURIListItem struct {
 	base
 
-	val   *[]fyne.URI
+	val   []fyne.URI
 	index int
 }
 
@@ -2209,11 +2209,11 @@ func (b *boundURIListItem) Get() (fyne.URI, error) {
 	b.propertiesLock.Lock()
 	defer b.propertiesLock.Unlock()
 
-	if b.index < 0 || b.index >= len(*b.val) {
+	if b.index < 0 || b.index >= len(b.val) {
 		return fyne.URI(nil), errOutOfBounds
 	}
 
-	return (*b.val)[b.index], nil
+	return (b.val)[b.index], nil
 }
 
 func (b *boundURIListItem) Set(val fyne.URI) error {
@@ -2224,7 +2224,7 @@ func (b *boundURIListItem) Set(val fyne.URI) error {
 }
 
 func (b *boundURIListItem) doSet(val fyne.URI) error {
-	(*b.val)[b.index] = val
+	(b.val)[b.index] = val
 
 	b.trigger()
 	return nil
@@ -2240,7 +2240,7 @@ func (b *boundExternalURIListItem) setIfChanged(val fyne.URI) error {
 	if compareURI(val, b.old) {
 		return nil
 	}
-	(*b.val)[b.index] = val
+	(b.val)[b.index] = val
 	b.old = val
 
 	b.trigger()

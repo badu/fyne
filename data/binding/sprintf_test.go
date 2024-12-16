@@ -21,7 +21,7 @@ func TestSprintfConversionRead(t *testing.T) {
 	bi := BindInt(&i)
 	br := BindRune(&r)
 	bs := BindString(&s)
-	bu := BindURI(&u)
+	bu := BindURI(u)
 
 	format := "Bool %v, Float %f, Int %i, Rune %v, String '%s', URI '%s'"
 	sp := NewSprintf(format, bb, bf, bi, br, bs, bu)
@@ -67,7 +67,7 @@ func TestSprintfConversionReadWrite(t *testing.T) {
 	bi := BindInt(&i)
 	br := BindRune(&r)
 	bs := BindString(&s)
-	bu := BindURI(&u)
+	bu := BindURI(u)
 
 	format := "Bool %v , Float %f , Int %v , Rune %v , String %s , URI %s"
 	sp := NewSprintf(format, bb, bf, bi, br, bs, bu)

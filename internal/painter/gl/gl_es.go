@@ -59,7 +59,7 @@ type (
 
 var textureFilterToGL = []int32{gl.LINEAR, gl.NEAREST, gl.LINEAR}
 
-func (p *painter) Init() {
+func (p *PainterImpl) Init() {
 	p.ctx = &esContext{}
 	err := gl.Init()
 	if err != nil {

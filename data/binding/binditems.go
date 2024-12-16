@@ -675,28 +675,28 @@ type ExternalURI interface {
 // Since: 2.1
 func NewURI() URI {
 	var blank = fyne.URI(nil)
-	return &boundURI{val: &blank}
+	return &boundURI{val: blank}
 }
 
 // BindURI returns a new bindable value that controls the contents of the provided fyne.URI variable.
 // If your code changes the content of the variable this refers to you should call Reload() to inform the bindings.
 //
 // Since: 2.1
-func BindURI(v *fyne.URI) ExternalURI {
+func BindURI(v fyne.URI) ExternalURI {
 	if v == nil {
 		var blank = fyne.URI(nil)
-		v = &blank // never allow a nil value pointer
+		v = blank // never allow a nil value pointer
 	}
 	b := &boundExternalURI{}
 	b.val = v
-	b.old = *v
+	b.old = v
 	return b
 }
 
 type boundURI struct {
 	base
 
-	val *fyne.URI
+	val fyne.URI
 }
 
 func (b *boundURI) Get() (fyne.URI, error) {
@@ -706,16 +706,16 @@ func (b *boundURI) Get() (fyne.URI, error) {
 	if b.val == nil {
 		return fyne.URI(nil), nil
 	}
-	return *b.val, nil
+	return b.val, nil
 }
 
 func (b *boundURI) Set(val fyne.URI) error {
 	b.propertiesLock.Lock()
 	defer b.propertiesLock.Unlock()
-	if compareURI(*b.val, val) {
+	if compareURI(b.val, val) {
 		return nil
 	}
-	*b.val = val
+	b.val = val
 
 	b.trigger()
 	return nil
@@ -733,7 +733,7 @@ func (b *boundExternalURI) Set(val fyne.URI) error {
 	if compareURI(b.old, val) {
 		return nil
 	}
-	*b.val = val
+	b.val = val
 	b.old = val
 
 	b.trigger()
@@ -741,5 +741,5 @@ func (b *boundExternalURI) Set(val fyne.URI) error {
 }
 
 func (b *boundExternalURI) Reload() error {
-	return b.Set(*b.val)
+	return b.Set(b.val)
 }

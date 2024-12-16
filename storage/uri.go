@@ -6,7 +6,7 @@ import (
 )
 
 // NewFileURI creates a new URI from the given file path.
-func NewFileURI(path string) fyne.URI {
+func NewFileURI(path string) *repository.TheURI {
 	return repository.NewFileURI(path)
 }
 

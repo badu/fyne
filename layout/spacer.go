@@ -21,7 +21,7 @@ type Spacer struct {
 
 // NewSpacer returns a spacer object which can fill vertical and horizontal
 // space. This is primarily used with a box layout.
-func NewSpacer() fyne.CanvasObject {
+func NewSpacer() *Spacer {
 	return &Spacer{}
 }
 

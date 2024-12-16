@@ -5,11 +5,11 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-type paddedLayout struct{}
+type PaddedLayout struct{}
 
 // Layout is called to pack all child objects into a specified size.
 // For PaddedLayout this sets all children to the full size passed minus padding all around.
-func (l paddedLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
+func (l PaddedLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 	padding := theme.Padding()
 	pos := fyne.NewSquareOffsetPos(padding)
 	siz := fyne.NewSize(size.Width-2*padding, size.Height-2*padding)
@@ -21,7 +21,7 @@ func (l paddedLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 
 // MinSize finds the smallest size that satisfies all the child objects.
 // For PaddedLayout this is determined simply as the MinSize of the largest child plus padding all around.
-func (l paddedLayout) MinSize(objects []fyne.CanvasObject) (min fyne.Size) {
+func (l PaddedLayout) MinSize(objects []fyne.CanvasObject) (min fyne.Size) {
 	for _, child := range objects {
 		if !child.Visible() {
 			continue
@@ -36,6 +36,6 @@ func (l paddedLayout) MinSize(objects []fyne.CanvasObject) (min fyne.Size) {
 // NewPaddedLayout creates a new PaddedLayout instance
 //
 // Since: 1.4
-func NewPaddedLayout() fyne.Layout {
-	return paddedLayout{}
+func NewPaddedLayout() PaddedLayout {
+	return PaddedLayout{}
 }

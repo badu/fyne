@@ -165,7 +165,7 @@ func existsURI(uri fyne.URI) (bool, error) {
 	return ok, nil
 }
 
-func registerRepository(d *mobileDriver) {
+func registerRepository(d *MobileDriver) {
 	repo := &mobileFileRepo{}
 	repository.Register("file", repo)
 	repository.Register("content", repo)

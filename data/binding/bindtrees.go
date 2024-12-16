@@ -2224,7 +2224,7 @@ type ExternalURITree interface {
 //
 // Since: 2.4
 func NewURITree() URITree {
-	t := &boundURITree{val: &map[string]fyne.URI{}}
+	t := &boundURITree{val: map[string]fyne.URI{}}
 	t.ids = make(map[string][]string)
 	t.items = make(map[string]DataItem)
 	return t
@@ -2235,7 +2235,7 @@ func NewURITree() URITree {
 // If your code changes the content of the maps this refers to you should call Reload() to inform the bindings.
 //
 // Since: 2.4
-func BindURITree(ids *map[string][]string, v *map[string]fyne.URI) ExternalURITree {
+func BindURITree(ids *map[string][]string, v map[string]fyne.URI) ExternalURITree {
 	if v == nil {
 		return NewURITree().(ExternalURITree)
 	}
@@ -2257,7 +2257,7 @@ type boundURITree struct {
 	treeBase
 
 	updateExternal bool
-	val            *map[string]fyne.URI
+	val            map[string]fyne.URI
 }
 
 func (t *boundURITree) Append(parent, id string, val fyne.URI) error {
@@ -2269,7 +2269,7 @@ func (t *boundURITree) Append(parent, id string, val fyne.URI) error {
 	}
 
 	t.ids[parent] = append(ids, id)
-	v := *t.val
+	v := t.val
 	v[id] = val
 
 	return t.doReload()
@@ -2279,14 +2279,14 @@ func (t *boundURITree) Get() (map[string][]string, map[string]fyne.URI, error) {
 	t.propertiesLock.RLock()
 	defer t.propertiesLock.RUnlock()
 
-	return t.ids, *t.val, nil
+	return t.ids, t.val, nil
 }
 
 func (t *boundURITree) GetValue(id string) (fyne.URI, error) {
 	t.propertiesLock.RLock()
 	defer t.propertiesLock.RUnlock()
 
-	if item, ok := (*t.val)[id]; ok {
+	if item, ok := (t.val)[id]; ok {
 		return item, nil
 	}
 
@@ -2302,7 +2302,7 @@ func (t *boundURITree) Prepend(parent, id string, val fyne.URI) error {
 	}
 
 	t.ids[parent] = append([]string{id}, ids...)
-	v := *t.val
+	v := t.val
 	v[id] = val
 
 	return t.doReload()
@@ -2318,7 +2318,7 @@ func (t *boundURITree) Remove(id string) error {
 
 	t.removeChildren(id)
 	delete(t.ids, id)
-	v := *t.val
+	v := t.val
 	delete(v, id)
 
 	return t.doReload()
@@ -2329,7 +2329,7 @@ func (t *boundURITree) removeChildren(id string) {
 		t.removeChildren(cid)
 
 		delete(t.ids, cid)
-		v := *t.val
+		v := t.val
 		delete(v, cid)
 	}
 }
@@ -2345,7 +2345,7 @@ func (t *boundURITree) Set(ids map[string][]string, v map[string]fyne.URI) error
 	t.propertiesLock.Lock()
 	defer t.propertiesLock.Unlock()
 	t.ids = ids
-	*t.val = v
+	t.val = v
 
 	return t.doReload()
 }
@@ -2353,7 +2353,7 @@ func (t *boundURITree) Set(ids map[string][]string, v map[string]fyne.URI) error
 func (t *boundURITree) doReload() (retErr error) {
 	var updated []string
 	fire := false
-	for id := range *t.val {
+	for id := range t.val {
 		found := false
 		for child := range t.items {
 			if child == id { // update existing
@@ -2394,11 +2394,11 @@ func (t *boundURITree) doReload() (retErr error) {
 		var err error
 		if t.updateExternal {
 			item.(*boundExternalURITreeItem).propertiesLock.Lock()
-			err = item.(*boundExternalURITreeItem).setIfChanged((*t.val)[id])
+			err = item.(*boundExternalURITreeItem).setIfChanged((t.val)[id])
 			item.(*boundExternalURITreeItem).propertiesLock.Unlock()
 		} else {
 			item.(*boundURITreeItem).propertiesLock.Lock()
-			err = item.(*boundURITreeItem).doSet((*t.val)[id])
+			err = item.(*boundURITreeItem).doSet((t.val)[id])
 			item.(*boundURITreeItem).propertiesLock.Unlock()
 		}
 		if err != nil {
@@ -2410,7 +2410,7 @@ func (t *boundURITree) doReload() (retErr error) {
 
 func (t *boundURITree) SetValue(id string, v fyne.URI) error {
 	t.propertiesLock.Lock()
-	(*t.val)[id] = v
+	(t.val)[id] = v
 	t.propertiesLock.Unlock()
 
 	item, err := t.GetItem(id)
@@ -2420,9 +2420,9 @@ func (t *boundURITree) SetValue(id string, v fyne.URI) error {
 	return item.(URI).Set(v)
 }
 
-func bindURITreeItem(v *map[string]fyne.URI, id string, external bool) URI {
+func bindURITreeItem(v map[string]fyne.URI, id string, external bool) URI {
 	if external {
-		ret := &boundExternalURITreeItem{old: (*v)[id]}
+		ret := &boundExternalURITreeItem{old: (v)[id]}
 		ret.val = v
 		ret.id = id
 		return ret
@@ -2434,7 +2434,7 @@ func bindURITreeItem(v *map[string]fyne.URI, id string, external bool) URI {
 type boundURITreeItem struct {
 	base
 
-	val *map[string]fyne.URI
+	val map[string]fyne.URI
 	id  string
 }
 
@@ -2442,7 +2442,7 @@ func (t *boundURITreeItem) Get() (fyne.URI, error) {
 	t.propertiesLock.Lock()
 	defer t.propertiesLock.Unlock()
 
-	v := *t.val
+	v := t.val
 	if item, ok := v[t.id]; ok {
 		return item, nil
 	}
@@ -2458,7 +2458,7 @@ func (t *boundURITreeItem) Set(val fyne.URI) error {
 }
 
 func (t *boundURITreeItem) doSet(val fyne.URI) error {
-	(*t.val)[t.id] = val
+	(t.val)[t.id] = val
 
 	t.trigger()
 	return nil
@@ -2474,7 +2474,7 @@ func (t *boundExternalURITreeItem) setIfChanged(val fyne.URI) error {
 	if compareURI(val, t.old) {
 		return nil
 	}
-	(*t.val)[t.id] = val
+	(t.val)[t.id] = val
 	t.old = val
 
 	t.trigger()

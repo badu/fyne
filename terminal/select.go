@@ -1,9 +1,16 @@
 package terminal
 
 import (
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
 )
+
+type SetClipboard interface {
+	SetContent(content string)
+}
+
+type GetClipboard interface {
+	Content() string
+}
 
 // getSelectedRange returns the current selection range, start row, start col, end row, end col
 // It always returns a positive selection
@@ -62,17 +69,15 @@ func (t *Terminal) SelectedText() string {
 	return widget.GetTextRange(t.content, t.blockMode, sr, sc, er, ec)
 }
 
-func (t *Terminal) copySelectedText(clipboard fyne.Clipboard) {
+func (t *Terminal) copySelectedText(clipboard SetClipboard) {
 	// copy start and end sel to clipboard and clear the sel style
 	text := t.SelectedText()
-	fyne.CurrentApp()
 	clipboard.SetContent(text)
 	t.clearSelectedText()
 }
 
-func (t *Terminal) pasteText(clipboard fyne.Clipboard) {
+func (t *Terminal) pasteText(clipboard GetClipboard) {
 	content := clipboard.Content()
-
 	if t.bracketedPasteMode {
 		_, _ = t.in.Write(append(
 			append(

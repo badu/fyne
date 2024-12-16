@@ -8,7 +8,7 @@ import (
 	"fyne.io/fyne/v2/canvas"
 )
 
-func (p *painter) createBuffer(points []float32) Buffer {
+func (p *PainterImpl) createBuffer(points []float32) Buffer {
 	vbo := p.ctx.CreateBuffer()
 	p.logError()
 	p.ctx.BindBuffer(arrayBuffer, vbo)
@@ -18,14 +18,14 @@ func (p *painter) createBuffer(points []float32) Buffer {
 	return vbo
 }
 
-func (p *painter) defineVertexArray(prog Program, name string, size, stride, offset int) {
+func (p *PainterImpl) defineVertexArray(prog Program, name string, size, stride, offset int) {
 	vertAttrib := p.ctx.GetAttribLocation(prog, name)
 	p.ctx.EnableVertexAttribArray(vertAttrib)
 	p.ctx.VertexAttribPointerWithOffset(vertAttrib, size, float, false, stride*floatSize, offset*floatSize)
 	p.logError()
 }
 
-func (p *painter) drawCircle(circle *canvas.Circle, pos fyne.Position, frame fyne.Size) {
+func (p *PainterImpl) drawCircle(circle *canvas.Circle, pos fyne.Position, frame fyne.Size) {
 	size := circle.Size()
 	radius := size.Width / 2
 	if size.Height < size.Width {
@@ -86,15 +86,15 @@ func (p *painter) drawCircle(circle *canvas.Circle, pos fyne.Position, frame fyn
 	p.freeBuffer(vbo)
 }
 
-func (p *painter) drawGradient(o fyne.CanvasObject, texCreator func(fyne.CanvasObject) Texture, pos fyne.Position, frame fyne.Size) {
+func (p *PainterImpl) drawGradient(o fyne.CanvasObject, texCreator func(fyne.CanvasObject) Texture, pos fyne.Position, frame fyne.Size) {
 	p.drawTextureWithDetails(o, texCreator, pos, o.Size(), frame, canvas.ImageFillStretch, 1.0, 0)
 }
 
-func (p *painter) drawImage(img *canvas.Image, pos fyne.Position, frame fyne.Size) {
+func (p *PainterImpl) drawImage(img *canvas.Image, pos fyne.Position, frame fyne.Size) {
 	p.drawTextureWithDetails(img, p.newGlImageTexture, pos, img.Size(), frame, img.FillMode, float32(img.Alpha()), 0)
 }
 
-func (p *painter) drawLine(line *canvas.Line, pos fyne.Position, frame fyne.Size) {
+func (p *PainterImpl) drawLine(line *canvas.Line, pos fyne.Position, frame fyne.Size) {
 	if line.StrokeColor == color.Transparent || line.StrokeColor == nil || line.StrokeWidth == 0 {
 		return
 	}
@@ -122,7 +122,7 @@ func (p *painter) drawLine(line *canvas.Line, pos fyne.Position, frame fyne.Size
 	p.freeBuffer(vbo)
 }
 
-func (p *painter) drawObject(o fyne.CanvasObject, pos fyne.Position, frame fyne.Size) {
+func (p *PainterImpl) drawObject(o fyne.CanvasObject, pos fyne.Position, frame fyne.Size) {
 	switch obj := o.(type) {
 	case *canvas.Circle:
 		p.drawCircle(obj, pos, frame)
@@ -143,11 +143,11 @@ func (p *painter) drawObject(o fyne.CanvasObject, pos fyne.Position, frame fyne.
 	}
 }
 
-func (p *painter) drawRaster(img *canvas.Raster, pos fyne.Position, frame fyne.Size) {
+func (p *PainterImpl) drawRaster(img *canvas.Raster, pos fyne.Position, frame fyne.Size) {
 	p.drawTextureWithDetails(img, p.newGlRasterTexture, pos, img.Size(), frame, canvas.ImageFillStretch, float32(img.Alpha()), 0)
 }
 
-func (p *painter) drawRectangle(rect *canvas.Rectangle, pos fyne.Position, frame fyne.Size) {
+func (p *PainterImpl) drawRectangle(rect *canvas.Rectangle, pos fyne.Position, frame fyne.Size) {
 	if (rect.FillColor == color.Transparent || rect.FillColor == nil) && (rect.StrokeColor == color.Transparent || rect.StrokeColor == nil || rect.StrokeWidth == 0) {
 		return
 	}
@@ -218,7 +218,7 @@ func (p *painter) drawRectangle(rect *canvas.Rectangle, pos fyne.Position, frame
 	p.freeBuffer(vbo)
 }
 
-func (p *painter) drawText(text *canvas.Text, pos fyne.Position, frame fyne.Size) {
+func (p *PainterImpl) drawText(text *canvas.Text, pos fyne.Position, frame fyne.Size) {
 	if text.Text == "" || text.Text == " " {
 		return
 	}
@@ -248,7 +248,7 @@ func (p *painter) drawText(text *canvas.Text, pos fyne.Position, frame fyne.Size
 	p.drawTextureWithDetails(text, p.newGlTextTexture, pos, size, frame, canvas.ImageFillStretch, 1.0, 0)
 }
 
-func (p *painter) drawTextureWithDetails(o fyne.CanvasObject, creator func(canvasObject fyne.CanvasObject) Texture,
+func (p *PainterImpl) drawTextureWithDetails(o fyne.CanvasObject, creator func(canvasObject fyne.CanvasObject) Texture,
 	pos fyne.Position, size, frame fyne.Size, fill canvas.ImageFill, alpha float32, pad float32) {
 
 	texture, err := p.getTexture(o, creator)
@@ -288,14 +288,14 @@ func (p *painter) drawTextureWithDetails(o fyne.CanvasObject, creator func(canva
 	p.freeBuffer(vbo)
 }
 
-func (p *painter) freeBuffer(vbo Buffer) {
+func (p *PainterImpl) freeBuffer(vbo Buffer) {
 	p.ctx.BindBuffer(arrayBuffer, noBuffer)
 	p.logError()
 	p.ctx.DeleteBuffer(vbo)
 	p.logError()
 }
 
-func (p *painter) lineCoords(pos, pos1, pos2 fyne.Position, lineWidth, feather float32, frame fyne.Size) ([]float32, float32, float32) {
+func (p *PainterImpl) lineCoords(pos, pos1, pos2 fyne.Position, lineWidth, feather float32, frame fyne.Size) ([]float32, float32, float32) {
 	// Shift line coordinates so that they match the target position.
 	xPosDiff := pos.X - fyne.Min(pos1.X, pos2.X)
 	yPosDiff := pos.Y - fyne.Min(pos1.Y, pos2.Y)
@@ -352,7 +352,7 @@ func (p *painter) lineCoords(pos, pos1, pos2 fyne.Position, lineWidth, feather f
 }
 
 // rectCoords calculates the openGL coordinate space of a rectangle
-func (p *painter) rectCoords(size fyne.Size, pos fyne.Position, frame fyne.Size,
+func (p *PainterImpl) rectCoords(size fyne.Size, pos fyne.Position, frame fyne.Size,
 	fill canvas.ImageFill, aspect float32, pad float32) []float32 {
 	size, pos = rectInnerCoords(size, pos, fill, aspect)
 	size, pos = roundToPixelCoords(size, pos, p.pixScale)
@@ -398,11 +398,11 @@ func rectInnerCoords(size fyne.Size, pos fyne.Position, fill canvas.ImageFill, a
 	return size, pos
 }
 
-func (p *painter) vecRectCoords(pos fyne.Position, rect *canvas.Rectangle, frame fyne.Size) ([4]float32, []float32) {
+func (p *PainterImpl) vecRectCoords(pos fyne.Position, rect *canvas.Rectangle, frame fyne.Size) ([4]float32, []float32) {
 	return p.vecRectCoordsWithPad(pos, rect, frame, 0, 0)
 }
 
-func (p *painter) vecRectCoordsWithPad(pos fyne.Position, rect fyne.CanvasObject, frame fyne.Size, xPad, yPad float32) ([4]float32, []float32) {
+func (p *PainterImpl) vecRectCoordsWithPad(pos fyne.Position, rect fyne.CanvasObject, frame fyne.Size, xPad, yPad float32) ([4]float32, []float32) {
 	size := rect.Size()
 	pos1 := rect.Position()
 
@@ -432,7 +432,7 @@ func (p *painter) vecRectCoordsWithPad(pos fyne.Position, rect fyne.CanvasObject
 	return [4]float32{x1Pos, y1Pos, x2Pos, y2Pos}, coords
 }
 
-func (p *painter) vecSquareCoords(pos fyne.Position, rect fyne.CanvasObject, frame fyne.Size) ([4]float32, []float32) {
+func (p *PainterImpl) vecSquareCoords(pos fyne.Position, rect fyne.CanvasObject, frame fyne.Size) ([4]float32, []float32) {
 	xPad, yPad := float32(0), float32(0)
 	size := rect.Size()
 	if size.Width > size.Height {
@@ -477,14 +477,14 @@ func getFragmentColor(col color.Color) (float32, float32, float32, float32) {
 	return float32(r) / alpha, float32(g) / alpha, float32(b) / alpha, alpha / 0xffff
 }
 
-func (p *painter) scaleFrameSize(frame fyne.Size) (float32, float32) {
+func (p *PainterImpl) scaleFrameSize(frame fyne.Size) (float32, float32) {
 	frameWidthScaled := roundToPixel(frame.Width*p.pixScale, 1.0)
 	frameHeightScaled := roundToPixel(frame.Height*p.pixScale, 1.0)
 	return frameWidthScaled, frameHeightScaled
 }
 
 // Returns scaled RectCoords(x1,x2,y1,y2) in same order
-func (p *painter) scaleRectCoords(x1, x2, y1, y2 float32) (float32, float32, float32, float32) {
+func (p *PainterImpl) scaleRectCoords(x1, x2, y1, y2 float32) (float32, float32, float32, float32) {
 	x1Scaled := roundToPixel(x1*p.pixScale, 1.0)
 	x2Scaled := roundToPixel(x2*p.pixScale, 1.0)
 	y1Scaled := roundToPixel(y1*p.pixScale, 1.0)

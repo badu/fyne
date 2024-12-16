@@ -9,13 +9,13 @@ import (
 const formLayoutCols = 2
 
 // formLayout is two column grid where each row has a label and a widget.
-type formLayout struct{}
+type FormLayout struct{}
 
 // calculateTableSizes calculates the izes of the table.
 // This includes the width of the label column (maximum width of all labels),
 // the width of the content column (maximum width of all content cells and remaining space in container)
 // and the total minimum height of the form.
-func (f *formLayout) calculateTableSizes(objects []fyne.CanvasObject, containerWidth float32) (labelWidth float32, contentWidth float32, height float32) {
+func (f *FormLayout) calculateTableSizes(objects []fyne.CanvasObject, containerWidth float32) (labelWidth float32, contentWidth float32, height float32) {
 	if len(objects)%formLayoutCols != 0 {
 		return 0, 0, 0
 	}
@@ -50,7 +50,7 @@ func (f *formLayout) calculateTableSizes(objects []fyne.CanvasObject, containerW
 }
 
 // Layout is called to pack all child objects into a table format with two columns.
-func (f *formLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
+func (f *FormLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 	labelWidth, contentWidth, _ := f.calculateTableSizes(objects, size.Width)
 
 	y := float32(0)
@@ -103,7 +103,7 @@ func (f *formLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 // MinSize finds the smallest size that satisfies all the child objects.
 // For a FormLayout this is the width of the widest label and content items and the height is
 // the sum of all column children combined with padding between each.
-func (f *formLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
+func (f *FormLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	labelWidth, contentWidth, height := f.calculateTableSizes(objects, 0)
 	return fyne.Size{
 		Width:  labelWidth + contentWidth + theme.Padding(),
@@ -112,6 +112,6 @@ func (f *formLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 }
 
 // NewFormLayout returns a new FormLayout instance
-func NewFormLayout() fyne.Layout {
-	return &formLayout{}
+func NewFormLayout() *FormLayout {
+	return &FormLayout{}
 }

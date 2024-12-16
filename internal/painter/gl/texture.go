@@ -21,7 +21,7 @@ var noTexture = Texture(cache.NoTexture)
 // Texture represents an uploaded GL texture
 type Texture cache.TextureType
 
-func (p *painter) freeTexture(obj fyne.CanvasObject) {
+func (p *PainterImpl) freeTexture(obj fyne.CanvasObject) {
 	texture, ok := cache.GetTexture(obj)
 	if !ok {
 		return
@@ -32,7 +32,7 @@ func (p *painter) freeTexture(obj fyne.CanvasObject) {
 	cache.DeleteTexture(obj)
 }
 
-func (p *painter) getTexture(object fyne.CanvasObject, creator func(canvasObject fyne.CanvasObject) Texture) (Texture, error) {
+func (p *PainterImpl) getTexture(object fyne.CanvasObject, creator func(canvasObject fyne.CanvasObject) Texture) (Texture, error) {
 	texture, ok := cache.GetTexture(object)
 
 	if !ok {
@@ -45,7 +45,7 @@ func (p *painter) getTexture(object fyne.CanvasObject, creator func(canvasObject
 	return Texture(texture), nil
 }
 
-func (p *painter) imgToTexture(img image.Image, textureFilter canvas.ImageScale) Texture {
+func (p *PainterImpl) imgToTexture(img image.Image, textureFilter canvas.ImageScale) Texture {
 	switch i := img.(type) {
 	case *image.Uniform:
 		texture := p.newTexture(textureFilter)
@@ -87,7 +87,7 @@ func (p *painter) imgToTexture(img image.Image, textureFilter canvas.ImageScale)
 	}
 }
 
-func (p *painter) newGlImageTexture(obj fyne.CanvasObject) Texture {
+func (p *PainterImpl) newGlImageTexture(obj fyne.CanvasObject) Texture {
 	img := obj.(*canvas.Image)
 
 	width := p.textureScale(img.Size().Width)
@@ -101,7 +101,7 @@ func (p *painter) newGlImageTexture(obj fyne.CanvasObject) Texture {
 	return p.imgToTexture(tex, img.ScaleMode)
 }
 
-func (p *painter) newGlLinearGradientTexture(obj fyne.CanvasObject) Texture {
+func (p *PainterImpl) newGlLinearGradientTexture(obj fyne.CanvasObject) Texture {
 	gradient := obj.(*canvas.LinearGradient)
 
 	w := gradient.Size().Width
@@ -118,7 +118,7 @@ func (p *painter) newGlLinearGradientTexture(obj fyne.CanvasObject) Texture {
 	return p.imgToTexture(gradient.Generate(int(width), int(height)), canvas.ImageScaleSmooth)
 }
 
-func (p *painter) newGlRadialGradientTexture(obj fyne.CanvasObject) Texture {
+func (p *PainterImpl) newGlRadialGradientTexture(obj fyne.CanvasObject) Texture {
 	gradient := obj.(*canvas.RadialGradient)
 
 	width := p.textureScale(gradient.Size().Width)
@@ -127,7 +127,7 @@ func (p *painter) newGlRadialGradientTexture(obj fyne.CanvasObject) Texture {
 	return p.imgToTexture(gradient.Generate(int(width), int(height)), canvas.ImageScaleSmooth)
 }
 
-func (p *painter) newGlRasterTexture(obj fyne.CanvasObject) Texture {
+func (p *PainterImpl) newGlRasterTexture(obj fyne.CanvasObject) Texture {
 	rast := obj.(*canvas.Raster)
 
 	width := p.textureScale(rast.Size().Width)
@@ -136,7 +136,7 @@ func (p *painter) newGlRasterTexture(obj fyne.CanvasObject) Texture {
 	return p.imgToTexture(rast.Generator(int(width), int(height)), rast.ScaleMode)
 }
 
-func (p *painter) newGlTextTexture(obj fyne.CanvasObject) Texture {
+func (p *PainterImpl) newGlTextTexture(obj fyne.CanvasObject) Texture {
 	text := obj.(*canvas.Text)
 	color := text.Color
 	if color == nil {
@@ -159,7 +159,7 @@ func (p *painter) newGlTextTexture(obj fyne.CanvasObject) Texture {
 	return p.imgToTexture(img, canvas.ImageScaleSmooth)
 }
 
-func (p *painter) newTexture(textureFilter canvas.ImageScale) Texture {
+func (p *PainterImpl) newTexture(textureFilter canvas.ImageScale) Texture {
 	if int(textureFilter) >= len(textureFilterToGL) {
 		fyne.LogError(fmt.Sprintf("Invalid canvas.ImageScale value (%d), using canvas.ImageScaleSmooth as default value", textureFilter), nil)
 		textureFilter = canvas.ImageScaleSmooth
@@ -179,7 +179,7 @@ func (p *painter) newTexture(textureFilter canvas.ImageScale) Texture {
 	return texture
 }
 
-func (p *painter) textureScale(v float32) float32 {
+func (p *PainterImpl) textureScale(v float32) float32 {
 	if p.pixScale == 1.0 {
 		return float32(math.Round(float64(v)))
 	}

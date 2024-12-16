@@ -8,7 +8,7 @@ import (
 	"unicode/utf8"
 )
 
-type uri struct {
+type TheURI struct {
 	scheme    string
 	authority string
 	path      string
@@ -16,15 +16,15 @@ type uri struct {
 	fragment  string
 }
 
-func (u *uri) Extension() string {
+func (u *TheURI) Extension() string {
 	return filepath.Ext(u.path)
 }
 
-func (u *uri) Name() string {
+func (u *TheURI) Name() string {
 	return filepath.Base(u.path)
 }
 
-func (u *uri) MimeType() string {
+func (u *TheURI) MimeType() string {
 	mimeTypeFull := mime.TypeByExtension(u.Extension())
 	if mimeTypeFull == "" {
 		mimeTypeFull = "text/plain"
@@ -48,11 +48,11 @@ func (u *uri) MimeType() string {
 	return mimeType
 }
 
-func (u *uri) Scheme() string {
+func (u *TheURI) Scheme() string {
 	return u.scheme
 }
 
-func (u *uri) String() string {
+func (u *TheURI) String() string {
 	// NOTE: this string reconstruction is mandated by IETF RFC3986,
 	// section 5.3, pp. 35.
 
@@ -66,18 +66,18 @@ func (u *uri) String() string {
 	return s
 }
 
-func (u *uri) Authority() string {
+func (u *TheURI) Authority() string {
 	return u.authority
 }
 
-func (u *uri) Path() string {
+func (u *TheURI) Path() string {
 	return u.path
 }
 
-func (u *uri) Query() string {
+func (u *TheURI) Query() string {
 	return u.query
 }
 
-func (u *uri) Fragment() string {
+func (u *TheURI) Fragment() string {
 	return u.fragment
 }

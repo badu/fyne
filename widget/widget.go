@@ -216,7 +216,7 @@ func (w *DisableableWidget) Disabled() bool {
 // single fyne.CanvasObject.
 //
 // Since: 2.1
-func NewSimpleRenderer(object fyne.CanvasObject) fyne.WidgetRenderer {
+func NewSimpleRenderer(object fyne.CanvasObject) *internalWidget.SimpleRenderer {
 	return internalWidget.NewSimpleRenderer(object)
 }
 

@@ -37,7 +37,7 @@ func (e *ExtensionFileFilter) Matches(uri fyne.URI) bool {
 
 // NewExtensionFileFilter takes a string slice of extensions with a leading . and creates a filter for the file dialog.
 // Example: .jpg, .mp3, .txt, .sh
-func NewExtensionFileFilter(extensions []string) FileFilter {
+func NewExtensionFileFilter(extensions []string) *ExtensionFileFilter {
 	return &ExtensionFileFilter{Extensions: extensions}
 }
 
@@ -60,6 +60,6 @@ func (mt *MimeTypeFileFilter) Matches(uri fyne.URI) bool {
 
 // NewMimeTypeFileFilter takes a string slice of mimetypes, including globs, and creates a filter for the file dialog.
 // Example: image/*, audio/mp3, text/plain, application/*
-func NewMimeTypeFileFilter(mimeTypes []string) FileFilter {
+func NewMimeTypeFileFilter(mimeTypes []string) *MimeTypeFileFilter {
 	return &MimeTypeFileFilter{MimeTypes: mimeTypes}
 }

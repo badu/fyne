@@ -59,11 +59,11 @@ var noBuffer = Buffer{}
 var noShader = Shader{}
 var textureFilterToGL = []int32{gl.Linear, gl.Nearest}
 
-func (p *painter) glctx() gl.Context {
+func (p *PainterImpl) glctx() gl.Context {
 	return p.contextProvider.Context().(gl.Context)
 }
 
-func (p *painter) Init() {
+func (p *PainterImpl) Init() {
 	p.ctx = &mobileContext{glContext: p.contextProvider.Context().(gl.Context)}
 	p.glctx().Disable(gl.DepthTest)
 	p.glctx().Enable(gl.Blend)

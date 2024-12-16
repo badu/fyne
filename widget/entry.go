@@ -24,6 +24,14 @@ const (
 	multiLineRows   = 3
 )
 
+type SetClipboard interface {
+	SetContent(content string)
+}
+
+type GetClipboard interface {
+	Content() string
+}
+
 // Entry widget allows simple text to be input when focused.
 type Entry struct {
 	DisableableWidget
@@ -969,7 +977,7 @@ func (e *Entry) Unbind() {
 
 // copyToClipboard copies the current selection to a given clipboard.
 // This does nothing if it is a concealed entry.
-func (e *Entry) copyToClipboard(clipboard fyne.Clipboard) {
+func (e *Entry) copyToClipboard(clipboard SetClipboard) {
 	if !e.selecting || e.Password {
 		return
 	}
@@ -999,7 +1007,7 @@ func (e *Entry) cursorTextPos() (pos int) {
 
 // cutToClipboard copies the current selection to a given clipboard and then removes the selected text.
 // This does nothing if it is a concealed entry.
-func (e *Entry) cutToClipboard(clipboard fyne.Clipboard) {
+func (e *Entry) cutToClipboard(clipboard SetClipboard) {
 	if !e.selecting || e.Password {
 		return
 	}
@@ -1076,7 +1084,7 @@ func (e *Entry) getRowCol(p fyne.Position) (int, int) {
 
 // pasteFromClipboard inserts text from the clipboard content,
 // starting from the cursor position.
-func (e *Entry) pasteFromClipboard(clipboard fyne.Clipboard) {
+func (e *Entry) pasteFromClipboard(clipboard GetClipboard) {
 	text := clipboard.Content()
 	if text == "" {
 		e.propertyLock.Lock()

@@ -7,21 +7,21 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-type gridWrapLayout struct {
+type GridWrapLayout struct {
 	CellSize fyne.Size
 	colCount int
 	rowCount int
 }
 
 // NewGridWrapLayout returns a new GridWrapLayout instance
-func NewGridWrapLayout(size fyne.Size) fyne.Layout {
-	return &gridWrapLayout{size, 1, 1}
+func NewGridWrapLayout(size fyne.Size) *GridWrapLayout {
+	return &GridWrapLayout{size, 1, 1}
 }
 
 // Layout is called to pack all child objects into a specified size.
 // For a GridWrapLayout this will attempt to lay all the child objects in a row
 // and wrap to a new row if the size is not large enough.
-func (g *gridWrapLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
+func (g *GridWrapLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 	padding := theme.Padding()
 	g.colCount = 1
 	g.rowCount = 0
@@ -57,7 +57,7 @@ func (g *gridWrapLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 // For a GridWrapLayout this is simply the specified cellsize as a single column
 // layout has no padding. The returned size does not take into account the number
 // of columns as this layout re-flows dynamically.
-func (g *gridWrapLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
+func (g *GridWrapLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	rows := g.rowCount
 	if rows < 1 {
 		rows = 1

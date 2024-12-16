@@ -107,7 +107,7 @@ func (a *FyneApp) newDefaultPreferences() *preferences {
 }
 
 // New returns a new application instance with the default driver and no unique ID (unless specified in FyneApp.toml)
-func New() fyne.App {
+func New() *FyneApp {
 	if meta.ID == "" {
 		checkLocalMetadata() // if no ID passed, check if it was in toml
 		if meta.ID == "" {
@@ -134,7 +134,7 @@ func makeStoreDocs(id string, s *store) *internal.Docs {
 	}
 }
 
-func newAppWithDriver(d fyne.Driver, id string) fyne.App {
+func newAppWithDriver(d fyne.Driver, id string) *FyneApp {
 	newApp := &FyneApp{uniqueID: id, driver: d}
 	fyne.SetCurrentApp(newApp)
 

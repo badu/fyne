@@ -163,7 +163,7 @@ func TestNewFloat_TriggerOnlyWhenChange(t *testing.T) {
 
 func TestBindURI(t *testing.T) {
 	val := storage.NewFileURI("/tmp")
-	f := BindURI(&val)
+	f := BindURI(val)
 	v, err := f.Get()
 	assert.Nil(t, err)
 	assert.Equal(t, "file:///tmp", v.String())
@@ -195,7 +195,7 @@ func TestBindURI(t *testing.T) {
 
 func TestBindURI_TriggerOnlyWhenChange(t *testing.T) {
 	v := storage.NewFileURI("first")
-	b := BindURI(&v)
+	b := BindURI(v)
 	triggered := 0
 	b.AddListener(NewDataListener(func() {
 		triggered++

@@ -1,3 +1,3 @@
-module some/module/v2
+module fyne.io/fyne/module/v2
 
 go 1.13

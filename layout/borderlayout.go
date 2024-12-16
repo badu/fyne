@@ -5,21 +5,21 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-type borderLayout struct {
+type BorderLayout struct {
 	top, bottom, left, right fyne.CanvasObject
 }
 
 // NewBorderLayout creates a new BorderLayout instance with top, bottom, left
 // and right objects set. All other items in the container will fill the remaining space in the middle.
 // Multiple extra items will be stacked in the specified order as a Stack container.
-func NewBorderLayout(top, bottom, left, right fyne.CanvasObject) fyne.Layout {
-	return &borderLayout{top, bottom, left, right}
+func NewBorderLayout(top, bottom, left, right fyne.CanvasObject) *BorderLayout {
+	return &BorderLayout{top, bottom, left, right}
 }
 
 // Layout is called to pack all child objects into a specified size.
 // For BorderLayout this arranges the top, bottom, left and right widgets at
 // the sides and any remaining widgets are maximised in the middle space.
-func (b *borderLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
+func (b *BorderLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 	padding := theme.Padding()
 	var topSize, bottomSize, leftSize, rightSize fyne.Size
 	if b.top != nil && b.top.Visible() {
@@ -65,7 +65,7 @@ func (b *borderLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 // For BorderLayout this is determined by the MinSize height of the top and
 // plus the MinSize width of the left and right, plus any padding needed.
 // This is then added to the union of the MinSize for any remaining content.
-func (b *borderLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
+func (b *BorderLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	minSize := fyne.NewSize(0, 0)
 	for _, child := range objects {
 		if !child.Visible() {

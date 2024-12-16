@@ -9,8 +9,8 @@ import (
 // canvas objects or widgets top to bottom. The objects are always displayed
 // at their vertical MinSize. Use a different layout if the objects are intended
 // to be larger than their vertical MinSize.
-func NewVBoxLayout() fyne.Layout {
-	return vBoxLayout{
+func NewVBoxLayout() VBoxLayout {
+	return VBoxLayout{
 		paddingFunc: theme.Padding,
 	}
 }
@@ -19,8 +19,8 @@ func NewVBoxLayout() fyne.Layout {
 // canvas objects or widgets left to right. The objects are always displayed
 // at their horizontal MinSize. Use a different layout if the objects are intended
 // to be larger than their horizontal MinSize.
-func NewHBoxLayout() fyne.Layout {
-	return hBoxLayout{
+func NewHBoxLayout() HBoxLayout {
+	return HBoxLayout{
 		paddingFunc: theme.Padding,
 	}
 }
@@ -29,8 +29,8 @@ func NewHBoxLayout() fyne.Layout {
 // amount of padding in between objects instead of the theme.Padding value.
 //
 // Since: 2.5
-func NewCustomPaddedHBoxLayout(padding float32) fyne.Layout {
-	return hBoxLayout{
+func NewCustomPaddedHBoxLayout(padding float32) HBoxLayout {
+	return HBoxLayout{
 		paddingFunc: func() float32 { return padding },
 	}
 }
@@ -39,13 +39,13 @@ func NewCustomPaddedHBoxLayout(padding float32) fyne.Layout {
 // amount of padding in between objects instead of the theme.Padding value.
 //
 // Since: 2.5
-func NewCustomPaddedVBoxLayout(padding float32) fyne.Layout {
-	return vBoxLayout{
+func NewCustomPaddedVBoxLayout(padding float32) VBoxLayout {
+	return VBoxLayout{
 		paddingFunc: func() float32 { return padding },
 	}
 }
 
-type vBoxLayout struct {
+type VBoxLayout struct {
 	paddingFunc func() float32
 }
 
@@ -53,7 +53,7 @@ type vBoxLayout struct {
 // This will pack objects into a single column where each item
 // is full width but the height is the minimum required.
 // Any spacers added will pad the view, sharing the space if there are two or more.
-func (v vBoxLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
+func (v VBoxLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 	spacers := 0
 	visibleObjects := 0
 	// Size taken up by visible objects
@@ -105,7 +105,7 @@ func (v vBoxLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 // MinSize finds the smallest size that satisfies all the child objects.
 // For a BoxLayout this is the width of the widest item and the height is
 // the sum of all children combined with padding between each.
-func (v vBoxLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
+func (v VBoxLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	minSize := fyne.NewSize(0, 0)
 	addPadding := false
 	padding := v.paddingFunc()
@@ -125,7 +125,7 @@ func (v vBoxLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	return minSize
 }
 
-type hBoxLayout struct {
+type HBoxLayout struct {
 	paddingFunc func() float32
 }
 
@@ -133,7 +133,7 @@ type hBoxLayout struct {
 // For a VBoxLayout this will pack objects into a single column where each item
 // is full width but the height is the minimum required.
 // Any spacers added will pad the view, sharing the space if there are two or more.
-func (g hBoxLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
+func (g HBoxLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 	spacers := 0
 	visibleObjects := 0
 	// Size taken up by visible objects
@@ -185,7 +185,7 @@ func (g hBoxLayout) Layout(objects []fyne.CanvasObject, size fyne.Size) {
 // MinSize finds the smallest size that satisfies all the child objects.
 // For a BoxLayout this is the width of the widest item and the height is
 // the sum of all children combined with padding between each.
-func (g hBoxLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
+func (g HBoxLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	minSize := fyne.NewSize(0, 0)
 	addPadding := false
 	padding := g.paddingFunc()

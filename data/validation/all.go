@@ -8,7 +8,7 @@ import (
 // In short, it combines multiple string validators into one.
 //
 // Since: 2.2
-func NewAllStrings(validators ...fyne.StringValidator) fyne.StringValidator {
+func NewAllStrings(validators ...fyne.StringValidator) func(string) error {
 	return func(text string) error {
 		for _, validator := range validators {
 			if err := validator(text); err != nil {

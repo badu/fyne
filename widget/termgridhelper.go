@@ -213,7 +213,7 @@ type HighlightOption func(h *TermTextGridStyle)
 // Returns:
 //
 //	A pointer to a TermTextGridStyle initialized with the provided colors and inversion settings.
-func NewTermTextGridStyle(fg, bg color.Color, bitmask byte, blinkEnabled bool) TextGridStyle {
+func NewTermTextGridStyle(fg, bg color.Color, bitmask byte, blinkEnabled bool) *TermTextGridStyle {
 	// calculate the inverted colors
 	var invertedFg, invertedBg color.Color
 	if fg == nil {

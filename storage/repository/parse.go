@@ -16,7 +16,7 @@ import (
 // need to call it, and it prevents a circular import.
 //
 // Since: 2.0
-func NewFileURI(path string) fyne.URI {
+func NewFileURI(path string) *TheURI {
 	// URIs are supposed to use forward slashes. On Windows, it
 	// should be OK to use the platform native filepath with UNIX
 	// or NT style paths, with / or \, but when we reconstruct
@@ -27,7 +27,7 @@ func NewFileURI(path string) fyne.URI {
 		path = filepath.ToSlash(path)
 	}
 
-	return &uri{
+	return &TheURI{
 		scheme: "file",
 		path:   path,
 	}
@@ -93,7 +93,7 @@ func ParseURI(s string) (fyne.URI, error) {
 		authority += ":" + port
 	}
 
-	return &uri{
+	return &TheURI{
 		scheme:    scheme,
 		authority: authority,
 		path:      l.Authority().Path(),

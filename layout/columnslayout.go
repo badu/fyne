@@ -5,7 +5,7 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-type columnsLayout struct {
+type ColumnsLayout struct {
 	widths []float32
 }
 
@@ -17,17 +17,17 @@ type columnsLayout struct {
 // The layout will fill the available space. This means that the trailing column might be wider,
 // when the parent container has more space available. But it can never shrink below the given width.
 // The last width will be re-used for additional columns if needed.
-func NewColumns(widths ...float32) fyne.Layout {
+func NewColumns(widths ...float32) ColumnsLayout {
 	if len(widths) == 0 {
 		panic("Need to define at least one width")
 	}
-	l := columnsLayout{
+	l := ColumnsLayout{
 		widths: widths,
 	}
 	return l
 }
 
-func (l columnsLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
+func (l ColumnsLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	wTotal, hTotal := float32(0), float32(0)
 	if len(objects) > 0 {
 		hTotal = objects[0].MinSize().Height
@@ -45,7 +45,7 @@ func (l columnsLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	return fyne.NewSize(wTotal, hTotal)
 }
 
-func (l columnsLayout) Layout(objects []fyne.CanvasObject, containerSize fyne.Size) {
+func (l ColumnsLayout) Layout(objects []fyne.CanvasObject, containerSize fyne.Size) {
 	var lastX float32
 	pos := fyne.NewPos(0, 0)
 	padding := theme.Padding()

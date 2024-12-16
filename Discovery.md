@@ -1,26 +1,3 @@
-The rules of refactoring and discovery
----
-
-1. Check errors in caller, if callee doesn't return an error. This comes from "Always alert as close to the app as possible"
-2. Always expand small payloads to their components
-3. Always use small interface for arguments of a function
-4. Always start with the model (data) and it's transformation
-5. Always check for initialization of structs (with no "constructors"), to have field names: it will help you reordering fields. In general, you should have "constructors"
-6. Exported functions should never return unexported types
-7. If you need a getter / setter, you hide business logic from the users / developers. A public property + additional calls to inform the interested parties, should do
-8. Consumer of a channel should create it and hand it over to producer
-9. Code duplication is not as bad as confusing code. Overall, the code looks good, except the parts where it is avoiding duplication
-10. Always go for immutability. If the pointer doesn't belong to the struct, it shows at least two cases : a hidden change in a foreign function or a shared value. Find a better way to share values
-11. If inside a function, we check for implementation satisfies an interface, do NOT alter the methods of that interface (e.g. `type selectableText interface {
-    Enable()
-    Disable()
-    Disabled() bool
-    SelectedText() string
-    }`) - removing one of the functions will break the code
-12. If you have multiple constructors, it's a sign you should use functional options
-13. Backward compatibility, even for settings, has real costs
-14. Don't export properties / methods / functions for the sake of tests
-
 Project discovery
 ---
 

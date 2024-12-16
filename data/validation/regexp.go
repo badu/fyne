@@ -12,7 +12,7 @@ import (
 // The validator will return nil if valid, otherwise returns an error with a reason text.
 //
 // Since: 1.4
-func NewRegexp(regexpstr, reason string) fyne.StringValidator {
+func NewRegexp(regexpstr, reason string) func(string) error {
 	expression, err := regexp.Compile(regexpstr)
 	if err != nil {
 		fyne.LogError("Regexp did not compile", err)

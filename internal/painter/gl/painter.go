@@ -63,13 +63,13 @@ type WithContext interface {
 
 // NewPainter creates a new GL based renderer for the provided canvas.
 // If it is a master painter it will also initialise OpenGL
-func NewPainter(c fyne.Canvas, ctx WithContext) Painter {
-	p := &painter{canvas: c, contextProvider: ctx}
+func NewPainter(c fyne.Canvas, ctx WithContext) *PainterImpl {
+	p := &PainterImpl{canvas: c, contextProvider: ctx}
 	p.SetFrameBufferScale(1.0)
 	return p
 }
 
-type painter struct {
+type PainterImpl struct {
 	canvas                fyne.Canvas
 	ctx                   context
 	contextProvider       WithContext
@@ -81,34 +81,34 @@ type painter struct {
 	pixScale              float32 // pre-calculate scale*texScale for each draw
 }
 
-func (p *painter) Clear() {
+func (p *PainterImpl) Clear() {
 	r, g, b, a := theme.Color(theme.ColorNameBackground).RGBA()
 	p.ctx.ClearColor(float32(r)/max16bit, float32(g)/max16bit, float32(b)/max16bit, float32(a)/max16bit)
 	p.ctx.Clear(bitColorBuffer | bitDepthBuffer)
 	p.logError()
 }
 
-func (p *painter) Free(obj fyne.CanvasObject) {
+func (p *PainterImpl) Free(obj fyne.CanvasObject) {
 	p.freeTexture(obj)
 }
 
-func (p *painter) Paint(obj fyne.CanvasObject, pos fyne.Position, frame fyne.Size) {
+func (p *PainterImpl) Paint(obj fyne.CanvasObject, pos fyne.Position, frame fyne.Size) {
 	if obj.Visible() {
 		p.drawObject(obj, pos, frame)
 	}
 }
 
-func (p *painter) SetFrameBufferScale(scale float32) {
+func (p *PainterImpl) SetFrameBufferScale(scale float32) {
 	p.texScale = scale
 	p.pixScale = p.canvas.Scale() * p.texScale
 }
 
-func (p *painter) SetOutputSize(width, height int) {
+func (p *PainterImpl) SetOutputSize(width, height int) {
 	p.ctx.Viewport(0, 0, width, height)
 	p.logError()
 }
 
-func (p *painter) StartClipping(pos fyne.Position, size fyne.Size) {
+func (p *PainterImpl) StartClipping(pos fyne.Position, size fyne.Size) {
 	x := p.textureScale(pos.X)
 	y := p.textureScale(p.canvas.Size().Height - pos.Y - size.Height)
 	w := p.textureScale(size.Width)
@@ -118,12 +118,12 @@ func (p *painter) StartClipping(pos fyne.Position, size fyne.Size) {
 	p.logError()
 }
 
-func (p *painter) StopClipping() {
+func (p *PainterImpl) StopClipping() {
 	p.ctx.Disable(scissorTest)
 	p.logError()
 }
 
-func (p *painter) compileShader(source string, shaderType uint32) (Shader, error) {
+func (p *PainterImpl) compileShader(source string, shaderType uint32) (Shader, error) {
 	shader := p.ctx.CreateShader(shaderType)
 
 	p.ctx.ShaderSource(shader, source)
@@ -145,7 +145,7 @@ func (p *painter) compileShader(source string, shaderType uint32) (Shader, error
 	return shader, nil
 }
 
-func (p *painter) createProgram(shaderFilename string) Program {
+func (p *PainterImpl) createProgram(shaderFilename string) Program {
 	// Why a switch over a filename?
 	// Because this allows for a minimal change, once we reach Go 1.16 and use go:embed instead of
 	// fyne bundle.
@@ -186,6 +186,6 @@ func (p *painter) createProgram(shaderFilename string) Program {
 	return prog
 }
 
-func (p *painter) logError() {
+func (p *PainterImpl) logError() {
 	logGLError(p.ctx.GetError)
 }
