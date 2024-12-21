@@ -13,25 +13,6 @@ type AnimationCurve func(float32) float32
 // Since: 2.0
 const AnimationRepeatForever = -1
 
-var (
-	// AnimationEaseInOut is the default easing, it starts slowly, accelerates to the middle and slows to the end.
-	//
-	// Since: 2.0
-	AnimationEaseInOut = animationEaseInOut
-	// AnimationEaseIn starts slowly and accelerates to the end.
-	//
-	// Since: 2.0
-	AnimationEaseIn = animationEaseIn
-	// AnimationEaseOut starts at speed and slows to the end.
-	//
-	// Since: 2.0
-	AnimationEaseOut = animationEaseOut
-	// AnimationLinear is a linear mapping for animations that progress uniformly through their duration.
-	//
-	// Since: 2.0
-	AnimationLinear = animationLinear
-)
-
 // Animation represents an animated element within a Fyne canvas.
 // These animations may control individual objects or entire scenes.
 //
@@ -63,11 +44,11 @@ func (a *Animation) Stop() {
 	CurrentDriver().StopAnimation(a)
 }
 
-func animationEaseIn(val float32) float32 {
+func AnimationEaseIn(val float32) float32 {
 	return val * val
 }
 
-func animationEaseInOut(val float32) float32 {
+func AnimationEaseInOut(val float32) float32 {
 	if val <= 0.5 {
 		return val * val * 2
 	}
@@ -75,10 +56,10 @@ func animationEaseInOut(val float32) float32 {
 	return -1 + (4-val*2)*val
 }
 
-func animationEaseOut(val float32) float32 {
+func AnimationEaseOut(val float32) float32 {
 	return val * (2 - val)
 }
 
-func animationLinear(val float32) float32 {
+func AnimationLinear(val float32) float32 {
 	return val
 }

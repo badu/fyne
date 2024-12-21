@@ -17,10 +17,12 @@ require (
 	github.com/fyne-io/image v0.0.0-20220602074514-4956b0afb3d2
 	github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20240506104042-037f3cc74f2a
+	github.com/go-gl/mathgl v1.2.0
 	github.com/go-ole/go-ole v1.2.6
 	github.com/go-text/render v0.2.0
 	github.com/go-text/typesetting v0.2.0
 	github.com/godbus/dbus/v5 v5.1.0
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/hashicorp/go-version v1.7.0
 	github.com/jackmordaunt/icns/v2 v2.2.6
 	github.com/jarcoal/httpmock v1.3.1
@@ -52,7 +54,6 @@ require (
 	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/jsummers/gobmp v0.0.0-20151104160322-e2ba15ffa76e // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
