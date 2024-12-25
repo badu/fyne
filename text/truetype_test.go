@@ -101,7 +101,7 @@ func TestGetGlyphIndexEdge(t *testing.T) {
 		t.Error("Bad index", index)
 	}
 
-	fd, err := os.Open("font/font_1_honokamin.ttf")
+	fd, err := os.Open("./testdata/font_1_honokamin.ttf")
 	if err != nil {
 		panic(err)
 	}

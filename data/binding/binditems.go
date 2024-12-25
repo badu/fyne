@@ -5,7 +5,6 @@ package binding
 
 import (
 	"bytes"
-
 	"fyne.io/fyne/v2"
 )
 
@@ -689,7 +688,6 @@ func BindURI(v fyne.URI) ExternalURI {
 	}
 	b := &boundExternalURI{}
 	b.val = v
-	b.old = v
 	return b
 }
 
@@ -723,18 +721,13 @@ func (b *boundURI) Set(val fyne.URI) error {
 
 type boundExternalURI struct {
 	boundURI
-
-	old fyne.URI
 }
 
 func (b *boundExternalURI) Set(val fyne.URI) error {
 	b.propertiesLock.Lock()
 	defer b.propertiesLock.Unlock()
-	if compareURI(b.old, val) {
-		return nil
-	}
+
 	b.val = val
-	b.old = val
 
 	b.trigger()
 	return nil

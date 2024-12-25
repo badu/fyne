@@ -63,8 +63,8 @@ func TestClickedCharacter(t *testing.T) {
 
 func TestBoundingBox(t *testing.T) {
 	text := &Text{}
-	text.X1 = text.Point{-10, -10}
-	text.X2 = text.Point{+10, +10}
+	text.X1 = Point{-10, -10}
+	text.X2 = Point{+10, +10}
 	text.Font = &Font{}
 	v := mgl32.Vec2{10, 5}
 	text.SetPosition(v)
