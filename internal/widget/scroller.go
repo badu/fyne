@@ -435,6 +435,20 @@ func (s *Scroll) ScrollToTop() {
 	s.scrollBy(0, -s.Offset.Y)
 }
 
+func (s *Scroll) ScrollToOffset(offset fyne.Position) {
+	if s.Offset == offset {
+		return
+	}
+
+	s.Offset = offset
+	s.refreshBars()
+}
+
+func (s *Scroll) refreshBars() {
+	s.updateOffset(0, 0)
+	s.refreshWithoutOffsetUpdate()
+}
+
 // DragEnd will stop scrolling on mobile has stopped
 func (s *Scroll) DragEnd() {
 }
